@@ -205,8 +205,8 @@ class LivestreamView extends StatelessWidget {
     }
 
     // For 4-5 users: Fixed 2x2 grid (max 4 slots visible)
-    // Show only first 4 co-hosts in the grid
-    final visibleCoHosts = streamViews.take(4).toList();
+    // Show up to 9 co-hosts in the grid for TikTok-style multi-guest live
+    final visibleCoHosts = streamViews.take(9).toList();
     final rows = (visibleCoHosts.length / columns).ceil();
 
     return Column(
