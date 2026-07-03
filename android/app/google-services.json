@@ -1,0 +1,152 @@
+{
+  "project_info": {
+    "project_number": "567676390162",
+    "firebase_url": "https://god-influncevr-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "god-influncevr",
+    "storage_bucket": "god-influncevr.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:567676390162:android:64c93c93200875ec1e01cb",
+        "android_client_info": {
+          "package_name": "com.godInfluenceX.vr"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "567676390162-ag2fespjjq20b9voggcgc8avquirf4mi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.godInfluenceX.vr",
+            "certificate_hash": "3f3fd043779f449d4fbdd1cfa198dd70879c48a6"
+          }
+        },
+        {
+          "client_id": "567676390162-cluedng5pipb1p7pm7m1ia7754b5v4pk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.godInfluenceX.vr",
+            "certificate_hash": "5f08bfd47e4efcb33a511ada366cd42ba088d900"
+          }
+        },
+        {
+          "client_id": "567676390162-i52238q9gqgir026gnttf51olscv1em9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.godInfluenceX.vr",
+            "certificate_hash": "2887071fe248ea602a54d2534433432812a36475"
+          }
+        },
+        {
+          "client_id": "567676390162-q368k3treuas9em25lrprpi0fvfoj02k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.godInfluenceX.vr",
+            "certificate_hash": "4dfd8bcd3d2d0957d024eb3eb0e6f1c94e28381b"
+          }
+        },
+        {
+          "client_id": "567676390162-kn9badm9rp9uem2kl11qq1hb8r42kiak.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVuj3G3uBHN0gajdXyp_F_0tcKeGfuTTQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "567676390162-kn9badm9rp9uem2kl11qq1hb8r42kiak.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "567676390162-5lttqteka5safidcom1r1icncepgfjes.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.godinflunce.vr"
+              }
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-4518801081128136~9729968900"
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:567676390162:android:37a52fe4d19fa9001e01cb",
+        "android_client_info": {
+          "package_name": "com.kingdomshift.live"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "567676390162-kn9badm9rp9uem2kl11qq1hb8r42kiak.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVuj3G3uBHN0gajdXyp_F_0tcKeGfuTTQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "567676390162-kn9badm9rp9uem2kl11qq1hb8r42kiak.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "567676390162-5lttqteka5safidcom1r1icncepgfjes.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.godinflunce.vr"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:567676390162:android:fa5d77015309b0a91e01cb",
+        "android_client_info": {
+          "package_name": "live.kingdomshift.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "567676390162-kn9badm9rp9uem2kl11qq1hb8r42kiak.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVuj3G3uBHN0gajdXyp_F_0tcKeGfuTTQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "567676390162-kn9badm9rp9uem2kl11qq1hb8r42kiak.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "567676390162-5lttqteka5safidcom1r1icncepgfjes.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.godinflunce.vr"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>567676390162-5lttqteka5safidcom1r1icncepgfjes.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.567676390162-5lttqteka5safidcom1r1icncepgfjes</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>567676390162-cluedng5pipb1p7pm7m1ia7754b5v4pk.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyB83sjg3nutbZmp6pOztMdq5ZfHrffUBrk</string>
+	<key>GCM_SENDER_ID</key>
+	<string>567676390162</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.godinflunce.vr</string>
+	<key>PROJECT_ID</key>
+	<string>god-influncevr</string>
+	<key>STORAGE_BUCKET</key>
+	<string>god-influncevr.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:567676390162:ios:e977b47793dfd6251e01cb</string>
+	<key>DATABASE_URL</key>
+	<string>https://god-influncevr-default-rtdb.asia-southeast1.firebasedatabase.app</string>
+</dict>
+</plist>
