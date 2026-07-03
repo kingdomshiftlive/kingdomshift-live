@@ -3,8 +3,8 @@
 ## Test 1 — Host Live
 - [x] Host can start live
 - [x] Stream stays open past 2 minutes
-- [ ] Host can end live manually
-- [ ] Summary screen appears correctly
+- [x] Host can end live manually
+- [x] Summary screen appears correctly
 
 ## Test 2 — Viewer Join
 - [ ] Viewer can find live
