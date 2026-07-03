@@ -1,0 +1,554 @@
+KINGDOMSHIFT LIVE STREAM AUDIT
+Generated: Fri Jul  3 09:16:51 HST 2026
+
+=== ZEGO ENGINE SETUP ===
+lib/screen/audio_live_stream_screen/create_audio_live_screen/create_audio_live_stream_controller.dart:49:    final appIdStr = settings?.zegoAppId ?? '0';
+lib/screen/audio_live_stream_screen/create_audio_live_screen/create_audio_live_stream_controller.dart:50:    final appSign = settings?.zegoAppSign ?? '';
+lib/screen/audio_live_stream_screen/create_audio_live_screen/create_audio_live_stream_controller.dart:52:    if (appIdStr.isEmpty || appSign.isEmpty) {
+lib/screen/audio_live_stream_screen/create_audio_live_screen/create_audio_live_stream_controller.dart:59:    int appId;
+lib/screen/audio_live_stream_screen/create_audio_live_screen/create_audio_live_stream_controller.dart:61:      appId = int.parse(appIdStr);
+lib/screen/audio_live_stream_screen/create_audio_live_screen/create_audio_live_stream_controller.dart:62:      if (appId == 0) {
+lib/screen/audio_live_stream_screen/create_audio_live_screen/create_audio_live_stream_controller.dart:66:      Loggers.error('Invalid Zego App ID: $appIdStr');
+lib/screen/audio_live_stream_screen/create_audio_live_screen/create_audio_live_stream_controller.dart:77:      await ZegoExpressEngine.createEngineWithProfile(
+lib/screen/audio_live_stream_screen/create_audio_live_screen/create_audio_live_stream_controller.dart:78:        ZegoEngineProfile(appId, ZegoScenario.Default, appSign: appSign),
+lib/screen/dashboard_screen/dashboard_screen_controller.dart:209:    int appId = 1974018811;
+lib/screen/dashboard_screen/dashboard_screen_controller.dart:210:    if (appId == 0) {
+lib/screen/dashboard_screen/dashboard_screen_controller.dart:219:      await ZegoExpressEngine.createEngineWithProfile(ZegoEngineProfile(
+lib/screen/dashboard_screen/dashboard_screen_controller.dart:220:          appId, ZegoScenario.Default,
+lib/screen/dashboard_screen/dashboard_screen_controller.dart:221:          appSign:
+
+=== LIVE START / PREVIEW / PUBLISH ===
+lib/screen/live_stream/create_live_stream_screen/create_live_stream_screen_controller.dart:49:    stopPreview();
+lib/screen/live_stream/create_live_stream_screen/create_live_stream_screen_controller.dart:120:      await zegoEngine.createCanvasView((viewID) async {
+lib/screen/live_stream/create_live_stream_screen/create_live_stream_screen_controller.dart:126:        zegoEngine.startPreview(canvas: previewCanvas);
+lib/screen/live_stream/create_live_stream_screen/create_live_stream_screen_controller.dart:146:    stopPreview();
+lib/screen/live_stream/create_live_stream_screen/create_live_stream_screen_controller.dart:149:  Future<void> stopPreview() async {
+lib/screen/live_stream/create_live_stream_screen/create_live_stream_screen_controller.dart:150:    zegoEngine.stopPreview();
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:129:      loginRoom();
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:160:    logoutRoom(4);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:208:  Future<void> logoutRoom(int index) async {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:212:    stopPreview();
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:214:    zegoEngine.logoutRoom(liveData.value.roomID ?? '');
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:217:  Future<ZegoRoomLoginResult> loginRoom() async {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:224:      final result = await zegoEngine.loginRoom(roomID, user, config: roomConfig);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:227:        showSnackBar('loginRoom failed: ${result.errorCode}');
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:273:      Loggers.error('Error in loginRoom: $e');
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:281:    // Users can only receive callbacks when the isUserStatusNotify property of ZegoRoomConfig is set to `true` when logging in to the room (loginRoom).
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:320:              logoutRoom(1);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:490:    return zegoEngine.startPublishingStream(streamID);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:494:    return zegoEngine.stopPublishingStream();
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:501:      await zegoEngine.createCanvasView((viewID) {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:544:  Future<void> stopPreview({int? viewId}) async {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:546:    zegoEngine.stopPreview();
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1112:      await zegoEngine.createCanvasView((viewID) async {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1115:        zegoEngine.startPreview(canvas: previewCanvas);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1125:      await zegoEngine.startPublishingStream('$streamId');
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1191:      stopPreview(viewId: view.streamViewId);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1321:    logoutRoom(2);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1424:          logoutRoom(3);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1462:    _mediaPlayerWidget = await ZegoExpressEngine.instance.createCanvasView((viewID) {
+
+=== CO-HOST / MULTI-HOST ===
+lib/screen/live_stream/livestream_screen/audience/widget/livestream_audience_top_view.dart:76:            bool isAudience = stream.coHostIds?.contains(controller.myUserId) == false;
+lib/screen/live_stream/livestream_screen/audience/widget/livestream_audience_top_view.dart:191:            bool isCoHost = (stream.coHostIds ?? []).contains(controller.myUserId);
+lib/screen/live_stream/livestream_screen/audience/widget/livestream_audience_top_view.dart:216:                if (!isBattleOn && liveData.isRestrictToJoin == 0 && !isCoHost)
+lib/screen/live_stream/livestream_screen/audience/widget/live_stream_user_info_sheet.dart:207:                                        onTap: () => widget.controller.coHostAudioToggle(state),
+lib/screen/live_stream/livestream_screen/audience/widget/live_stream_user_info_sheet.dart:216:                                        onTap: () => widget.controller.coHostVideoToggle(state),
+lib/screen/live_stream/livestream_screen/audience/widget/live_stream_user_info_sheet.dart:256:                                          widget.controller.coHostDelete(state);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:104:  RxList<LivestreamUserState> coHostList = <LivestreamUserState>[].obs;
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:162:      updateLiveStreamData(watchingCount: -1, coHostId: FieldValue.arrayRemove([myUserId]));
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:315:                if (element.type == LivestreamUserType.coHost) {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:562:    FieldValue? coHostId,
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:576:      if (coHostId != null) FirebaseConst.coHostIds: coHostId
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:599:    updateUserStateToFirestore(userId, type: isRefused ? LivestreamUserType.audience : LivestreamUserType.coHost);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:756:          coHostList.value = liveUsersStates.where((element) => element.type == LivestreamUserType.coHost).toList();
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1010:      case LivestreamUserType.coHost:
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1082:                      updateUserStateToFirestore(myUserId, type: LivestreamUserType.coHost);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1101:  void publishCoHostStream(int streamId) async {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1132:      updateLiveStreamData(coHostId: FieldValue.arrayUnion([streamId]));
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1133:      _sendCommentToFirestore(type: LivestreamCommentType.joinedCoHost);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1188:  void closeCoHostStream(int? streamId) {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1193:      updateLiveStreamData(coHostId: FieldValue.arrayRemove([streamId]));
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1195:          (element) => element.senderId == myUserId && element.commentType == LivestreamCommentType.joinedCoHost);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1211:  void coHostVideoToggle(LivestreamUserState state) {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1213:      return showSnackBar(LKey.theCoHostHasTurnedOffTheirVideo);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1220:  void coHostAudioToggle(LivestreamUserState state) {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1222:      return showSnackBar(LKey.theCoHostHasTurnedOffTheirAudio);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1232:      if (newState.type == LivestreamUserType.coHost && oldState?.type != LivestreamUserType.coHost) {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1233:        publishCoHostStream(myUserId);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1259:      if (oldState?.type == LivestreamUserType.coHost && newState.type == LivestreamUserType.audience) {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1260:        closeCoHostStream(newState.userId);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1265:  void coHostDelete(LivestreamUserState state) {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1266:    if (state.type == LivestreamUserType.coHost) {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1267:      updateLiveStreamData(coHostId: FieldValue.arrayRemove([state.userId]));
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1333:      if (userState?.type == LivestreamUserType.coHost) {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1357:    // (1 Host + N Co-hosts)
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1359:        liveUsersStates.where((e) => e.type == LivestreamUserType.host || e.type == LivestreamUserType.coHost).toList();
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1421:          if (liveData.value.coHostIds?.contains(myUserId) ?? false) {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1422:            closeCoHostStream(myUserId);
+lib/screen/live_stream/livestream_screen/view/battle_view.dart:105:      // Co-host
+lib/screen/live_stream/livestream_screen/view/battle_view.dart:106:      LivestreamUserState? coHostState;
+lib/screen/live_stream/livestream_screen/view/battle_view.dart:107:      AppUser? coHostUser;
+lib/screen/live_stream/livestream_screen/view/battle_view.dart:109:        coHostState = userStates.firstWhereOrNull(
+lib/screen/live_stream/livestream_screen/view/battle_view.dart:112:        coHostUser = coHostState?.getUser(liveUsers);
+lib/screen/live_stream/livestream_screen/view/battle_view.dart:118:        if (coHostUser != null) coHostUser,
+lib/screen/live_stream/livestream_screen/view/battle_view.dart:123:      int blue = coHostState?.currentBattleCoin ?? 0;
+lib/screen/live_stream/livestream_screen/view/livestream_comment_view.dart:128:                    child: Text(LKey.accept.tr,
+lib/screen/live_stream/livestream_screen/view/livestream_comment_view.dart:145:      case LivestreamCommentType.joinedCoHost:
+lib/screen/live_stream/livestream_screen/view/livestream_comment_view.dart:146:        return Text(LKey.joinedAsACoHost.tr,
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:77:    final coHosts = views.sublist(1);
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:98:            // Right half: Co-hosts grid matching left side height
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:100:              child: _buildCoHostsGrid(
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:102:                streamViews: coHosts,
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:141:  Widget _buildCoHostsGrid({
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:208:    // Show only first 4 co-hosts in the grid
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:209:    final visibleCoHosts = streamViews.take(4).toList();
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:210:    final rows = (visibleCoHosts.length / columns).ceil();
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:216:        final endIndex = (startIndex + columns).clamp(0, visibleCoHosts.length);
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:217:        final rowUsers = visibleCoHosts.sublist(startIndex, endIndex);
+lib/screen/live_stream/livestream_screen/view/live_stream_bottom_view.dart:90:                                final isHostOrCoHost = userState.type == LivestreamUserType.host ||
+lib/screen/live_stream/livestream_screen/view/live_stream_bottom_view.dart:91:                                    userState.type == LivestreamUserType.coHost;
+lib/screen/live_stream/livestream_screen/view/live_stream_bottom_view.dart:92:                                if (!isHostOrCoHost) return const SizedBox();
+lib/screen/live_stream/livestream_screen/view/live_stream_bottom_view.dart:100:                                    if (LivestreamUserType.coHost == userState.type &&
+lib/screen/live_stream/livestream_screen/view/live_stream_bottom_view.dart:107:                                              controller.closeCoHostStream(userId);
+lib/screen/live_stream/livestream_screen/view/multi_battle_view.dart:56:        .where((e) => e.type == LivestreamUserType.host || e.type == LivestreamUserType.coHost)
+lib/screen/live_stream/livestream_screen/widget/members_sheet.dart:58:                items: [LKey.requests.tr, LKey.audience.tr, LKey.invited.tr, LKey.coHosts.tr],
+lib/screen/live_stream/livestream_screen/widget/members_sheet.dart:178:                          showShow: controller.coHostList.isEmpty,
+lib/screen/live_stream/livestream_screen/widget/members_sheet.dart:179:                          title: LKey.coHostListEmptyTitle.tr,
+lib/screen/live_stream/livestream_screen/widget/members_sheet.dart:180:                          description: LKey.coHostListEmptyDescription.tr,
+lib/screen/live_stream/livestream_screen/widget/members_sheet.dart:183:                            itemCount: controller.coHostList.length,
+lib/screen/live_stream/livestream_screen/widget/members_sheet.dart:185:                              final state = controller.coHostList[index];
+lib/screen/live_stream/livestream_screen/widget/members_sheet.dart:231:      case LivestreamUserType.coHost:
+lib/screen/live_stream/livestream_screen/widget/members_sheet.dart:237:              () => controller.coHostVideoToggle(state),
+lib/screen/live_stream/livestream_screen/widget/members_sheet.dart:242:              () => controller.coHostAudioToggle(state),
+lib/screen/live_stream/livestream_screen/widget/members_sheet.dart:244:            _buildActionBtn(AssetRes.icDelete1, ColorRes.likeRed, () => controller.coHostDelete(state)),
+lib/screen/live_stream/live_dashboard_screen.dart:197:        'label': 'Invite Co-Host',
+
+=== GRID / MULTI USER LAYOUTS ===
+lib/screen/live_stream/livestream_history/livestream_history_screen.dart:84:                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+lib/screen/live_stream/livestream_history/livestream_history_screen.dart:103:                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+lib/screen/live_stream/livestream_screen/host/widget/layout_picker_sheet.dart:54:                final currentLayout = controller.liveData.value.streamLayout ?? StreamLayout.spotlight;
+lib/screen/live_stream/livestream_screen/host/widget/layout_picker_sheet.dart:62:                  children: StreamLayout.values.map((layout) {
+lib/screen/live_stream/livestream_screen/host/widget/layout_picker_sheet.dart:69:                        controller.changeStreamLayout(layout);
+lib/screen/live_stream/livestream_screen/host/widget/layout_picker_sheet.dart:86:  final StreamLayout layout;
+lib/screen/live_stream/livestream_screen/host/widget/layout_picker_sheet.dart:98:      case StreamLayout.spotlight:
+lib/screen/live_stream/livestream_screen/host/widget/layout_picker_sheet.dart:100:      case StreamLayout.grid:
+lib/screen/live_stream/livestream_screen/host/widget/layout_picker_sheet.dart:102:      case StreamLayout.stack:
+lib/screen/live_stream/livestream_screen/host/widget/layout_picker_sheet.dart:104:      case StreamLayout.focus:
+lib/screen/live_stream/livestream_screen/host/widget/layout_picker_sheet.dart:152:      case StreamLayout.spotlight:
+lib/screen/live_stream/livestream_screen/host/widget/layout_picker_sheet.dart:153:        // Host large left, small grid right
+lib/screen/live_stream/livestream_screen/host/widget/layout_picker_sheet.dart:172:      case StreamLayout.grid:
+lib/screen/live_stream/livestream_screen/host/widget/layout_picker_sheet.dart:173:        // Equal grid
+lib/screen/live_stream/livestream_screen/host/widget/layout_picker_sheet.dart:200:      case StreamLayout.stack:
+lib/screen/live_stream/livestream_screen/host/widget/layout_picker_sheet.dart:212:      case StreamLayout.focus:
+lib/screen/live_stream/livestream_screen/host/widget/live_stream_host_top_view.dart:115:                                    Icons.grid_view_rounded,
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:556:    StreamLayout? streamLayout,
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:580:  void changeStreamLayout(StreamLayout layout) {
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:60:      final layout = stream.streamLayout ?? StreamLayout.spotlight;
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:63:        case StreamLayout.spotlight:
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:65:        case StreamLayout.grid:
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:66:          return DynamicUserView(controller: controller, streamViews: views);
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:67:        case StreamLayout.stack:
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:69:        case StreamLayout.focus:
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:98:            // Right half: Co-hosts grid matching left side height
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:117:        return ThreeUserView(controller: controller, streamViews: views);
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:119:        return FourUserView(controller: controller, streamViews: views);
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:121:        return FiveUserView(controller: controller, streamViews: views);
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:123:        return SixUserView(controller: controller, streamViews: views);
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:125:        return SevenUserView(controller: controller, streamViews: views);
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:127:        return EightUserView(controller: controller, streamViews: views);
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:129:        return DynamicUserView(controller: controller, streamViews: views);
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:195:    // Always use 2 columns for right side grid
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:207:    // For 4-5 users: Fixed 2x2 grid (max 4 slots visible)
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:208:    // Show only first 4 co-hosts in the grid
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:320:class DynamicUserView extends StatelessWidget {
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:324:  const DynamicUserView({
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:375:    // Handles 9-32 users with appropriate grid layouts
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:377:      return 3; // 3 columns for 9 users (3x3 grid)
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:381:      return 4; // 4 columns for 13-16 users (4x4 grid)
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:385:      return 4; // 4 columns for 21-24 users (4x6 grid)
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:387:      return 4; // 4 columns for 25-28 users (4x7 grid)
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:389:      // 29-32 users: 4 columns (4x8 grid)
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:433:class ThreeUserView extends StatelessWidget {
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:437:  const ThreeUserView({
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:490:class FourUserView extends StatelessWidget {
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:494:  const FourUserView({super.key, required this.controller, required this.streamViews});
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:555:class FiveUserView extends StatelessWidget {
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:559:  const FiveUserView({super.key, required this.controller, required this.streamViews});
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:621:class SixUserView extends StatelessWidget {
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:625:  const SixUserView({super.key, required this.controller, required this.streamViews});
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:687:class SevenUserView extends StatelessWidget {
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:691:  const SevenUserView({super.key, required this.controller, required this.streamViews});
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:753:class EightUserView extends StatelessWidget {
+lib/screen/live_stream/livestream_screen/view/livestream_view.dart:757:  const EightUserView({super.key, required this.controller, required this.streamViews});
+lib/screen/live_stream/live_stream_search_screen/live_stream_search_screen.dart:509:                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+
+=== COMMENTS ===
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:27:import 'package:shortzz/model/livestream/livestream_comment.dart';
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:75:  StreamSubscription<QuerySnapshot<LivestreamComment?>>? liveStreamCommentsListener;
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:77:  TextEditingController textCommentController = TextEditingController();
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:86:  CollectionReference get liveStreamCommentsRef =>
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:87:      db.collection(FirebaseConst.liveStreams).doc(liveData.value.roomID).collection(FirebaseConst.comments);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:107:  RxList<LivestreamComment> comments = <LivestreamComment>[].obs;
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:135:    fetchLiveStreamComments();
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:155:    liveStreamCommentsListener?.cancel();
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:258:          _sendCommentToFirestore(type: LivestreamCommentType.joined);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:399:      // Send comment to notify audience
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:400:      _sendCommentToFirestore(type: LivestreamCommentType.text, comment: "Started screen sharing");
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:429:      // Send comment to notify audience
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:430:      _sendCommentToFirestore(type: LivestreamCommentType.text, comment: "Stopped screen sharing");
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:593:    LivestreamComment? comment,
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:601:    // Determine the comment to delete
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:602:    final commentToDelete = comment ??
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:603:        comments.firstWhereOrNull(
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:604:            (element) => element.senderId == userId && element.commentType == LivestreamCommentType.request);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:606:    if (commentToDelete != null) {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:607:      liveStreamCommentsRef.doc(commentToDelete.id.toString()).delete();
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:633:      // Get all Comments in the livestream and delete them
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:634:      QuerySnapshot commentsSnapshot = await liveStreamCommentsRef.get();
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:636:      for (var doc in commentsSnapshot.docs) {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:640:      Loggers.info('Deleted ${commentsSnapshot.docs.length} livestream comments.');
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:647:      Loggers.success('livestream , users_states , comments  deleted from Firestore.');
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:763:  void fetchLiveStreamComments() {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:764:    Loggers.info('Fetching live stream comments...');
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:765:    liveStreamCommentsListener?.cancel();
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:766:    liveStreamCommentsListener = liveStreamCommentsRef
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:770:              Loggers.error('No comments found in Firestore.');
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:773:            return LivestreamComment.fromJson(snapshot.data()!);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:780:      //     'Received comment changes: ${querySnapshot.docChanges.length}');
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:783:        LivestreamComment? comment = change.doc.data();
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:784:        if (comment == null) {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:785:          Loggers.error('Null comment received.');
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:791:            if (comment.commentType == LivestreamCommentType.request && !isHost) {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:794:            comments.add(comment);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:796:            if (isHost && comment.commentType == LivestreamCommentType.gift && comment.giftId != null) {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:797:              Gift? gift = gifts.firstWhereOrNull((gift) => gift.id == comment.giftId);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:812:            Loggers.info('New comment added: ${comment.toJson()}');
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:816:            if (comment.commentType == LivestreamCommentType.request && !isHost) {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:819:            int index = comments.indexWhere((c) => c.id == comment.id);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:821:              comments[index] = comment;
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:822:              // Loggers.info('Comment modified: ${comment.toJson()}');
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:827:            comments.removeWhere((c) => c.id == comment.id);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:828:            // Loggers.info('Comment removed: ${comment.id}');
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:833:      // Assign sender and receiver users to comments
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:834:      for (var comment in comments) {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:835:        comment.gift = gifts.firstWhereOrNull((gift) => gift.id == comment.giftId);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:838:      comments.sort((a, b) => (b.id ?? 0).compareTo(a.id ?? 0));
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:923:  void onTextCommentSend() {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:924:    String comment = textCommentController.text.trim();
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:925:    textCommentController.clear();
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:927:    if (comment.isEmpty) return;
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:928:    _sendCommentToFirestore(type: LivestreamCommentType.text, comment: comment);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:958:          _sendCommentToFirestore(type: LivestreamCommentType.gift, giftId: gift.id, receiverId: user?.userId);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:971:  _sendCommentToFirestore({required LivestreamCommentType type, String? comment, int? giftId, int? receiverId}) async {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:975:      liveStreamCommentsRef.doc('$time').set(LivestreamComment(
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:976:              comment: comment, commentType: type, id: time, senderId: myUserId, receiverId: receiverId, giftId: giftId)
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1003:        _sendCommentToFirestore(type: LivestreamCommentType.request, receiverId: liveData.hostId);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1133:      _sendCommentToFirestore(type: LivestreamCommentType.joinedCoHost);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1194:      LivestreamComment? comment = comments.firstWhereOrNull(
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1195:          (element) => element.senderId == myUserId && element.commentType == LivestreamCommentType.joinedCoHost);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1196:      if (comment != null) {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1197:        liveStreamCommentsRef.doc(comment.id.toString()).delete();
+lib/screen/live_stream/livestream_screen/view/livestream_comment_view.dart:7:import 'package:shortzz/model/livestream/livestream_comment.dart';
+lib/screen/live_stream/livestream_screen/view/livestream_comment_view.dart:12:class LiveStreamCommentView extends StatelessWidget {
+lib/screen/live_stream/livestream_screen/view/livestream_comment_view.dart:15:  const LiveStreamCommentView({super.key, required this.controller});
+lib/screen/live_stream/livestream_screen/view/livestream_comment_view.dart:35:          itemCount: controller.comments.length,
+lib/screen/live_stream/livestream_screen/view/livestream_comment_view.dart:41:            LivestreamComment comment = controller.comments[index];
+lib/screen/live_stream/livestream_screen/view/livestream_comment_view.dart:42:            // Hide gift comments from the comments section
+lib/screen/live_stream/livestream_screen/view/livestream_comment_view.dart:43:            if (comment.commentType == LivestreamCommentType.gift) {
+lib/screen/live_stream/livestream_screen/view/livestream_comment_view.dart:53:                    image: comment.senderUser?.profile?.addBaseURL(),
+lib/screen/live_stream/livestream_screen/view/livestream_comment_view.dart:54:                    fullName: comment.senderUser?.fullname,
+lib/screen/live_stream/livestream_screen/view/livestream_comment_view.dart:66:                          username: comment.senderUser?.username,
+lib/screen/live_stream/livestream_screen/view/livestream_comment_view.dart:67:                          isVerify: comment.senderUser?.isVerify,
+lib/screen/live_stream/livestream_screen/view/livestream_comment_view.dart:73:                        _buildCommentContent(context, comment)
+lib/screen/live_stream/livestream_screen/view/livestream_comment_view.dart:86:  Widget _buildCommentContent(BuildContext context, LivestreamComment comment) {
+lib/screen/live_stream/livestream_screen/view/livestream_comment_view.dart:87:    switch (comment.commentType) {
+lib/screen/live_stream/livestream_screen/view/livestream_comment_view.dart:90:      case LivestreamCommentType.request:
+lib/screen/live_stream/livestream_screen/view/livestream_comment_view.dart:103:                    controller.handleRequestResponse(user: comment.senderUser, isRefused: true, comment: comment);
+lib/screen/live_stream/livestream_screen/view/livestream_comment_view.dart:118:                    controller.handleRequestResponse(user: comment.senderUser, isRefused: false, comment: comment);
+lib/screen/live_stream/livestream_screen/view/livestream_comment_view.dart:136:      case LivestreamCommentType.text:
+lib/screen/live_stream/livestream_screen/view/livestream_comment_view.dart:137:        return Text(comment.comment?.tr ?? '',
+lib/screen/live_stream/livestream_screen/view/livestream_comment_view.dart:139:      case LivestreamCommentType.gift:
+lib/screen/live_stream/livestream_screen/view/livestream_comment_view.dart:140:        // Gifts are not displayed in the comments section
+lib/screen/live_stream/livestream_screen/view/livestream_comment_view.dart:142:      case LivestreamCommentType.joined:
+lib/screen/live_stream/livestream_screen/view/livestream_comment_view.dart:145:      case LivestreamCommentType.joinedCoHost:
+lib/screen/live_stream/livestream_screen/view/live_stream_bottom_view.dart:9:import 'package:shortzz/screen/live_stream/livestream_screen/view/livestream_comment_view.dart';
+lib/screen/live_stream/livestream_screen/view/live_stream_bottom_view.dart:51:                                    child: LiveStreamCommentView(controller: controller))),
+lib/screen/live_stream/livestream_screen/widget/live_stream_text_field.dart:41:          controller: controller.textCommentController,
+lib/screen/live_stream/livestream_screen/widget/live_stream_text_field.dart:148:      onTap: controller.onTextCommentSend,
+lib/screen/live_stream/live_dashboard_screen.dart:523:        'label': 'Comments',
+lib/screen/live_stream/live_stream_search_screen/live_stream_search_screen_controller.dart:243:    final CollectionReference commentsRef = livestreamRef.collection(FirebaseConst.comments);
+lib/screen/live_stream/live_stream_search_screen/live_stream_search_screen_controller.dart:249:        commentsRef.get(),
+lib/screen/live_stream/live_stream_search_screen/live_stream_search_screen_controller.dart:253:      final QuerySnapshot commentsSnapshot = results[1];
+lib/screen/live_stream/live_stream_search_screen/live_stream_search_screen_controller.dart:263:      // Queue deletions for comments
+lib/screen/live_stream/live_stream_search_screen/live_stream_search_screen_controller.dart:264:      for (final doc in commentsSnapshot.docs) {
+lib/screen/live_stream/live_stream_search_screen/live_stream_search_screen_controller.dart:267:      Loggers.info('Queued ${commentsSnapshot.size} comment deletions.');
+lib/screen/live_stream/live_stream_search_screen/live_stream_search_screen_controller.dart:274:      Loggers.success('Deleted live stream, user states, and comments from Firestore.');
+
+=== GIFTS / COINS ===
+lib/screen/live_stream/livestream_screen/host/widget/live_stream_host_top_view.dart:54:                        // Row 1: Stop, Eye count, Coin count, Share, Audience, Layout
+lib/screen/live_stream/livestream_screen/host/widget/live_stream_host_top_view.dart:69:                                title: (userState?.totalCoin ?? 0).numberFormat, imageIcon: AssetRes.icCoin),
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:30:import 'package:shortzz/screen/gift_sheet/send_gift_sheet.dart';
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:31:import 'package:shortzz/screen/gift_sheet/send_gift_sheet_controller.dart';
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:100:  List<Gift> get gifts => setting?.gifts ?? [];
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:110:  Rx<AppUser?> selectedGiftUser = Rx(null);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:795:            // Trigger animation for video gifts on host screen
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:796:            if (isHost && comment.commentType == LivestreamCommentType.gift && comment.giftId != null) {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:797:              Gift? gift = gifts.firstWhereOrNull((gift) => gift.id == comment.giftId);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:798:              if (gift?.type == 'video') {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:799:                loadResource(videoBaseUrl + gift!.image.toString()).then((ret) async {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:835:        comment.gift = gifts.firstWhereOrNull((gift) => gift.id == comment.giftId);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:931:  void onGiftTap(GiftType type, {BattleView battleViewType = BattleView.red, List<AppUser> users = const []}) {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:934:      return showSnackBar(LKey.cannotSendGiftToYourself.tr);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:937:      return showSnackBar(LKey.battleEndedGiftNotSent.tr);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:939:    GiftManager.openGiftSheet(
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:940:        onCompletion: (giftManager) async {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:941:          if (giftManager.gift.type == 'video') {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:942:            await loadResource(videoBaseUrl + giftManager.gift.image.toString());
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:953:          Gift gift = giftManager.gift;
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:954:          AppUser? user = giftManager.streamUser;
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:956:          int coinPrice = gift.coinPrice?.toInt() ?? 0;
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:958:          _sendCommentToFirestore(type: LivestreamCommentType.gift, giftId: gift.id, receiverId: user?.userId);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:961:            battleCoin: type == GiftType.battle ? coinPrice : null,
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:962:            currentBattleCoin: type == GiftType.battle ? coinPrice : null,
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:963:            liveCoin: type == GiftType.livestream ? coinPrice : null,
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:966:        giftType: type,
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:971:  _sendCommentToFirestore({required LivestreamCommentType type, String? comment, int? giftId, int? receiverId}) async {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:976:              comment: comment, commentType: type, id: time, senderId: myUserId, receiverId: receiverId, giftId: giftId)
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1022:    int? battleCoin,
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1023:    int? liveCoin,
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1026:    int? currentBattleCoin,
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1045:        if (battleCoin != null) FirebaseConst.totalBattleCoin: battleCoin == 0 ? 0 : FieldValue.increment(battleCoin),
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1046:        if (currentBattleCoin != null)
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1047:          FirebaseConst.currentBattleCoin: currentBattleCoin == 0 ? 0 : FieldValue.increment(currentBattleCoin),
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1048:        if (liveCoin != null) FirebaseConst.liveCoin: liveCoin == 0 ? 0 : FieldValue.increment(liveCoin),
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1054:      if (battleCoin != null || liveCoin != null) {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1055:        myUser.value?.coinEstimatedValue(battleCoin?.toDouble() ?? liveCoin?.toDouble());
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1203:          battleCoin: 0,
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1204:          currentBattleCoin: 0);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1337:          updateUserStateToFirestore(myUserId, battleCoin: 0, liveCoin: 0, currentBattleCoin: 0);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1446:  /// ------------- Gift ------------
+lib/screen/live_stream/livestream_screen/view/battle_view.dart:121:      // Battle coins
+lib/screen/live_stream/livestream_screen/view/battle_view.dart:122:      int red = hostState?.currentBattleCoin ?? 0;
+lib/screen/live_stream/livestream_screen/view/battle_view.dart:123:      int blue = coHostState?.currentBattleCoin ?? 0;
+lib/screen/live_stream/livestream_screen/view/battle_view.dart:240:              // coin view
+lib/screen/live_stream/livestream_screen/view/battle_view.dart:244:                  _buildCoinStats(context, topRight: true, coin: red),
+lib/screen/live_stream/livestream_screen/view/battle_view.dart:245:                  _buildCoinStats(context, topRight: false, coin: blue),
+lib/screen/live_stream/livestream_screen/view/battle_view.dart:280:  Widget _buildCoinStats(BuildContext context, {required bool topRight, required int coin}) {
+lib/screen/live_stream/livestream_screen/view/battle_view.dart:299:          if (topRight) Image.asset(AssetRes.icCoin, height: 18, width: 18),
+lib/screen/live_stream/livestream_screen/view/battle_view.dart:301:            coin.numberFormat,
+lib/screen/live_stream/livestream_screen/view/battle_view.dart:307:          if (!topRight) Image.asset(AssetRes.icCoin, height: 18, width: 18),
+lib/screen/live_stream/livestream_screen/view/livestream_comment_view.dart:42:            // Hide gift comments from the comments section
+lib/screen/live_stream/livestream_screen/view/livestream_comment_view.dart:43:            if (comment.commentType == LivestreamCommentType.gift) {
+lib/screen/live_stream/livestream_screen/view/livestream_comment_view.dart:139:      case LivestreamCommentType.gift:
+lib/screen/live_stream/livestream_screen/view/livestream_comment_view.dart:140:        // Gifts are not displayed in the comments section
+lib/screen/live_stream/livestream_screen/view/multi_battle_view.dart:36:                participants.sort((a, b) => b.currentBattleCoin.compareTo(a.currentBattleCoin));
+lib/screen/live_stream/livestream_screen/view/multi_battle_view.dart:102:          // Coins
+lib/screen/live_stream/livestream_screen/view/multi_battle_view.dart:106:              Image.asset(AssetRes.icCoin, height: 12, width: 12),
+lib/screen/live_stream/livestream_screen/view/multi_battle_view.dart:109:                state.currentBattleCoin.numberFormat,
+lib/screen/live_stream/livestream_screen/widget/livestream_exist_message_bar.dart:47:          widget.controller.updateUserStateToFirestore(widget.controller.myUserId, currentBattleCoin: 0);
+lib/screen/live_stream/livestream_screen/widget/live_stream_text_field.dart:7:import 'package:shortzz/screen/gift_sheet/send_gift_sheet.dart';
+lib/screen/live_stream/livestream_screen/widget/live_stream_text_field.dart:27:      bool isGiftIconVisible =
+lib/screen/live_stream/livestream_screen/widget/live_stream_text_field.dart:58:              isGiftIconVisible: isGiftIconVisible,
+lib/screen/live_stream/livestream_screen/widget/live_stream_text_field.dart:75:  final bool isGiftIconVisible;
+lib/screen/live_stream/livestream_screen/widget/live_stream_text_field.dart:85:    required this.isGiftIconVisible,
+lib/screen/live_stream/livestream_screen/widget/live_stream_text_field.dart:91:    final bool showGiftIconsForBattle = isTextEmpty && isAudience && isBattleOn && users.length == 2;
+lib/screen/live_stream/livestream_screen/widget/live_stream_text_field.dart:93:    final bool showMultiBattleGiftIcon = isTextEmpty && isAudience && isBattleOn && users.length > 2;
+lib/screen/live_stream/livestream_screen/widget/live_stream_text_field.dart:95:    final bool showSendButton = !isBattleOn || !isGiftIconVisible;
+lib/screen/live_stream/livestream_screen/widget/live_stream_text_field.dart:103:          : showGiftIconsForBattle
+lib/screen/live_stream/livestream_screen/widget/live_stream_text_field.dart:107:                    GiftIcon(
+lib/screen/live_stream/livestream_screen/widget/live_stream_text_field.dart:109:                      onTap: () => controller.onGiftTap(
+lib/screen/live_stream/livestream_screen/widget/live_stream_text_field.dart:110:                        GiftType.battle,
+lib/screen/live_stream/livestream_screen/widget/live_stream_text_field.dart:115:                    GiftIcon(
+lib/screen/live_stream/livestream_screen/widget/live_stream_text_field.dart:117:                      onTap: () => controller.onGiftTap(
+lib/screen/live_stream/livestream_screen/widget/live_stream_text_field.dart:118:                        GiftType.battle,
+lib/screen/live_stream/livestream_screen/widget/live_stream_text_field.dart:125:              : showMultiBattleGiftIcon
+lib/screen/live_stream/livestream_screen/widget/live_stream_text_field.dart:126:                  ? GiftIcon(
+lib/screen/live_stream/livestream_screen/widget/live_stream_text_field.dart:128:                      onTap: () => controller.onGiftTap(
+lib/screen/live_stream/livestream_screen/widget/live_stream_text_field.dart:129:                        GiftType.battle,
+lib/screen/live_stream/livestream_screen/widget/live_stream_text_field.dart:140:                              : GiftIcon(
+lib/screen/live_stream/livestream_screen/widget/live_stream_text_field.dart:141:                                  onTap: () => controller.onGiftTap(GiftType.livestream, users: users),
+lib/screen/live_stream/livestream_screen/widget/live_stream_text_field.dart:165:class GiftIcon extends StatelessWidget {
+lib/screen/live_stream/livestream_screen/widget/live_stream_text_field.dart:169:  const GiftIcon({super.key, this.onTap, this.bgColor});
+lib/screen/live_stream/livestream_screen/widget/live_stream_text_field.dart:185:        child: Image.asset(AssetRes.icGift, height: 20, width: 20, color: whitePure(context)),
+lib/screen/live_stream/live_stream_end_screen/widget/livestream_summary.dart:76:                    title: LKey.totalCoinsCollected.tr,
+lib/screen/live_stream/live_stream_end_screen/widget/livestream_summary.dart:77:                    value: userState?.totalCoin.toString() ?? '0',
+lib/screen/live_stream/live_stream_end_screen/widget/livestream_summary.dart:82:                          '${LKey.fromBattle.tr} : ${userState?.totalBattleCoin ?? 0} + ${LKey.live.tr} : ${userState?.liveCoin ?? 0}',
+lib/common/service/api/gift_wallet_service.dart:5:import 'package:shortzz/model/gift_wallet/withdraw_model.dart';
+lib/common/service/api/gift_wallet_service.dart:9:class GiftWalletService {
+lib/common/service/api/gift_wallet_service.dart:10:  GiftWalletService._();
+lib/common/service/api/gift_wallet_service.dart:12:  static final GiftWalletService instance = GiftWalletService._();
+lib/common/service/api/gift_wallet_service.dart:14:  Future<StatusModel> sendGift({int? userId, int? giftId}) async {
+lib/common/service/api/gift_wallet_service.dart:16:        url: WebService.giftWallet.sendGift,
+lib/common/service/api/gift_wallet_service.dart:18:        param: {Params.userId: userId, Params.giftId: giftId});
+lib/common/service/api/gift_wallet_service.dart:24:        url: WebService.giftWallet.fetchMyWithdrawalRequest,
+lib/common/service/api/gift_wallet_service.dart:35:      {required String coins,
+lib/common/service/api/gift_wallet_service.dart:39:        url: WebService.giftWallet.submitWithdrawalRequest,
+lib/common/service/api/gift_wallet_service.dart:42:          Params.coins: coins,
+lib/common/service/api/gift_wallet_service.dart:50:  Future<User?> buyCoins({required int id, String? purchasedAt}) async {
+lib/common/service/api/gift_wallet_service.dart:52:        url: WebService.giftWallet.buyCoins,
+lib/common/service/api/gift_wallet_service.dart:55:          Params.coinPackageId: id,
+lib/common/service/api/user_service.dart:95:      coinWallet: 0,
+lib/common/service/api/user_service.dart:146:        coinWallet: profile['coin_wallet'] ?? 0,
+lib/common/service/api/user_service.dart:160:        notifyGiftReceived: (profile['notify_gift_received'] == true) ? 1 : 0,
+lib/common/service/api/user_service.dart:190:      bool? notifyGiftReceived,
+lib/common/service/api/user_service.dart:235:      if (notifyGiftReceived != null)
+lib/common/service/api/user_service.dart:236:        updates['notify_gift_received'] = notifyGiftReceived;
+lib/common/service/utils/params.dart:75:  static const String coins = 'coins';
+lib/common/service/utils/params.dart:76:  static const String coinPackageId = 'coin_package_id';
+lib/common/service/utils/params.dart:85:  static const String notifyGiftReceived = 'notify_gift_received';
+lib/common/service/utils/params.dart:87:  static const String giftId = 'gift_id';
+lib/common/service/utils/web_service.dart:10:  static var giftWallet = _GiftWallet();
+lib/common/service/utils/web_service.dart:35:class _GiftWallet {
+lib/common/service/utils/web_service.dart:36:  String sendGift = "${apiURL}misc/sendGift";
+lib/common/service/utils/web_service.dart:39:  String buyCoins = "${apiURL}misc/buyCoins";
+lib/common/service/utils/web_service.dart:120:  String sendGift = "https://admin.godinfluencex.com/gifts";
+
+=== AUTO-END / TIMEOUTS ===
+lib/screen/live_stream/livestream_screen/host/widget/live_stream_host_top_view.dart:197:                title ?? LKey.endStreamTitle.tr,
+lib/screen/live_stream/livestream_screen/host/widget/live_stream_host_top_view.dart:201:                description ?? LKey.endStreamMessage.tr,
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:54:  Timer? timer;
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:55:  Timer? minViewerTimeoutTimer;
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:60:  int get minViewersThreshold => setting?.liveMinViewers ?? 0;
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:62:  int get timeoutMinutes => setting?.liveTimeout ?? 0;
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:67:  RxBool isMinViewerTimeout = false.obs;
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:151:    timer?.cancel();
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:152:    minViewerTimeoutTimer?.cancel();
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:316:                  streamEnded();
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:488:    // startMinViewerTimeoutCheck(); // Disabled for testing: don't auto-end host live
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:678:          timer?.cancel();
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1207:      streamEnded();
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1276:  void _timerStart(VoidCallback callBack) {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1277:    timer = Timer.periodic(
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1282:        //   timer?.cancel();
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1290:    String title = !isBattleOn ? LKey.endStreamTitle.tr : LKey.stopBattleTitle.tr;
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1291:    String description = !isBattleOn ? LKey.endStreamMessage.tr : LKey.stopBattleDescription.tr;
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1298:                // startMinViewerTimeoutCheck(); // Disabled for testing
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1301:                hostEndStream();
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1319:  void hostEndStream() {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1320:    streamEnded();
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1324:  void streamEnded() {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1373:    // Battle Start Timer Logic
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1378:    Loggers.success('Battle Timer Started');
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1380:    _timerStart(() {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1396:        timer?.cancel();
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1402:  void startMinViewerTimeoutCheck() {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1403:    if (minViewerTimeoutTimer?.isActive ?? false) return;
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1404:    Loggers.info('Check Min. Viewers Required to continue live $timeoutMinutes Minutes');
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1405:    minViewerTimeoutTimer = Timer.periodic(Duration(minutes: timeoutMinutes), (_) {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1406:      minViewerTimeoutTimer?.cancel();
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1407:      if ((liveData.value.watchingCount ?? 0) <= minViewersThreshold) {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1408:        isMinViewerTimeout.value = true;
+lib/screen/live_stream/livestream_screen/view/battle_view.dart:48:                Obx(() => BattleTimer(controller: widget.controller, livestream: widget.controller.liveData.value)),
+lib/screen/live_stream/livestream_screen/view/battle_view.dart:60:              Obx(() => BattleTimer(controller: widget.controller, livestream: widget.controller.liveData.value)),
+lib/screen/live_stream/livestream_screen/view/battle_view.dart:445:class BattleTimer extends StatefulWidget {
+lib/screen/live_stream/livestream_screen/view/battle_view.dart:449:  const BattleTimer({super.key, required this.controller, required this.livestream});
+lib/screen/live_stream/livestream_screen/view/battle_view.dart:452:  State<BattleTimer> createState() => _BattleTimerState();
+lib/screen/live_stream/livestream_screen/view/battle_view.dart:455:class _BattleTimerState extends State<BattleTimer> {
+lib/screen/live_stream/livestream_screen/view/live_stream_bottom_view.dart:180:                        controller.isMinViewerTimeout.value) {
+lib/screen/live_stream/livestream_screen/view/multi_battle_view.dart:31:            // Timer is handled in BattleView parent, adding spacing here
+lib/screen/live_stream/livestream_screen/widget/battle_start_countdown_overlay.dart:30:  Timer? timer;
+lib/screen/live_stream/livestream_screen/widget/battle_start_countdown_overlay.dart:39:    battleCountdownTimer();
+lib/screen/live_stream/livestream_screen/widget/battle_start_countdown_overlay.dart:42:  void battleCountdownTimer() async {
+lib/screen/live_stream/livestream_screen/widget/battle_start_countdown_overlay.dart:46:    _timerStart(() async {
+lib/screen/live_stream/livestream_screen/widget/battle_start_countdown_overlay.dart:57:        controller.minViewerTimeoutTimer?.cancel();
+lib/screen/live_stream/livestream_screen/widget/battle_start_countdown_overlay.dart:60:        timer?.cancel();
+lib/screen/live_stream/livestream_screen/widget/battle_start_countdown_overlay.dart:69:    timer?.cancel();
+lib/screen/live_stream/livestream_screen/widget/battle_start_countdown_overlay.dart:126:                  timer?.cancel();
+lib/screen/live_stream/livestream_screen/widget/battle_start_countdown_overlay.dart:148:  void _timerStart(VoidCallback callBack) {
+lib/screen/live_stream/livestream_screen/widget/battle_start_countdown_overlay.dart:149:    timer = Timer.periodic(
+lib/screen/live_stream/livestream_screen/widget/battle_start_countdown_overlay.dart:153:        // Cancel the timer after 5 seconds
+lib/screen/live_stream/livestream_screen/widget/battle_start_countdown_overlay.dart:155:        //   timer?.cancel();
+lib/screen/live_stream/livestream_screen/widget/livestream_exist_message_bar.dart:26:  Timer? _timer;
+lib/screen/live_stream/livestream_screen/widget/livestream_exist_message_bar.dart:39:    _timer = Timer.periodic(const Duration(seconds: 1), (_) async {
+lib/screen/live_stream/livestream_screen/widget/livestream_exist_message_bar.dart:44:        _timer?.cancel();
+lib/screen/live_stream/livestream_screen/widget/livestream_exist_message_bar.dart:50:            widget.controller.startMinViewerTimeoutCheck();
+lib/screen/live_stream/livestream_screen/widget/livestream_exist_message_bar.dart:53:          widget.controller.hostEndStream();
+lib/screen/live_stream/livestream_screen/widget/livestream_exist_message_bar.dart:63:    _timer?.cancel();
+lib/screen/live_stream/livestream_screen/widget/livestream_exist_message_bar.dart:83:                  : LKey.streamEndedMinUserDescription
+lib/screen/live_stream/livestream_screen/widget/livestream_exist_message_bar.dart:84:                      .trParams({'viewers_count': widget.controller.minViewersThreshold.toString()}),
+lib/screen/live_stream/live_stream_end_screen/widget/livestream_end_sheet.dart:57:                          LKey.streamEnded.tr,
+lib/screen/live_stream/live_stream_end_screen/widget/livestream_summary.dart:54:                      isHost ? LKey.streamEnded.tr : LKey.yourStreamEnded.tr,
+
+=== RECORDING ===
+lib/screen/live_stream/create_live_stream_screen/create_live_stream_screen_controller.dart:227:      startRecording(livestream.roomID ?? '');
+lib/screen/live_stream/create_live_stream_screen/create_live_stream_screen_controller.dart:239:  startRecording(String streamId) async {
+lib/screen/live_stream/create_live_stream_screen/create_live_stream_screen_controller.dart:240:    http.Response res = await http.get(Uri.parse('${WebService.post.startRecording}/$streamId'), headers: header);
+lib/screen/live_stream/livestream_history/livestream_history_controller.dart:19:  final String apiUrl = 'https://admin.godinfluencex.com/api/recording-history/';
+lib/screen/live_stream/livestream_history/livestream_history_controller.dart:20:  final String deleteApiUrl = 'https://admin.godinfluencex.com/api/delete-recording-history/';
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1300:                stopRecording();
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1312:  stopRecording() async {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1316:    await http.get(Uri.parse('${WebService.post.stopRecording}/$taskId'), headers: header);
+lib/screen/live_stream/live_dashboard_screen.dart:527:        'icon': Icons.fiber_manual_record,
+lib/screen/live_stream/live_dashboard_screen.dart:528:        'label': 'Recording',
+lib/screen/live_stream/live_stream_search_screen/live_stream_search_screen.dart:74:                    Text(LKey.liveRecordings.tr.toUpperCase(),
+lib/common/service/utils/web_service.dart:118:  String startRecording = "${apiURL}/startRecording";
+lib/common/service/utils/web_service.dart:119:  String stopRecording = "${apiURL}/stopRecording";
+
+=== FIRESTORE LIVE DATA ===
+lib/screen/live_stream/create_live_stream_screen/create_live_stream_screen_controller.dart:209:      DocumentReference livestreamRef = db.collection(FirebaseConst.liveStreams).doc('$userId');
+lib/screen/live_stream/create_live_stream_screen/create_live_stream_screen_controller.dart:211:      DocumentReference userStateRef = livestreamRef.collection(FirebaseConst.userState).doc('$userId');
+lib/screen/live_stream/create_live_stream_screen/create_live_stream_screen_controller.dart:215:      batch.set(livestreamRef, livestream.toJson());
+lib/screen/live_stream/create_live_stream_screen/create_live_stream_screen_controller.dart:227:      startRecording(livestream.roomID ?? '');
+lib/screen/live_stream/livestream_screen/audience/widget/livestream_audience_top_view.dart:192:            int count = liveData.watchingCount ?? 0;
+lib/screen/live_stream/livestream_screen/audience/widget/livestream_audience_top_view.dart:193:            int watchingCount = count >= 0 ? count : 0;
+lib/screen/live_stream/livestream_screen/audience/widget/livestream_audience_top_view.dart:210:                        watchingCount.numberFormat,
+lib/screen/live_stream/livestream_screen/host/widget/live_stream_host_top_view.dart:39:            int count = stream.watchingCount ?? 0;
+lib/screen/live_stream/livestream_screen/host/widget/live_stream_host_top_view.dart:40:            int watchingCount = count >= 0 ? count : 0;
+lib/screen/live_stream/livestream_screen/host/widget/live_stream_host_top_view.dart:65:                                title: watchingCount.numberFormat,
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:79:  DocumentReference get liveStreamDocRef => db.collection(FirebaseConst.liveStreams).doc(liveData.value.roomID);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:81:  CollectionReference get liveStreamUsersRef => db.collection(FirebaseConst.appUsers);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:83:  CollectionReference get liveStreamUserStatesRef =>
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:84:      db.collection(FirebaseConst.liveStreams).doc(liveData.value.roomID).collection(FirebaseConst.userState);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:87:      db.collection(FirebaseConst.liveStreams).doc(liveData.value.roomID).collection(FirebaseConst.comments);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:162:      updateLiveStreamData(watchingCount: -1, coHostId: FieldValue.arrayRemove([myUserId]));
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:195:      updateLiveStreamData(watchingCount: 1);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:214:    zegoEngine.logoutRoom(liveData.value.roomID ?? '');
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:218:    final roomID = liveData.value.roomID ?? '';
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:224:      final result = await zegoEngine.loginRoom(roomID, user, config: roomConfig);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:236:      final userRef = liveStreamUsersRef.doc(myUserId.toString());
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:237:      final stateRef = liveStreamUserStatesRef.doc(myUserId.toString());
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:270:      updateLiveStreamData(watchingCount: 1);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:282:    ZegoExpressEngine.onRoomUserUpdate = (roomID, updateType, List<ZegoUser> userList) {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:289:          'onRoomUserUpdate: roomID: $roomID, updateType: ${updateType.name}, userList: ${userList.map((e) => e.userID)}');
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:292:    ZegoExpressEngine.onRoomStreamUpdate = (roomID, updateType, List<ZegoStream> streamList, extendedData) async {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:301:          'onRoomStreamUpdate: roomID: $roomID, updateType: $updateType, streamList: ${streamList.map((e) => e.streamID)}, extendedData: $extendedData');
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:310:            if (liveData.value.roomID == stream.streamID) {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:331:    ZegoExpressEngine.onRoomStateUpdate = (roomID, state, errorCode, extendedData) {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:333:          'onRoomStateUpdate: roomID: $roomID, state: ${state.name}, errorCode: $errorCode, extendedData: $extendedData');
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:475:    if ((liveData.value.roomID ?? '').isEmpty) {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:478:    String streamID = liveData.value.roomID ?? '';
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:561:    int watchingCount = 0,
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:575:      if (watchingCount != 0) FirebaseConst.watchingCount: FieldValue.increment(watchingCount),
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:612:    final String? roomId = liveData.value.roomID;
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:623:      QuerySnapshot usersSnapshot = await liveStreamUserStatesRef.get();
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:661:              Loggers.error('Livestream document not found for Room ID: ${liveData.value.roomID}');
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:706:    liveStreamUserStatesListener = liveStreamUserStatesRef
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:984:    DocumentReference myUserRef = liveStreamUsersRef.doc(myUserId.toString());
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1033:    DocumentReference reference = liveStreamUserStatesRef.doc(userId.toString());
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1058:      await liveStreamUserStatesRef.doc(userId.toString()).update(updateData);
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1338:          if ((liveData.value.roomID ?? '').isEmpty) {
+lib/screen/live_stream/livestream_screen/livestream_screen_controller.dart:1407:      if ((liveData.value.watchingCount ?? 0) <= minViewersThreshold) {
+lib/screen/live_stream/live_stream_search_screen/live_stream_search_screen.dart:432:    Widget _buildUserInfo(AppUser? hostUser, int watchingCount) {
+lib/screen/live_stream/live_stream_search_screen/live_stream_search_screen.dart:452:            '${watchingCount.numberFormat} ${LKey.viewers.tr}',
+lib/screen/live_stream/live_stream_search_screen/live_stream_search_screen.dart:474:        int count = stream.watchingCount ?? 0;
+lib/screen/live_stream/live_stream_search_screen/live_stream_search_screen.dart:475:        int watchingCount = count >= 0 ? count : 0;
+lib/screen/live_stream/live_stream_search_screen/live_stream_search_screen.dart:487:                  _buildUserInfo(hostUser, watchingCount),
+lib/screen/live_stream/live_stream_search_screen/live_stream_search_screen_controller.dart:63:        String roomId = livestream?.roomID ?? '';
+lib/screen/live_stream/live_stream_search_screen/live_stream_search_screen_controller.dart:184:    DocumentReference livestreamRef = db.collection(FirebaseConst.liveStreams).doc('$userId');
+lib/screen/live_stream/live_stream_search_screen/live_stream_search_screen_controller.dart:204:      DocumentReference userStateRef = livestreamRef.collection(FirebaseConst.userState).doc('$userId');
+lib/screen/live_stream/live_stream_search_screen/live_stream_search_screen_controller.dart:208:      bool isExist = (await livestreamRef.get()).exists;
+lib/screen/live_stream/live_stream_search_screen/live_stream_search_screen_controller.dart:213:        batch.update(livestreamRef, livestream.toJson());
+lib/screen/live_stream/live_stream_search_screen/live_stream_search_screen_controller.dart:217:        batch.set(livestreamRef, livestream.toJson());
+lib/screen/live_stream/live_stream_search_screen/live_stream_search_screen_controller.dart:239:    final DocumentReference livestreamRef = db.collection(FirebaseConst.liveStreams).doc(roomId);
+lib/screen/live_stream/live_stream_search_screen/live_stream_search_screen_controller.dart:241:    final CollectionReference usersStateRef = livestreamRef.collection(FirebaseConst.userState);
+lib/screen/live_stream/live_stream_search_screen/live_stream_search_screen_controller.dart:243:    final CollectionReference commentsRef = livestreamRef.collection(FirebaseConst.comments);
+lib/screen/live_stream/live_stream_search_screen/live_stream_search_screen_controller.dart:270:      batch.delete(livestreamRef);
+
+=== ANDROID LIVE PERMISSIONS ===
+3:    <uses-permission android:name="android.permission.INTERNET"/>
+5:    <uses-permission android:name="android.permission.CAMERA"/>
+6:    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+8:    <uses-permission android:name="android.permission.BLUETOOTH"/>
+9:    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
+10:    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>

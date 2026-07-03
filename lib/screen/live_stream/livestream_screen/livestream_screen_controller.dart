@@ -485,7 +485,7 @@ class LivestreamScreenController extends BaseController {
     await zegoEngine.mutePublishStreamVideo(false, channel: ZegoPublishChannel.Main); // Ensure video is not muted
     await zegoEngine.mutePublishStreamAudio(false); // Ensure audio is not muted
 
-    startMinViewerTimeoutCheck(); //  Check time to Min. Viewers Required to continue live
+    // startMinViewerTimeoutCheck(); // Disabled for testing: don't auto-end host live
     pushNotificationToFollowers(liveData.value);
     return zegoEngine.startPublishingStream(streamID);
   }
@@ -1295,7 +1295,7 @@ class LivestreamScreenController extends BaseController {
             onTap: () {
               if (isBattleOn) {
                 updateLiveStreamData(battleType: BattleType.initiate, type: LivestreamType.livestream);
-                startMinViewerTimeoutCheck();
+                // startMinViewerTimeoutCheck(); // Disabled for testing
               } else {
                 stopRecording();
                 hostEndStream();
