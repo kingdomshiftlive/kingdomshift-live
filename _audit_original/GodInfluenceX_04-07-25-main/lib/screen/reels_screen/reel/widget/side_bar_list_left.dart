@@ -1,0 +1,170 @@
+import 'package:dotted_border/dotted_border.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:shortzz/common/manager/session_manager.dart';
+import 'package:shortzz/common/widget/gradient_icon.dart';
+import 'package:shortzz/model/post_story/music/music_model.dart';
+import 'package:shortzz/model/post_story/post_model.dart';
+import 'package:shortzz/screen/reels_screen/reel/reel_page_controller.dart';
+import 'package:shortzz/utilities/asset_res.dart';
+import 'package:shortzz/utilities/style_res.dart';
+import 'package:shortzz/utilities/text_style_custom.dart';
+import 'package:shortzz/utilities/theme_res.dart';
+
+import '../../reels_screen_controller.dart';
+
+class SideBarListLeft extends StatelessWidget {
+  final ReelController controller;
+  final GlobalKey likeKey;
+  final ReelsScreenController reelsScreenController;
+
+  const SideBarListLeft(
+      {super.key, required this.controller, required this.likeKey, required this.reelsScreenController});
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() {
+      Post reel = controller.reelData.value;
+      final isPlaceholder = reel.id == -1;
+      Music? music = reel.music;
+      if (music?.addedBy == 0) {
+        music?.user = reel.user;
+      } else {
+        music?.user = null;
+      }
+
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Column(
+          children: [
+            Obx(() {
+              if (reelsScreenController.reels.isEmpty) {
+                return const SizedBox(width: 30, height: 30);
+              }
+
+              bool isVisible = reelsScreenController.reels[reelsScreenController.position.value].userId !=
+                  SessionManager.instance.getUserID();
+
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Visibility(
+                  visible: isVisible,
+                  replacement: const SizedBox(width: 30, height: 30),
+                  child: InkWell(
+                    onTap: reelsScreenController.onReportTap,
+                    child: Image.asset(AssetRes.icAlert, width: 35, height: 35),
+                  ),
+                ),
+              );
+            }),
+            IconWithLabel(
+              onTap: isPlaceholder ? () {} : controller.onShareTap,
+              image: AssetRes.icShareNew,
+              text: isPlaceholder ? '1' : (reel.shares ?? 0).toString(),
+            ),
+            Visibility(
+              visible: controller.reelData.value.user?.id != SessionManager.instance.getUserID(),
+              child: IconWithGift(onTap: controller.onGiftTap),
+            ),
+            Visibility(
+              visible: music != null,
+              child: IconWithMusic(onAudioTap: () => controller.onAudioTap(music), music: music),
+            ),
+          ],
+        ),
+      );
+    });
+  }
+}
+
+class IconWithGift extends StatelessWidget {
+  final VoidCallback onTap;
+
+  const IconWithGift({super.key, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        height: 37,
+        width: 37,
+        margin: const EdgeInsets.symmetric(vertical: 7.5),
+        padding: const EdgeInsets.all(7),
+        decoration: BoxDecoration(
+          color: whitePure(context),
+          shape: BoxShape.circle,
+        ),
+        child: GradientIcon(child: Image.asset(AssetRes.icGiftNew, width: 22, height: 22)),
+      ),
+    );
+  }
+}
+
+class IconWithMusic extends StatelessWidget {
+  final VoidCallback onAudioTap;
+  final Music? music;
+
+  const IconWithMusic({super.key, required this.onAudioTap, this.music});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onAudioTap,
+      child: Container(
+        height: 37,
+        width: 37,
+        margin: const EdgeInsets.only(top: 7.5),
+        padding: const EdgeInsets.all(3),
+        decoration: BoxDecoration(color: whitePure(context), shape: BoxShape.circle),
+        child: DottedBorder(
+          options: OvalDottedBorderOptions(strokeWidth: 1.5, gradient: StyleRes.themeGradient),
+          child:
+              Padding(padding: const EdgeInsets.all(3.0), child: GradientIcon(child: Image.asset(AssetRes.icMusicNew))),
+        ),
+      ),
+    );
+  }
+}
+
+class IconWithLabel extends StatelessWidget {
+  final VoidCallback onTap;
+  final String image;
+  final String text;
+  final Color? iconColor;
+  final Key? likeKey;
+
+  const IconWithLabel({
+    super.key,
+    required this.onTap,
+    required this.image,
+    required this.text,
+    this.iconColor = Colors.white,
+    this.likeKey,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 7.5),
+      child: Column(
+        children: [
+          InkWell(onTap: onTap, key: likeKey, child: Image.asset(image, width: 34, height: 34, color: iconColor)),
+          if (text.isNotEmpty)
+            Text(
+              text,
+              style: TextStyleCustom.outFitMedium500(fontSize: 13, color: whitePure(context)).copyWith(
+                shadows: <Shadow>[
+                  Shadow(
+                    offset: const Offset(0.0, 1.0),
+                    blurRadius: 3.0,
+                    color: textLightGrey(context),
+                  )
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}

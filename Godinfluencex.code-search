@@ -1,0 +1,111 @@
+# Query: Godinfluencex
+# ContextLines: 1
+
+26 results - 13 files
+
+BACKEND_INTEGRATION.md:
+  2  
+  3: Base URL: `https://admin.godinfluencex.com/api/`  
+  4  Auth: All endpoints require `AUTHTOKEN` header.
+
+POST_CREATION_CYCLES.md:
+  1: # Post Creation Cycles in GodInfluenceX
+  2  
+
+.vscode\launch.json:
+   7          {
+   8:             "name": "GodInfluenceX_04-07-25",
+   9              "request": "launch",
+
+  12          {
+  13:             "name": "GodInfluenceX_04-07-25 (profile mode)",
+  14              "request": "launch",
+
+  18          {
+  19:             "name": "GodInfluenceX_04-07-25 (release mode)",
+  20              "request": "launch",
+
+android\app\build.gradle.txt:
+  32  android {
+  33:     namespace = "com.godInfluenceX.vr"
+  34      compileSdk = 36
+
+  48          // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+  49:         applicationId = "com.godInfluenceX.vr"/
+  50          // You can update the following values to match your application needs.
+
+android\app\google-services.json:
+  12          "android_client_info": {
+  13:           "package_name": "com.godInfluenceX.vr"
+  14          }
+
+  20            "android_info": {
+  21:             "package_name": "com.godInfluenceX.vr",
+  22              "certificate_hash": "3f3fd043779f449d4fbdd1cfa198dd70879c48a6"
+
+  28            "android_info": {
+  29:             "package_name": "com.godInfluenceX.vr",
+  30              "certificate_hash": "5f08bfd47e4efcb33a511ada366cd42ba088d900"
+
+  36            "android_info": {
+  37:             "package_name": "com.godInfluenceX.vr",
+  38              "certificate_hash": "2887071fe248ea602a54d2534433432812a36475"
+
+  44            "android_info": {
+  45:             "package_name": "com.godInfluenceX.vr",
+  46              "certificate_hash": "4dfd8bcd3d2d0957d024eb3eb0e6f1c94e28381b"
+
+android\build\reports\problems\problems-report.html:
+  652  // begin-report-data
+  653: {"diagnostics":[{"locations":[{"path":"build file '/Users/kartikghosh/Studio/GodInfluenceX_04-07-25/android/app/build.gradle'","line":40}],"problem":[{"text":"Properties should be assigned using the 'propName = value' syntax. Setting a property via the Gradle-generated 'propName value' or 'propName(value)' syntax in Groovy DSL has been deprecated."}],"severity":"WARNING","problemDetails":[{"text":"This is scheduled to be removed in Gradle 10.0."}],"contextualLabel":"Properties should be assigned using the 'propName = value' syntax. Setting a property via the Gradle-generated 'propName value' or 'propName(value)' syntax in Groovy DSL has been deprecated.","documentationLink":"https://docs.gradle.org/8.13/userguide/upgrading_version_8.html#groovy_space_assignment_syntax","problemId":[{"name":"deprecation","displayName":"Deprecation"},{"name":"properties-should-be-assigned-using-the-propname-value-syntax-setting-a-property-via-the-gradle-generated-propname-value-or-propname-value-syntax-in-groovy-dsl","displayName":"Properties should be assigned using the 'propName = value' syntax. Setting a property via the Gradle-generated 'propName value' or 'propName(value)' syntax in Groovy DSL has been deprecated."}],"solutions":[[{"text":"Use assignment ('coreLibraryDesugaringEnabled = <value>') instead."}]]},{"locations":[{"path":"build file '/Users/kartikghosh/Studio/GodInfluenceX_04-07-25/android/app/build.gradle'","line":72}],"problem":[{"text":"Properties should be assigned using the 'propName = value' syntax. Setting a property via the Gradle-generated 'propName value' or 'propName(value)' syntax in Groovy DSL has been deprecated."}],"severity":"WARNING","problemDetails":[{"text":"This is scheduled to be removed in Gradle 10.0."}],"contextualLabel":"Properties should be assigned using the 'propName = value' syntax. Setting a property via the Gradle-generated 'propName value' or 'propName(value)' syntax in Groovy DSL has been deprecated.","documentationLink":"https://docs.gradle.org/8.13/userguide/upgrading_version_8.html#groovy_space_assignment_syntax","problemId":[{"name":"deprecation","displayName":"Deprecation"},{"name":"properties-should-be-assigned-using-the-propname-value-syntax-setting-a-property-via-the-gradle-generated-propname-value-or-propname-value-syntax-in-groovy-dsl","displayName":"Properties should be assigned using the 'propNam
+  654  // end-report-data
+
+ios\Runner\Info.plist:
+   9  	<key>CFBundleDisplayName</key>
+  10: 	<string>GodInfluenceX</string>
+  11  	<key>CFBundleExecutable</key>
+
+  17  	<key>CFBundleName</key>
+  18: 	<string>GodInfluenceX</string>
+  19  	<key>CFBundlePackageType</key>
+
+ios\Runner\Runner.entitlements:
+  12  	<array>
+  13: 		<string>applinks:app.godinfluencex.com</string>
+  14  	</array>
+
+ios\Runner.xcodeproj\project.pbxproj:
+  675  				INFOPLIST_FILE = Runner/Info.plist;
+  676: 				INFOPLIST_KEY_CFBundleDisplayName = GodInfluenceX;
+  677  				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
+
+  872  				INFOPLIST_FILE = Runner/Info.plist;
+  873: 				INFOPLIST_KEY_CFBundleDisplayName = GodInfluenceX;
+  874  				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
+
+  909  				INFOPLIST_FILE = Runner/Info.plist;
+  910: 				INFOPLIST_KEY_CFBundleDisplayName = GodInfluenceX;
+  911  				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
+
+lib\common\manager\branch_io_manager.dart:
+  20  
+  21:   static const String _baseUrl = 'https://app.godinfluencex.com';
+  22  
+
+lib\common\service\utils\web_service.dart:
+  117    String stopRecording = "${apiURL}stopRecording";
+  118:   String sendGift = "https://admin.godinfluencex.com/gifts";
+  119  }
+
+lib\screen\live_stream\livestream_history\livestream_history_controller.dart:
+  18    var livestreams = <HistoryItem>[].obs;
+  19:   final String apiUrl = 'https://admin.godinfluencex.com/api/recording-history/';
+  20:   final String deleteApiUrl = 'https://admin.godinfluencex.com/api/delete-recording-history/';
+  21    var downloadProgress = <String, double>{}.obs;
+
+lib\utilities\const_res.dart:
+   1: const String baseURL = 'https://admin.godinfluencex.com/';
+   2  const String apiURL = '${baseURL}api/';
+
+  11  
+  12: const String videoBaseUrl = "https://godinfluencex.s3.us-east-2.amazonaws.com/";

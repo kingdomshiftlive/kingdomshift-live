@@ -1,0 +1,61 @@
+Launching lib\main.dart on SM S918U in debug mode...
+Running Gradle task 'assembleDebug'...                          
+Warning: Flutter support for your project's Gradle version (8.13.0) will soon be dropped. Please upgrade your Gradle version to a version of at least 8.14.0 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's gradle version is typically defined in the gradle wrapper file. By default, this can be found at C:\Users\charo\Downloads\GodInfluenceX_04-07-25-main\GodInfluenceX_04-07-25-main\android/gradle/wrapper/gradle-wrapper.properties. 
+For more information, see https://docs.gradle.org/current/userguide/gradle_wrapper.html.
+
+[ZEGO][PLUGIN] Download native dependency
+[ZEGO][PLUGIN] Native version: 3.23.0.47729
+[ZEGO][PLUGIN] The specified version SDK already exists!
+WARNING: Your Android app project: app located at: C:\Users\charo\Downloads\GodInfluenceX_04-07-25-main\GodInfluenceX_04-07-25-main\android\app\build.gradle
+applies the Kotlin Gradle Plugin, which will cause build failures in future versions of Flutter. 
+Please migrate your app to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers
+
+WARNING: Your app uses the following plugins that apply Kotlin Gradle Plugin (KGP): audio_session, audio_waveforms, device_info_plus, flutter_downloader, flutter_image_compress_common, flutter_native_video_trimmer, google_sign_in_android, mobile_scanner, package_info_plus, purchases_flutter, qr_code_scanner_plus, retrytech_plugin, share_plus, shared_preferences_android, video_compress, video_player_android, wakelock_plus, webview_flutter_android
+Future versions of Flutter will fail to build if your app uses plugins that apply KGP.
+
+Please check the changelogs of these plugins and upgrade to a version that supports Built-in Kotlin.
+If no such version exists, report the issue to the plugin. If necessary, here is a guide on filing 
+an issue against a plugin: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers#report-incompatible-kotlin-gradle-plugin-usage-to-plugin-authors
+
+If you are a plugin author, please migrate your plugin to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-plugin-authors
+lib/screen/dashboard_screen/dashboard_screen.dart:369:19: Error: The getter 'controller' isn't defined for the type '_DashboardScreenState'.
+ - '_DashboardScreenState' is from 'package:shortzz/screen/dashboard_screen/dashboard_screen.dart' ('lib/screen/dashboard_screen/dashboard_screen.dart').
+Try correcting the name to the name of an existing getter, or defining a getter or field named 'controller'.
+                  controller.selectedPageIndex.value = 12;
+                  ^^^^^^^^^^
+lib/screen/dashboard_screen/dashboard_screen.dart:374:19: Error: The getter 'controller' isn't defined for the type '_DashboardScreenState'.
+ - '_DashboardScreenState' is from 'package:shortzz/screen/dashboard_screen/dashboard_screen.dart' ('lib/screen/dashboard_screen/dashboard_screen.dart').
+Try correcting the name to the name of an existing getter, or defining a getter or field named 'controller'.
+                  controller.selectedPageIndex.value = 11;
+                  ^^^^^^^^^^
+lib/screen/dashboard_screen/dashboard_screen.dart:379:19: Error: The getter 'controller' isn't defined for the type '_DashboardScreenState'.
+ - '_DashboardScreenState' is from 'package:shortzz/screen/dashboard_screen/dashboard_screen.dart' ('lib/screen/dashboard_screen/dashboard_screen.dart').
+Try correcting the name to the name of an existing getter, or defining a getter or field named 'controller'.
+                  controller.selectedPageIndex.value = 10;
+                  ^^^^^^^^^^
+lib/screen/dashboard_screen/dashboard_screen.dart:385:19: Error: The getter 'controller' isn't defined for the type '_DashboardScreenState'.
+ - '_DashboardScreenState' is from 'package:shortzz/screen/dashboard_screen/dashboard_screen.dart' ('lib/screen/dashboard_screen/dashboard_screen.dart').
+Try correcting the name to the name of an existing getter, or defining a getter or field named 'controller'.
+                  controller.selectedPageIndex.value = 2;
+                  ^^^^^^^^^^
+Target kernel_snapshot_program failed: Exception
+
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:compileFlutterBuildDebug'.
+> Process 'command 'C:\Users\charo\Downloads\flutter_windows_3.44.0-stable\flutter\bin\flutter.bat'' finished with non-zero exit value 1
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 29s
+Running Gradle task 'assembleDebug'...                             30.5s
+Error: Gradle task assembleDebug failed with exit code 1
