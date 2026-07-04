@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shortzz/screen/live_stream/create_live_stream_screen/create_live_stream_screen.dart';
+import 'package:shortzz/screen/live_stream/live_stream_search_screen/live_stream_search_screen.dart';
+import 'package:shortzz/common/manager/session_manager.dart';
 
 const kLiveBg = Color(0xFF08141F);
 const kLiveBg2 = Color(0xFF0A1A2A);
@@ -27,6 +29,8 @@ class LiveDashboardScreen extends StatelessWidget {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             _buildGreeting(),
+            const SizedBox(height: 20),
+            _buildLiveNowButton(),
             const SizedBox(height: 20),
             _buildLiveTypes(),
             const SizedBox(height: 24),
@@ -113,6 +117,19 @@ class LiveDashboardScreen extends StatelessWidget {
             child:
                 const Icon(Icons.person_rounded, color: kLiveMuted, size: 20)),
       ]),
+    );
+  }
+
+
+  Widget _buildLiveNowButton() {
+    return ElevatedButton.icon(
+      onPressed: () {
+        Get.to(() => LiveStreamSearchScreen(
+              myUser: SessionManager.instance.getUser(),
+            ));
+      },
+      icon: const Icon(Icons.live_tv_rounded),
+      label: const Text('LIVE NOW — Watch Active Streams'),
     );
   }
 
