@@ -10,6 +10,7 @@ import 'package:shortzz/common/controller/follow_controller.dart';
 import 'package:shortzz/common/controller/profile_controller.dart';
 import 'package:shortzz/common/extensions/string_extension.dart';
 import 'package:shortzz/common/manager/session_manager.dart';
+import 'package:shortzz/common/service/api/user_service.dart';
 import 'package:shortzz/common/service/navigation/navigate_with_controller.dart';
 import 'package:shortzz/common/widget/full_name_with_blue_tick.dart';
 import 'package:shortzz/model/post_story/post_model.dart';
@@ -113,7 +114,27 @@ class _FollowButtonState extends State<FollowButton> {
               ? () {}
               : () async {
                   isLoading.value = true;
-                  await followController.followUnFollowUser();
+                  final creatorKey =
+                      widget.controller.reelData.value.supabaseId != null
+                          ? widget.controller.reelData.value.userId.toString()
+                          : null;
+
+                  if (creatorKey != null) {
+                    final isNowFollowing =
+                        !(followController.user.value?.isFollowing ?? false);
+                    final ok = await UserService.instance.setSupabaseFollow(
+                      followingKey: creatorKey,
+                      isFollowing: isNowFollowing,
+                    );
+                    if (ok) {
+                      followController.user.update((val) {
+                        val?.isFollowing = isNowFollowing;
+                        val?.updateFollowerCount(isNowFollowing);
+                      });
+                    }
+                  } else {
+                    await followController.followUnFollowUser();
+                  }
                   await Future.delayed(const Duration(milliseconds: 100));
                   isLoading.value = false;
                 },

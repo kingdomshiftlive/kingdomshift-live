@@ -332,6 +332,34 @@ class UserService {
     return model.data ?? [];
   }
 
+
+  Future<bool> setSupabaseFollow({
+    required String followingKey,
+    required bool isFollowing,
+  }) async {
+    try {
+      final followerKey = firebase_auth.FirebaseAuth.instance.currentUser?.uid ??
+          SessionManager.instance.getUserID().toString();
+
+      if (isFollowing) {
+        await supabase.Supabase.instance.client.from('user_follows').upsert({
+          'follower_key': followerKey,
+          'following_key': followingKey,
+        });
+      } else {
+        await supabase.Supabase.instance.client
+            .from('user_follows')
+            .delete()
+            .eq('follower_key', followerKey)
+            .eq('following_key', followingKey);
+      }
+      return true;
+    } catch (e) {
+      Loggers.error('Supabase follow failed: $e');
+      return false;
+    }
+  }
+
   Future<StatusModel> followUser({required int userId}) async {
     StatusModel model = await ApiService.instance.call(
       url: WebService.user.followUser,
