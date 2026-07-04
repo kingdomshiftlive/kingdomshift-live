@@ -18,7 +18,7 @@ class BranchIoManager {
 
   static final BranchIoManager instance = BranchIoManager._();
 
-  static const String _baseUrl = 'https://app.godinfluencex.com';
+  static const String _baseUrl = 'https://kingdomshift.live';
 
   Future<CustomBranchResponse?> init(
       {required ShareBranchType type,

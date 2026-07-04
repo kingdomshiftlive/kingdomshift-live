@@ -61,11 +61,7 @@ class SideBarListLeft extends StatelessWidget {
                 ),
               );
             }),
-            IconWithLabel(
-              onTap: isPlaceholder ? () {} : controller.onShareTap,
-              image: AssetRes.icShareNew,
-              text: isPlaceholder ? '1' : (reel.shares ?? 0).toString(),
-            ),
+            // Share button moved to right action rail to prevent duplicate share icons.
             Visibility(
               visible: controller.reelData.value.user?.id !=
                   SessionManager.instance.getUserID(),

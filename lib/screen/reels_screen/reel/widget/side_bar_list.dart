@@ -63,11 +63,11 @@ class SideBarList extends StatelessWidget {
               text: isPlaceholder ? '1' : (reel.saves ?? 0).toString(),
               iconColor: whitePure(context),
             ),
-            // IconWithLabel(
-            //   onTap: isPlaceholder ? () {} : controller.onShareTap,
-            //   image: AssetRes.icShareNew,
-            //   text: isPlaceholder ? '1' : (reel.shares ?? 0).toString(),
-            // ),
+            IconWithLabel(
+              onTap: isPlaceholder ? () {} : controller.onShareTap,
+              image: AssetRes.icShareNew,
+              text: isPlaceholder ? '1' : (reel.shares ?? 0).toString(),
+            ),
             // Visibility(
             //   visible: controller.reelData.value.user?.id !=
             //       SessionManager.instance.getUserID(),

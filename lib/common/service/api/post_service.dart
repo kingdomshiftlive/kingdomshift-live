@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:image_picker/image_picker.dart';
 import 'package:shortzz/common/controller/base_controller.dart';
 import 'package:shortzz/common/manager/logger.dart';
+import 'package:shortzz/common/manager/session_manager.dart';
 import 'package:shortzz/common/service/api/api_service.dart';
 import 'package:shortzz/common/service/utils/params.dart';
 import 'package:shortzz/common/service/utils/web_service.dart';
@@ -283,6 +284,74 @@ class PostService {
     } catch (e) {
       Loggers.error('Supabase video delete failed: $e');
       return false;
+    }
+  }
+
+
+  Future<List<Comment>> fetchSupabaseVideoComments({
+    required String supabaseId,
+  }) async {
+    try {
+      final response = await supabase.Supabase.instance.client
+          .from('video_comments')
+          .select()
+          .eq('video_id', supabaseId)
+          .order('created_at', ascending: true);
+
+      return (response as List).map((item) {
+        return Comment(
+          id: item['id'].toString().hashCode,
+          postId: supabaseId.hashCode,
+          comment: item['comment']?.toString() ?? '',
+          likes: 0,
+          repliesCount: 0,
+          isPinned: 0,
+          createdAt: item['created_at']?.toString(),
+          user: null,
+        );
+      }).toList();
+    } catch (e) {
+      Loggers.error('Supabase comments fetch failed: $e');
+      return [];
+    }
+  }
+
+  Future<Comment?> addSupabaseVideoComment({
+    required String supabaseId,
+    required String comment,
+  }) async {
+    print('USING SUPABASE COMMENT -> video_id=$supabaseId comment=$comment');
+    try {
+      final firebaseUser = firebase_auth.FirebaseAuth.instance.currentUser;
+      if (firebaseUser == null) return null;
+
+      final item = await supabase.Supabase.instance.client
+          .from('video_comments')
+          .insert({
+            'video_id': supabaseId,
+            'creator_id': firebaseUser.uid,
+            'comment': comment,
+          })
+          .select()
+          .single();
+
+      print('COMMENT INSERTED -> $item');
+
+      return Comment(
+        id: item['id'].toString().hashCode,
+        postId: supabaseId.hashCode,
+        userId: SessionManager.instance.getUserID(),
+        comment: item['comment']?.toString() ?? '',
+        likes: 0,
+        repliesCount: 0,
+        isPinned: 0,
+        createdAt: item['created_at']?.toString(),
+        user: SessionManager.instance.getUser(),
+      );
+    } catch (e) {
+      print('COMMENT ERROR: $e');
+      Loggers.error('Supabase comment add failed: $e');
+      return null;
     }
   }
 

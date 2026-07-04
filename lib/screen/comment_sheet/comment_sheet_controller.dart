@@ -133,32 +133,49 @@ class CommentSheetController extends BaseController {
     isLoading.value = true;
 
     try {
-      final items = await PostService.instance.fetchPostComments(
-        postId: postId,
-        lastItemId: isEmpty ? null : commentsList.lastOrNull?.id?.toInt(),
-      );
-
-      if (items == null) return;
+      final bool isSupabasePost = (post.value?.supabaseId ?? '').isNotEmpty;
+      final supabaseItems = isSupabasePost
+          ? await PostService.instance.fetchSupabaseVideoComments(
+              supabaseId: post.value!.supabaseId!,
+            )
+          : null;
+      final items = isSupabasePost
+          ? null
+          : await PostService.instance.fetchPostComments(
+              postId: postId,
+              lastItemId: isEmpty ? null : commentsList.lastOrNull?.id?.toInt(),
+            );
 
       if (isEmpty) {
         commentsList.clear();
       }
 
-      // Add pinned comments only once
-      if (commentsList.isEmpty) {
-        final pinned = items.pinnedComments ?? [];
-        for (final pin in pinned) {
-          if (!commentsList.any((c) => c.id == pin.id)) {
-            commentsList.add(pin);
+      if (isSupabasePost) {
+        final fetchedComments = supabaseItems ?? [];
+        for (final newComment in fetchedComments) {
+          if (!commentsList.any((existing) => existing.id == newComment.id)) {
+            commentsList.add(newComment);
           }
         }
-      }
+      } else {
+        if (items == null) return;
 
-      // Add regular comments (avoid duplicates)
-      final fetchedComments = items.comments ?? [];
-      for (final newComment in fetchedComments) {
-        if (!commentsList.any((existing) => existing.id == newComment.id)) {
-          commentsList.add(newComment);
+        // Add pinned comments only once
+        if (commentsList.isEmpty) {
+          final pinned = items.pinnedComments ?? [];
+          for (final pin in pinned) {
+            if (!commentsList.any((c) => c.id == pin.id)) {
+              commentsList.add(pin);
+            }
+          }
+        }
+
+        // Add regular comments (avoid duplicates)
+        final fetchedComments = items.comments ?? [];
+        for (final newComment in fetchedComments) {
+          if (!commentsList.any((existing) => existing.id == newComment.id)) {
+            commentsList.add(newComment);
+          }
         }
       }
       post.update((val) => val?.comments = commentsList.length);

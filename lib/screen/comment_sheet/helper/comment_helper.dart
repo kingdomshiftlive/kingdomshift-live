@@ -356,11 +356,16 @@ class CommentHelper {
       return null;
     }
 
-    Comment? comment = await PostService.instance.addComment(
-        postId: postId,
-        comment: description,
-        mentionUserIds: mentionUserIds,
-        type: type.value);
+    Comment? comment = (post.supabaseId ?? '').isNotEmpty
+        ? await PostService.instance.addSupabaseVideoComment(
+            supabaseId: post.supabaseId!,
+            comment: description,
+          )
+        : await PostService.instance.addComment(
+            postId: postId,
+            comment: description,
+            mentionUserIds: mentionUserIds,
+            type: type.value);
     return comment;
   }
 
