@@ -76,7 +76,13 @@ class PostService {
           .order('created_at', ascending: false)
           .limit(AppRes.paginationLimit);
       print('RAW VIDEO RESPONSE: $response');
-      List<Post> posts = (response as List).map((item) {
+      final responseList = response as List;
+      final validVideos = responseList.where((item) {
+        final videoUrl = (item['video_url'] ?? '').toString().trim();
+        return videoUrl.isNotEmpty;
+      }).toList();
+
+      List<Post> posts = validVideos.map((item) {
         return Post(
           id: item['id'].hashCode,
           description: item['title'] ?? '',
@@ -98,7 +104,7 @@ class PostService {
               : null,
         );
       }).toList();
-      print('MAPPED ${posts.length} POSTS');
+      print('MAPPED ${posts.length} POSTS, FILTERED OUT ${responseList.length - validVideos.length} BAD VIDEO ROWS');
       return posts;
     } catch (e) {
       print('FETCH POSTS ERROR: $e');
