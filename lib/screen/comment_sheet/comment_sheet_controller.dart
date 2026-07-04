@@ -409,7 +409,9 @@ class CommentSheetController extends BaseController {
               int existingPinnedComment =
                   commentsList.where((p0) => p0.isPinned == 1).length;
               commentsList.insert(existingPinnedComment, comment);
+              commentsList.refresh();
               post.update((val) => val?.updateCommentCount(1));
+              post.refresh();
             }
           });
     } else {
@@ -424,7 +426,9 @@ class CommentSheetController extends BaseController {
             int existingPinnedComment =
                 commentsList.where((p0) => p0.isPinned == 1).length;
             commentsList.insert(existingPinnedComment, value);
+            commentsList.refresh();
             post.update((val) => val?.updateCommentCount(1));
+            post.refresh();
             Post? _post = post.value;
             if (_post?.user?.notifyPostComment == 1 &&
                 _post?.user?.id != myUser.value?.id) {
