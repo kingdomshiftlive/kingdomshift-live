@@ -67,6 +67,48 @@ class PostService {
 
   static final PostService instance = PostService._();
 
+
+  Future<Map<String, dynamic>> getSupabaseVideoSocialState(String supabaseId) async {
+    try {
+      final userKey = firebase_auth.FirebaseAuth.instance.currentUser?.uid ??
+          SessionManager.instance.getUserID().toString();
+
+      final likes = await supabase.Supabase.instance.client
+          .from('video_likes')
+          .select('id')
+          .eq('video_id', supabaseId);
+
+      final saves = await supabase.Supabase.instance.client
+          .from('video_saves')
+          .select('id')
+          .eq('video_id', supabaseId);
+
+      final myLike = await supabase.Supabase.instance.client
+          .from('video_likes')
+          .select('id')
+          .eq('video_id', supabaseId)
+          .eq('user_key', userKey)
+          .maybeSingle();
+
+      final mySave = await supabase.Supabase.instance.client
+          .from('video_saves')
+          .select('id')
+          .eq('video_id', supabaseId)
+          .eq('user_key', userKey)
+          .maybeSingle();
+
+      return {
+        'likes': (likes as List).length,
+        'saves': (saves as List).length,
+        'isLiked': myLike != null,
+        'isSaved': mySave != null,
+      };
+    } catch (e) {
+      Loggers.error('Supabase social state failed: $e');
+      return {};
+    }
+  }
+
   Future<List<Post>> fetchPostsDiscover(
       {required String type, int page = 1, CancelToken? cancelToken}) async {
     try {
@@ -83,14 +125,19 @@ class PostService {
         return videoUrl.isNotEmpty;
       }).toList();
 
-      List<Post> posts = validVideos.map((item) {
-        return Post(
+      List<Post> posts = [];
+      for (final item in validVideos) {
+        final social = await getSupabaseVideoSocialState(item['id'].toString());
+        posts.add(Post(
           id: item['id'].hashCode,
           supabaseId: item['id']?.toString(),
           description: item['title'] ?? '',
           video: item['video_url'] ?? '',
           thumbnail: item['thumbnail_url'] ?? '',
-          likes: item['likes_count'] ?? 0,
+          likes: social['likes'] ?? item['likes_count'] ?? 0,
+          saves: social['saves'] ?? 0,
+          isLiked: social['isLiked'] ?? false,
+          isSaved: social['isSaved'] ?? false,
           comments: item['comments_count'] ?? 0,
           views: item['views_count'] ?? 0,
           shares: item['shares_count'] ?? 0,
@@ -104,8 +151,8 @@ class PostService {
                   profilePhoto: item['app_profiles']['avatar_url'] ?? '',
                 )
               : null,
-        );
-      }).toList();
+        ));
+      }
       print('MAPPED ${posts.length} POSTS, FILTERED OUT ${responseList.length - validVideos.length} BAD VIDEO ROWS');
       return posts;
     } catch (e) {
@@ -395,6 +442,61 @@ class PostService {
         url: WebService.post.likeComment,
         param: {Params.commentId: commentId},
         fromJson: StatusModel.fromJson);
+  }
+
+
+  Future<bool> setSupabaseVideoLike({
+    required String supabaseId,
+    required bool isLiked,
+  }) async {
+    try {
+      final userKey = firebase_auth.FirebaseAuth.instance.currentUser?.uid ??
+          SessionManager.instance.getUserID().toString();
+
+      if (isLiked) {
+        await supabase.Supabase.instance.client.from('video_likes').upsert({
+          'video_id': supabaseId,
+          'user_key': userKey,
+        });
+      } else {
+        await supabase.Supabase.instance.client
+            .from('video_likes')
+            .delete()
+            .eq('video_id', supabaseId)
+            .eq('user_key', userKey);
+      }
+      return true;
+    } catch (e) {
+      Loggers.error('Supabase like failed: $e');
+      return false;
+    }
+  }
+
+  Future<bool> setSupabaseVideoSave({
+    required String supabaseId,
+    required bool isSaved,
+  }) async {
+    try {
+      final userKey = firebase_auth.FirebaseAuth.instance.currentUser?.uid ??
+          SessionManager.instance.getUserID().toString();
+
+      if (isSaved) {
+        await supabase.Supabase.instance.client.from('video_saves').upsert({
+          'video_id': supabaseId,
+          'user_key': userKey,
+        });
+      } else {
+        await supabase.Supabase.instance.client
+            .from('video_saves')
+            .delete()
+            .eq('video_id', supabaseId)
+            .eq('user_key', userKey);
+      }
+      return true;
+    } catch (e) {
+      Loggers.error('Supabase save failed: $e');
+      return false;
+    }
   }
 
   Future<StatusModel> disLikeComment({int? commentId}) async {

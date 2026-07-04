@@ -76,9 +76,16 @@ class ReelController extends BaseController {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 700), () async {
       try {
-        await (reelData.value.isLiked == true
-            ? _likePostApi(reelId)
-            : _disLikePostApi(reelId));
+        if ((reelData.value.supabaseId ?? '').isNotEmpty) {
+          await PostService.instance.setSupabaseVideoLike(
+            supabaseId: reelData.value.supabaseId!,
+            isLiked: reelData.value.isLiked == true,
+          );
+        } else {
+          await (reelData.value.isLiked == true
+              ? _likePostApi(reelId)
+              : _disLikePostApi(reelId));
+        }
         // if (reelData.value.postType == PostType.video &&
         //     Get.isRegistered<PostScreenController>(tag: '$reelId')) {
         //   final controller = Get.find<PostScreenController>(tag: '$reelId');
@@ -145,9 +152,16 @@ class ReelController extends BaseController {
       if (reelData.value.id == null) {
         return Loggers.error('Reel value not found');
       }
-      await ((reelData.value.isSaved ?? false)
-          ? _savePostApi(reelId)
-          : _unSavePostApi(reelId));
+      if ((reelData.value.supabaseId ?? '').isNotEmpty) {
+        await PostService.instance.setSupabaseVideoSave(
+          supabaseId: reelData.value.supabaseId!,
+          isSaved: reelData.value.isSaved == true,
+        );
+      } else {
+        await ((reelData.value.isSaved ?? false)
+            ? _savePostApi(reelId)
+            : _unSavePostApi(reelId));
+      }
       isSavedLoading = false;
     });
   }
