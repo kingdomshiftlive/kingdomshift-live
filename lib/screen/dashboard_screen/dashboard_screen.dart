@@ -139,9 +139,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     isPostUploading),
                 _navItem(context, controller, 1, Icons.dynamic_feed_rounded,
                     'Feed', isPostUploading),
-                _navItem(context, controller, 2, Icons.radio_button_checked,
-                    'Live', isPostUploading,
-                    isLive: true),
+                _navItem(context, controller, -1, Icons.add_circle_rounded,
+                    'Create', isPostUploading,
+                    isCreate: true),
                 _navItem(context, controller, 4,
                     Icons.chat_bubble_outline_rounded, 'Inbox', isPostUploading,
                     badgeIndex: 4),
@@ -279,6 +279,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     String label,
     bool isPostUploading, {
     bool isLive = false,
+    bool isCreate = false,
     int? badgeIndex,
   }) {
     return Obx(() {
@@ -286,7 +287,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
       return SafeArea(
         bottom: isPostUploading ? false : true,
         child: GestureDetector(
-          onTap: () => controller.onChanged(index),
+          onTap: () {
+            if (isCreate) {
+              Get.to(() => const CameraScreen(cameraType: CameraScreenType.post));
+              return;
+            }
+            controller.onChanged(index);
+          },
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
