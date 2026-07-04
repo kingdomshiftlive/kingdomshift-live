@@ -70,7 +70,7 @@ class _KSHomeOverlayState extends State<_KSHomeOverlay> {
 
   Widget _buildHeader() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
+      padding: const EdgeInsets.fromLTRB(16, 2, 12, 0),
       child: Row(children: [
         // Compact text logo like TikTok
         RichText(
@@ -78,32 +78,32 @@ class _KSHomeOverlayState extends State<_KSHomeOverlay> {
           TextSpan(
               text: 'Kingdom',
               style: TextStyle(
-                  color: kGold, fontSize: 15, fontWeight: FontWeight.w800)),
+                  color: kGold, fontSize: 18, fontWeight: FontWeight.w800)),
           TextSpan(
               text: 'Shift',
               style: TextStyle(
                   color: kTealLight,
-                  fontSize: 15,
+                  fontSize: 18,
                   fontWeight: FontWeight.w800)),
           TextSpan(
               text: '.Live',
               style: TextStyle(
-                  color: kPink, fontSize: 15, fontWeight: FontWeight.w800)),
+                  color: kPink, fontSize: 18, fontWeight: FontWeight.w800)),
         ])),
         const Spacer(),
         // Search - navigates to search screen
         GestureDetector(
             onTap: () => Get.to(() => const SearchScreen()),
             child: Container(
-                width: 34,
-                height: 34,
+                width: 38,
+                height: 42,
                 decoration: BoxDecoration(
                     color: Colors.black38,
                     shape: BoxShape.circle,
                     border:
                         Border.all(color: kTealLight.withValues(alpha: 0.25))),
                 child: const Icon(Icons.search_rounded,
-                    color: kTextPrimary, size: 18))),
+                    color: kTextPrimary, size: 21))),
         const SizedBox(width: 6),
         GestureDetector(
             onTap: () {
@@ -121,7 +121,7 @@ class _KSHomeOverlayState extends State<_KSHomeOverlay> {
                       border: Border.all(
                           color: kTealLight.withValues(alpha: 0.25))),
                   child: const Icon(Icons.notifications_outlined,
-                      color: kTextPrimary, size: 18)),
+                      color: kTextPrimary, size: 21)),
               Positioned(
                   top: 2,
                   right: 2,
@@ -143,10 +143,10 @@ class _KSHomeOverlayState extends State<_KSHomeOverlay> {
 
   Widget _buildTabBar() {
     return SizedBox(
-      height: 38,
+      height: 42,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
         itemCount: _tabs.length,
         itemBuilder: (_, i) {
           final isSelected = _selectedTab == i;
@@ -163,24 +163,27 @@ class _KSHomeOverlayState extends State<_KSHomeOverlay> {
             },
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
-              margin: const EdgeInsets.only(right: 6),
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+              margin: const EdgeInsets.only(right: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
               decoration: BoxDecoration(
-                color: isSelected ? kTeal : Colors.black38,
-                borderRadius: BorderRadius.circular(18),
+                color: isSelected ? null : Colors.black.withValues(alpha: 0.38),
+                gradient: isSelected
+                    ? const LinearGradient(colors: [kTealLight, kTeal])
+                    : null,
+                borderRadius: BorderRadius.circular(22),
                 border: Border.all(
-                    color: isSelected ? kTeal : Colors.white24, width: 1),
+                    color: isSelected ? kTealLight : Colors.white24, width: 1),
                 boxShadow: isSelected
                     ? [
                         BoxShadow(
-                            color: kTeal.withValues(alpha: 0.4), blurRadius: 8)
+                            color: kTealLight.withValues(alpha: 0.45), blurRadius: 14)
                       ]
                     : [],
               ),
               child: Text(_tabs[i],
                   style: TextStyle(
-                    color: isSelected ? Colors.white : kTextSecondary,
-                    fontSize: 11,
+                    color: isSelected ? Colors.black : kTextSecondary,
+                    fontSize: 12,
                     fontWeight:
                         isSelected ? FontWeight.bold : FontWeight.normal,
                   )),
