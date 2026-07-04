@@ -744,9 +744,23 @@ class CreateFeedScreenController extends BaseController {
 
     updateUploadingProgress(progress: 90);
 
-    // Step 7: Finalize post params and upload
-    params[Params.video] = uploadedVideo.data;
-    params[Params.thumbnail] = uploadedThumbnail.data;
+    // Step 7: Validate uploaded media before publishing
+    final uploadedVideoPath = (uploadedVideo.data ?? '').trim();
+    final uploadedThumbnailPath = (uploadedThumbnail.data ?? '').trim();
+
+    if (uploadedVideoPath.isEmpty) {
+      return failedResponseSnackBar(
+          message: 'Video upload failed. Please try again.');
+    }
+
+    if (uploadedThumbnailPath.isEmpty) {
+      return failedResponseSnackBar(
+          message: 'Thumbnail upload failed. Please try again.');
+    }
+
+    // Step 8: Finalize post params and upload
+    params[Params.video] = uploadedVideoPath;
+    params[Params.thumbnail] = uploadedThumbnailPath;
 
     // Explicitly enforce post_type = 5 for podcast
     if (createType == CreateFeedType.podcast) {
