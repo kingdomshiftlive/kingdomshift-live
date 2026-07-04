@@ -36,9 +36,23 @@ class CameraBottomView extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              // Gallery button
-              CustomBorderRoundIcon(
-                  image: AssetRes.icImage, onTap: controller.onMediaTap),
+              // Gallery upload button
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CustomBorderRoundIcon(
+                      image: AssetRes.icImage, onTap: controller.onMediaTap),
+                  const SizedBox(height: 6),
+                  const Text(
+                    'Upload',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
 
               // Recording control button
               RecordingControlButton(controller: controller),

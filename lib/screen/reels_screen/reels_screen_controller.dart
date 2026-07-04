@@ -7,6 +7,7 @@ import 'package:shortzz/common/controller/base_controller.dart';
 import 'package:shortzz/common/extensions/string_extension.dart';
 import 'package:shortzz/common/functions/debounce_action.dart';
 import 'package:shortzz/common/manager/logger.dart';
+import 'package:shortzz/common/manager/session_manager.dart';
 import 'package:shortzz/common/service/api/post_service.dart';
 import 'package:shortzz/common/service/logger.dart';
 import 'package:shortzz/common/service/video_cache_helper/video_cache_helper.dart';
@@ -24,14 +25,12 @@ class ReelsScreenController extends BaseController {
   static const tag = 'REEL';
   RxBool isVideoDisposing = false.obs;
 
-  DashboardScreenController dashboardController =
-      Get.find<DashboardScreenController>();
+  DashboardScreenController dashboardController = Get.find<DashboardScreenController>();
 
   HomeScreenController homeScreenController = Get.find<HomeScreenController>();
   final RxDouble previousPosition = 0.0.obs;
 
-  RxMap<int, VideoPlayerController> videoControllers =
-      <int, VideoPlayerController>{}.obs;
+  RxMap<int, VideoPlayerController> videoControllers = <int, VideoPlayerController>{}.obs;
 
   RxList<Post> reels = <Post>[].obs;
   Rx<Post>? reel = Post().obs;
@@ -91,9 +90,7 @@ class ReelsScreenController extends BaseController {
   }
 
   void onReportTap() {
-    Get.bottomSheet(
-        ReportSheet(
-            reportType: ReportType.post, id: reels[position.value].id?.toInt()),
+    Get.bottomSheet(ReportSheet(reportType: ReportType.post, id: reels[position.value].id?.toInt()),
         isScrollControlled: true);
   }
 
@@ -103,12 +100,8 @@ class ReelsScreenController extends BaseController {
     if (position.value > 0) {
       unawaited(_initializeControllerAtIndex(position.value - 1));
     }
-    if (position.value + 1 < reels.length) {
-      unawaited(_initializeControllerAtIndex(position.value + 1));
-    }
-    if (position.value + 2 < reels.length) {
-      unawaited(_initializeControllerAtIndex(position.value + 2));
-    }
+    unawaited(_initializeControllerAtIndex(position.value + 1));
+    unawaited(_initializeControllerAtIndex(position.value + 2));
     _warmNext(position.value);
   }
 
@@ -143,7 +136,7 @@ class ReelsScreenController extends BaseController {
   //   } else {
   //     // For non-current items: avoid initializing; just cache and return
   //     if (index != position.value) {
-  //       unawaited(VideoCacheHelper.downloadAndCacheVideo(url));
+  //       // Disabled: background caching caused scroll hangs on home feed.
   //       return;
   //     }
   //     ctrl = VideoPlayerController.networkUrl(Uri.parse(url));
@@ -197,7 +190,7 @@ class ReelsScreenController extends BaseController {
       } else {
         Loggers.warning('NETWORK VIDEO RUNNING $index');
         controller = VideoPlayerController.networkUrl(Uri.parse(videoUrl));
-        unawaited(VideoCacheHelper.downloadAndCacheVideo(videoUrl));
+        // Disabled: background caching caused scroll hangs on home feed.
       }
     }
 
@@ -250,8 +243,7 @@ class ReelsScreenController extends BaseController {
       return Loggers.error('Post ID $postId not found in reels');
     }
 
-    final response =
-        await PostService.instance.increaseViewsCount(postId: postId);
+    final response = await PostService.instance.increaseViewsCount(postId: postId);
 
     if (response.status == true) {
       // Loggers.info('🚀 INCREASE VIEWS COUNT SUCCESSFUL');
@@ -260,8 +252,7 @@ class ReelsScreenController extends BaseController {
 
       final controllerTag = postId.toString();
       if (Get.isRegistered<ReelController>(tag: controllerTag)) {
-        Get.find<ReelController>(tag: controllerTag)
-            .updateReelData(reel: post, isIncreaseCoin: true);
+        Get.find<ReelController>(tag: controllerTag).updateReelData(reel: post, isIncreaseCoin: true);
       }
     }
   }
@@ -290,10 +281,8 @@ class ReelsScreenController extends BaseController {
   }
 
   Future<void> disposeAllController() async {
-    final controllersToDispose = videoControllers.values
-        .toList(); // clone to avoid concurrent modification
-    videoControllers
-        .clear(); // clear early to prevent usage during async dispose
+    final controllersToDispose = videoControllers.values.toList(); // clone to avoid concurrent modification
+    videoControllers.clear(); // clear early to prevent usage during async dispose
 
     for (var controller in controllersToDispose) {
       try {
@@ -326,7 +315,7 @@ class ReelsScreenController extends BaseController {
       final url = reels[i].video?.addBaseURL() ?? '';
       if (url.isEmpty || _warmed.contains(url)) continue;
       _warmed.add(url);
-      unawaited(VideoCacheHelper.downloadAndCacheVideo(url));
+      // Disabled: background caching caused scroll hangs on home feed.
     }
   }
 
@@ -352,9 +341,7 @@ class ReelsScreenController extends BaseController {
     }
     final controllerTag = post.id.toString();
     if (Get.isRegistered<ReelController>(tag: controllerTag)) {
-      Get.find<ReelController>(tag: controllerTag)
-          .reelData
-          .update((val) => val?.updateCommentCount(1));
+      Get.find<ReelController>(tag: controllerTag).reelData.update((val) => val?.updateCommentCount(1));
     }
   }
 
@@ -362,7 +349,6 @@ class ReelsScreenController extends BaseController {
     if (reels.isEmpty) {
       return;
     }
-    this.reels.assignAll(reels);
     if (onRefresh != null) {
       position.value = 0;
 
@@ -371,7 +357,6 @@ class ReelsScreenController extends BaseController {
       }
 
       String videoUrl = reels[position.value].video?.addBaseURL() ?? '';
-      if (videoUrl.isEmpty) return;
 
       final cached = await VideoCacheHelper.getValidCachedVideo(videoUrl);
       File file;
@@ -381,7 +366,7 @@ class ReelsScreenController extends BaseController {
         controller = VideoPlayerController.file(file);
       } else {
         controller = VideoPlayerController.networkUrl(Uri.parse(videoUrl));
-        VideoCacheHelper.downloadAndCacheVideo(videoUrl);
+        // Disabled: background caching caused scroll hangs on home feed.
       }
       await controller.initialize();
 

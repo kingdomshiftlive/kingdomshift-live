@@ -82,8 +82,7 @@ class ReelsScreen extends StatelessWidget {
                                     itemCount: (hasMoreData?.value ?? true)
                                         ? reels.length
                                         : reels.length + 1,
-                                    physics:
-                                        const CustomPageViewScrollPhysics(),
+                                    physics: const PageScrollPhysics(),
                                     onPageChanged: controller.onPageChanged,
                                     scrollDirection: Axis.vertical,
                                     itemBuilder: (context, index) {
