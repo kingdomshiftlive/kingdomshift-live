@@ -85,6 +85,7 @@ class PostService {
       List<Post> posts = validVideos.map((item) {
         return Post(
           id: item['id'].hashCode,
+          supabaseId: item['id']?.toString(),
           description: item['title'] ?? '',
           video: item['video_url'] ?? '',
           thumbnail: item['thumbnail_url'] ?? '',
@@ -123,6 +124,7 @@ class PostService {
       List<Post> posts = (response as List).map((item) {
         return Post(
           id: item['id'].hashCode,
+          supabaseId: item['id']?.toString(),
           description: item['title'] ?? '',
           video: item['video_url'] ?? '',
           thumbnail: item['thumbnail_url'] ?? '',
@@ -221,6 +223,7 @@ class PostService {
       List<Post> posts = (response as List).map((item) {
         return Post(
           id: item['id'].hashCode,
+          supabaseId: item['id']?.toString(),
           description: item['title'] ?? '',
           video: item['video_url'] ?? '',
           thumbnail: item['thumbnail_url'] ?? '',
@@ -267,6 +270,20 @@ class PostService {
         },
         fromJson: PostsModel.fromJson);
     return model.data ?? [];
+  }
+
+
+  Future<bool> deleteSupabaseVideo({required String supabaseId}) async {
+    try {
+      await supabase.Supabase.instance.client
+          .from('videos')
+          .delete()
+          .eq('id', supabaseId);
+      return true;
+    } catch (e) {
+      Loggers.error('Supabase video delete failed: $e');
+      return false;
+    }
   }
 
   Future<StatusModel> deletePost({int? postId}) async {

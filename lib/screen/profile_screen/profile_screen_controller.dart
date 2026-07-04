@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shortzz/screen/home_screen/home_screen_controller.dart';
+import 'package:shortzz/screen/reels_screen/reels_screen_controller.dart';
 import 'package:shortzz/common/controller/ads_controller.dart';
 import 'package:shortzz/common/controller/follow_controller.dart';
 import 'package:shortzz/common/controller/profile_controller.dart';
@@ -300,9 +302,16 @@ class ProfileScreenController extends BlockUserController
               model = await PostService.instance
                   .deletePost(postId: post.id?.toInt() ?? -1);
             }
-            if (model.status == true) {
+            bool supabaseDeleted = false;
+            if ((post.supabaseId ?? '').isNotEmpty) {
+              supabaseDeleted = await PostService.instance
+                  .deleteSupabaseVideo(supabaseId: post.supabaseId!);
+            }
+
+            if (model.status == true || supabaseDeleted) {
               Get.delete<ReelController>(tag: '${post.id}');
               reels.removeWhere((element) => element.id == post.id);
+              _removePostEverywhere(post.id?.toInt());
               post = Post();
             }
             stopLoader();
@@ -457,4 +466,21 @@ class ProfileScreenController extends BlockUserController
       userData.update((val) => val?.isFreez = isFreeze ? 0 : 1);
     }
   }
+
+  void _removePostEverywhere(int? postId) {
+    if (postId == null) return;
+
+    if (Get.isRegistered<HomeScreenController>()) {
+      Get.find<HomeScreenController>().reels.removeWhere((e) => e.id == postId);
+    }
+
+    if (Get.isRegistered<ReelsScreenController>(tag: ReelsScreenController.tag)) {
+      final reelsController =
+          Get.find<ReelsScreenController>(tag: ReelsScreenController.tag);
+      reelsController.reels.removeWhere((e) => e.id == postId);
+      reelsController.videoControllers.clear();
+    }
+  }
+
+
 }

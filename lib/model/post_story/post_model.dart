@@ -47,6 +47,7 @@ class PostModel {
 class Post {
   Post({
     this.id,
+    this.supabaseId,
     this.postSaveId,
     this.postType = PostType.none,
     this.userId,
@@ -82,6 +83,7 @@ class Post {
 
   Post.fromJson(dynamic json) {
     id = json['id'];
+    supabaseId = json['supabase_id'];
     postSaveId = json['post_save_id'];
     postType = json['post_type'] != null
         ? PostType.fromString(json['post_type'])
@@ -128,6 +130,7 @@ class Post {
   }
 
   int? id;
+  String? supabaseId;
   int? postSaveId;
   PostType postType = PostType.none;
   int? userId;
@@ -163,6 +166,7 @@ class Post {
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['id'] = id;
+    map['supabase_id'] = supabaseId;
     map['post_save_id'] = postSaveId;
     map['post_type'] = postType.type;
     map['user_id'] = userId;
@@ -210,6 +214,7 @@ class Post {
   Map<String, dynamic> toJsonForChat() {
     final map = <String, dynamic>{};
     map['id'] = id;
+    map['supabase_id'] = supabaseId;
     map['post_save_id'] = postSaveId;
     map['post_type'] = postType.type;
     map['user_id'] = userId;
