@@ -345,7 +345,7 @@ class UserService {
         await supabase.Supabase.instance.client.from('user_follows').upsert({
           'follower_key': followerKey,
           'following_key': followingKey,
-        });
+        }, onConflict: 'follower_key,following_key');
       } else {
         await supabase.Supabase.instance.client
             .from('user_follows')

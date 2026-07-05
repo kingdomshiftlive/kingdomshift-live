@@ -115,7 +115,7 @@ class PostService {
       print('QUERYING SUPABASE VIDEOS TABLE...');
       final response = await supabase.Supabase.instance.client
           .from('videos')
-          .select()
+          .select('*, app_profiles(id, full_name, username, avatar_url)')
           .order('created_at', ascending: false)
           .limit(AppRes.paginationLimit);
       print('RAW VIDEO RESPONSE: $response');
