@@ -107,12 +107,10 @@ class _FollowButtonState extends State<FollowButton> {
         return const SizedBox();
       }
       return AnimatedOpacity(
-        opacity: isFollow ? 0 : 1,
+        opacity: 1,
         duration: const Duration(milliseconds: 10),
         child: InkWell(
-          onTap: isFollow
-              ? () {}
-              : () async {
+          onTap: () async {
                   isLoading.value = true;
                   final creatorKey =
                       widget.controller.reelData.value.supabaseId != null
@@ -159,7 +157,7 @@ class _FollowButtonState extends State<FollowButton> {
                     color: whitePure(context).withValues(alpha: .05),
                   ),
                   child: Icon(
-                    Icons.add,
+                    isFollow ? Icons.check : Icons.add,
                     color: whitePure(context),
                   ),
                   // child: Text(
