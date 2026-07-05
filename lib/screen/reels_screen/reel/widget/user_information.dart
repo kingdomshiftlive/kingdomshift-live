@@ -97,6 +97,7 @@ class FollowButton extends StatefulWidget {
 
 class _FollowButtonState extends State<FollowButton> {
   final RxBool localFollow = false.obs;
+  final RxBool isLoading = false.obs;
   String? loadedCreatorKey;
 
   Future<void> loadFollowState(String creatorKey) async {
@@ -122,9 +123,9 @@ class _FollowButtonState extends State<FollowButton> {
     final followController = Get.put(
         FollowController(widget.controller.reelData.value.user.obs),
         tag: '${widget.controller.reelData.value.userId}');
-    RxBool isLoading = false.obs;
     return Obx(() {
-      final creatorKey = widget.controller.reelData.value.metadata;
+      final creatorKey = widget.controller.reelData.value.metadata ??
+          widget.controller.reelData.value.userId?.toString();
       if (creatorKey != null) {
         loadFollowState(creatorKey);
       }
@@ -141,19 +142,18 @@ class _FollowButtonState extends State<FollowButton> {
           onTap: () async {
                   isLoading.value = true;
                   final creatorKey =
-                      widget.controller.reelData.value.supabaseId != null
-                          ? widget.controller.reelData.value.metadata
-                          : null;
+                      widget.controller.reelData.value.metadata ??
+                          widget.controller.reelData.value.userId?.toString();
 
                   if (creatorKey != null) {
                     final isNowFollowing =
                         !(followController.user.value?.isFollowing ?? false);
+                    localFollow.value = isNowFollowing;
                     final ok = await UserService.instance.setSupabaseFollow(
                       followingKey: creatorKey,
                       isFollowing: isNowFollowing,
                     );
                     if (ok) {
-                      localFollow.value = isNowFollowing;
                       followController.user.update((val) {
                         val?.isFollowing = isNowFollowing;
                         val?.updateFollowerCount(isNowFollowing);
