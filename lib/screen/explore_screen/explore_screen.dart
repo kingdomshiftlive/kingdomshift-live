@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shortzz/screen/search_screen/search_screen.dart';
+import 'package:shortzz/screen/explore_screen/explore_screen_controller.dart';
 
 const ksBg = Color(0xFF08141F);
 const ksCard = Color(0xFF0D2035);
@@ -16,6 +17,7 @@ class ExploreScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(ExploreScreenController());
     final chips = [
       'For You',
       'Trending',
@@ -122,7 +124,18 @@ class ExploreScreen extends StatelessWidget {
               ),
               itemBuilder: (_, i) {
                 final c = cards[i];
-                return Container(
+                return InkWell(
+                  onTap: () {
+                    if (i == 0 || i == 1) {
+                      Get.to(() => const SearchScreen());
+                    } else if (i == 5) {
+                      controller.openPodcasts();
+                    } else {
+                      Get.to(() => const SearchScreen());
+                    }
+                  },
+                  borderRadius: BorderRadius.circular(24),
+                  child: Container(
                   padding: const EdgeInsets.all(14),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
@@ -148,6 +161,7 @@ class ExploreScreen extends StatelessWidget {
                       const Text('Tap to explore live content',
                           style: TextStyle(color: ksMuted, fontSize: 12)),
                     ],
+                  ),
                   ),
                 );
               },

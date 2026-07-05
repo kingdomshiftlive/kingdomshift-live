@@ -8,6 +8,7 @@ import 'package:shortzz/screen/hashtag_screen/hashtag_screen.dart';
 import 'package:shortzz/screen/post_screen/single_post_screen.dart';
 import 'package:shortzz/screen/reels_screen/reels_screen.dart';
 import 'package:shortzz/screen/scan_qr_code_screen/scan_qr_code_screen.dart';
+import 'package:shortzz/screen/search_screen/search_screen.dart';
 import 'package:shortzz/screen/video_player_screen/video_player_screen.dart';
 
 class ExploreScreenController extends BaseController {
@@ -48,6 +49,27 @@ class ExploreScreenController extends BaseController {
       case PostType.none:
         Loggers.error('Post Type none');
         break;
+    }
+  }
+
+  void openSearch() {
+    Get.to(() => const SearchScreen());
+  }
+
+  void openPodcasts() async {
+    final posts = await PostService.instance.fetchPostsDiscover(
+      type: '${PostType.podcast.type}',
+      page: 1,
+    );
+
+    if (posts.isNotEmpty) {
+      Get.to(() => ReelsScreen(
+            reels: posts.obs,
+            position: 0,
+            hasMoreData: false.obs,
+          ));
+    } else {
+      Get.to(() => const SearchScreen());
     }
   }
 
