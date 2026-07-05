@@ -42,6 +42,8 @@ class GiphyService {
         'https://tenor.googleapis.com/v2/search?key=LIVDSRZULELA&q=$keyWord&limit=$paginationLimit&pos=$startCount&media_filter=gif';
     http.Response response = await http.get(Uri.parse(url));
     Loggers.info(url);
+    print('TENOR SEARCH STATUS: ${response.statusCode}');
+    print('TENOR SEARCH BODY: ${response.body.substring(0, response.body.length > 300 ? 300 : response.body.length)}');
     print('GIPHY SEARCH STATUS: ${response.statusCode}');
     print('GIPHY SEARCH BODY: ${response.body.substring(0, response.body.length > 300 ? 300 : response.body.length)}');
     if (response.statusCode == 200) {
@@ -70,6 +72,8 @@ class GiphyService {
         'https://tenor.googleapis.com/v2/featured?key=LIVDSRZULELA&limit=$paginationLimit&pos=$startCount&media_filter=gif';
     Loggers.info(url);
     http.Response response = await http.get(Uri.parse(url));
+    print('TENOR TRENDING STATUS: ${response.statusCode}');
+    print('TENOR TRENDING BODY: ${response.body.substring(0, response.body.length > 300 ? 300 : response.body.length)}');
     print('GIPHY TRENDING STATUS: ${response.statusCode}');
     print('GIPHY TRENDING BODY: ${response.body.substring(0, response.body.length > 300 ? 300 : response.body.length)}');
     if (response.statusCode == 200) {
