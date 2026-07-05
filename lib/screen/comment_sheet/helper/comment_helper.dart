@@ -360,6 +360,7 @@ class CommentHelper {
         ? await PostService.instance.addSupabaseVideoComment(
             supabaseId: post.supabaseId!,
             comment: description,
+            type: type.value,
           )
         : await PostService.instance.addComment(
             postId: postId,

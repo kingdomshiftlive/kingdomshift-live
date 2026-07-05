@@ -22,6 +22,7 @@ import 'package:shortzz/model/post_story/story/story_model.dart';
 import 'package:shortzz/model/post_story/user_post_model.dart';
 import 'package:shortzz/model/user_model/user_model.dart';
 import 'package:shortzz/utilities/app_res.dart';
+import 'package:shortzz/screen/comment_sheet/helper/comment_helper.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 
 enum PostType {
@@ -371,6 +372,7 @@ class PostService {
           likes: 0,
           repliesCount: 0,
           isPinned: 0,
+          type: (item['type'] == 1) ? CommentType.image : CommentType.text,
           createdAt: item['created_at']?.toString(),
           user: null,
         );
@@ -384,6 +386,7 @@ class PostService {
   Future<Comment?> addSupabaseVideoComment({
     required String supabaseId,
     required String comment,
+    int type = 0,
   }) async {
     print('USING SUPABASE COMMENT -> video_id=$supabaseId comment=$comment');
     try {
@@ -396,6 +399,7 @@ class PostService {
             'video_id': supabaseId,
             'creator_id': firebaseUser.uid,
             'comment': comment,
+            'type': type,
           })
           .select()
           .single();
@@ -410,6 +414,7 @@ class PostService {
         likes: 0,
         repliesCount: 0,
         isPinned: 0,
+        type: (item['type'] == 1) ? CommentType.image : CommentType.text,
         createdAt: item['created_at']?.toString(),
         user: SessionManager.instance.getUser(),
       );
