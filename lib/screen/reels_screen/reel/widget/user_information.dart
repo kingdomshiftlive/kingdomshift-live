@@ -126,6 +126,13 @@ class _FollowButtonState extends State<FollowButton> {
     return Obx(() {
       final creatorKey = widget.controller.reelData.value.metadata ??
           widget.controller.reelData.value.userId?.toString();
+      final myKey = firebase_auth.FirebaseAuth.instance.currentUser?.uid ??
+          SessionManager.instance.getUserID().toString();
+
+      if (creatorKey == myKey) {
+        return const SizedBox();
+      }
+
       if (creatorKey != null) {
         loadFollowState(creatorKey);
       }
