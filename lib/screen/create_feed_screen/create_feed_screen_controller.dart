@@ -363,6 +363,11 @@ class CreateFeedScreenController extends BaseController {
               tag: ProfileScreenController.tag);
           profileController.onAddPost(post: post, type: createType);
         }
+
+        // Refresh Home feed so newly uploaded Supabase video appears right away
+        if (Get.isRegistered<HomeScreenController>()) {
+          await Get.find<HomeScreenController>().onRefreshPage(reset: true);
+        }
         Loggers.info('''
                 Post ID: ${post.id}
                 Mention User IDs: ${post.mentionedUsers?.map((e) => e.id).toList()} 
