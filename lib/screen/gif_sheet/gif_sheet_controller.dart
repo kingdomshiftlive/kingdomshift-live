@@ -10,7 +10,15 @@ import 'package:shortzz/model/giphy/giphy_model.dart';
 class GifSheetController extends BaseController {
   RxList<GiphyData> trendingList = <GiphyData>[].obs;
   RxList<GiphyData> searchingGiphyList = <GiphyData>[].obs;
-  final Setting? setting = SessionManager.instance.getSettings();
+  Setting? setting = SessionManager.instance.getSettings();
+
+  String get giphyApiKey {
+    final key = setting?.giphyKey ?? '';
+    if (key.trim().isNotEmpty) return key.trim();
+
+    // Temporary fallback until admin settings are restored.
+    return 'dc6zaTOxFJmzC';
+  }
   RxBool isTrendingLoading = false.obs;
   RxBool isSearchLoading = false.obs;
   TextEditingController searchTextController = TextEditingController();
@@ -26,7 +34,7 @@ class GifSheetController extends BaseController {
   Future<void> fetchTrendingGiphy({bool isEmpty = false}) async {
     if (isTrendingLoading.value || trendingList.length > 89) return;
     isTrendingLoading.value = true;
-    String apiKey = setting?.giphyKey ?? '';
+    String apiKey = giphyApiKey;
     List<GiphyData> items = await GiphyService.instance.trending(
         apiKey: apiKey,
         startCount:
@@ -42,7 +50,7 @@ class GifSheetController extends BaseController {
     if (isSearchLoading.value) return;
     if (!isEmpty && searchingGiphyList.length > 89) return;
     isSearchLoading.value = true;
-    String apiKey = setting?.giphyKey ?? '';
+    String apiKey = giphyApiKey;
     List<GiphyData> items = await GiphyService.instance.search(
         apiKey: apiKey,
         keyWord: searchTextController.text.trim(),
