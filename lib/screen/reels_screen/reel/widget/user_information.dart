@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:readmore/readmore.dart';
@@ -94,6 +96,27 @@ class FollowButton extends StatefulWidget {
 }
 
 class _FollowButtonState extends State<FollowButton> {
+  final RxBool localFollow = false.obs;
+  String? loadedCreatorKey;
+
+  Future<void> loadFollowState(String creatorKey) async {
+    if (loadedCreatorKey == creatorKey) return;
+    loadedCreatorKey = creatorKey;
+    final followerKey = firebase_auth.FirebaseAuth.instance.currentUser?.uid ??
+        SessionManager.instance.getUserID().toString();
+
+    try {
+      final row = await supabase.Supabase.instance.client
+          .from('user_follows')
+          .select('id')
+          .eq('follower_key', followerKey)
+          .eq('following_key', creatorKey)
+          .maybeSingle();
+
+      localFollow.value = row != null;
+    } catch (_) {}
+  }
+
   @override
   Widget build(BuildContext context) {
     final followController = Get.put(
@@ -101,7 +124,12 @@ class _FollowButtonState extends State<FollowButton> {
         tag: '${widget.controller.reelData.value.userId}');
     RxBool isLoading = false.obs;
     return Obx(() {
-      bool isFollow = followController.user.value?.isFollowing ?? false;
+      final creatorKey = widget.controller.reelData.value.metadata;
+      if (creatorKey != null) {
+        loadFollowState(creatorKey);
+      }
+      bool isFollow = localFollow.value ||
+          (followController.user.value?.isFollowing ?? false);
       if (followController.user.value?.id ==
           SessionManager.instance.getUserID()) {
         return const SizedBox();
@@ -125,6 +153,7 @@ class _FollowButtonState extends State<FollowButton> {
                       isFollowing: isNowFollowing,
                     );
                     if (ok) {
+                      localFollow.value = isNowFollowing;
                       followController.user.update((val) {
                         val?.isFollowing = isNowFollowing;
                         val?.updateFollowerCount(isNowFollowing);
