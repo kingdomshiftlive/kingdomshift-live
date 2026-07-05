@@ -298,7 +298,11 @@ class HomeScreenController extends BaseController
       if (resetData) {
         reels.assignAll(newPosts);
       } else {
-        reels.addAll(newPosts);
+        for (final post in newPosts) {
+          if (!reels.any((existing) => existing.supabaseId == post.supabaseId)) {
+            reels.add(post);
+          }
+        }
       }
     }
     isLoading.value = false;

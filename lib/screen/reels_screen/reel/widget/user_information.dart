@@ -116,7 +116,7 @@ class _FollowButtonState extends State<FollowButton> {
                   isLoading.value = true;
                   final creatorKey =
                       widget.controller.reelData.value.supabaseId != null
-                          ? widget.controller.reelData.value.userId.toString()
+                          ? widget.controller.reelData.value.metadata
                           : null;
 
                   if (creatorKey != null) {
@@ -131,6 +131,7 @@ class _FollowButtonState extends State<FollowButton> {
                         val?.isFollowing = isNowFollowing;
                         val?.updateFollowerCount(isNowFollowing);
                       });
+                      followController.user.refresh();
                     }
                   } else {
                     await followController.followUnFollowUser();

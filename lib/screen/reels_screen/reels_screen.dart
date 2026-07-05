@@ -79,9 +79,7 @@ class ReelsScreen extends StatelessWidget {
                                     description: LKey.reelsEmptyDescription.tr)
                                 : PageView.builder(
                                     controller: controller.pageController,
-                                    itemCount: (hasMoreData?.value ?? true)
-                                        ? reels.length
-                                        : reels.length + 1,
+                                    itemCount: reels.length + 1,
                                     physics: const PageScrollPhysics(),
                                     onPageChanged: controller.onPageChanged,
                                     scrollDirection: Axis.vertical,

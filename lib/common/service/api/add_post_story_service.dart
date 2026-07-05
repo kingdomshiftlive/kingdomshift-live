@@ -57,7 +57,7 @@ class AddPostStoryService {
       if (thumbnailUrl.isEmpty)
         thumbnailUrl = param['thumbnail']?.toString() ?? '';
       print('FINAL VIDEO URL: $videoUrl');
-      await supabase.Supabase.instance.client.from('videos').insert({
+      final inserted = await supabase.Supabase.instance.client.from('videos').insert({
         'creator_id': firebaseUser.uid,
         'title': param['description'] ?? param['caption'] ?? '',
         'description': param['description'] ?? param['caption'] ?? '',
@@ -65,9 +65,29 @@ class AddPostStoryService {
         'thumbnail_url': thumbnailUrl,
         'category': param['category'] ?? 'Faith',
         'status': 'published',
-      }).timeout(const Duration(seconds: 15));
-      print('SAVED TO VIDEOS TABLE SUCCESS!');
-      return PostModel();
+      }).select().single().timeout(const Duration(seconds: 15));
+      print('SAVED TO VIDEOS TABLE SUCCESS: $inserted');
+      return PostModel(
+        status: true,
+        message: 'Post uploaded successfully',
+        data: Post(
+          id: inserted['id'].toString().hashCode,
+          supabaseId: inserted['id']?.toString(),
+          userId: inserted['creator_id']?.toString().hashCode,
+          metadata: inserted['creator_id']?.toString(),
+          description: inserted['title'] ?? '',
+          video: inserted['video_url'] ?? '',
+          thumbnail: inserted['thumbnail_url'] ?? '',
+          likes: 0,
+          comments: 0,
+          views: 0,
+          shares: 0,
+          saves: 0,
+          isLiked: false,
+          isSaved: false,
+          createdAt: inserted['created_at'] ?? '',
+        ),
+      );
     } catch (e) {
       print('SAVE ERROR: $e');
       return PostModel();
