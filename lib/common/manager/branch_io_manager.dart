@@ -146,7 +146,15 @@ class BranchIoManager {
           Get.back();
           _showNativeShareSheet(title, link);
           if (type == ShareBranchType.post && post != null) {
-            _increaseShareCount(post.id, onShareSuccess);
+            if ((post.supabaseId ?? '').isNotEmpty) {
+              PostService.instance
+                  .increaseSupabaseShareCount(supabaseId: post.supabaseId!)
+                  .then((ok) {
+                if (ok) onShareSuccess?.call();
+              });
+            } else {
+              _increaseShareCount(post.id, onShareSuccess);
+            }
           }
         },
         post: post,

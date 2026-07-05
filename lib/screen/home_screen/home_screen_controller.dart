@@ -214,7 +214,6 @@ class HomeScreenController extends BaseController
       isLoading.value = true;
       currentPage.value = 1;
       hasMoreData.value = true;
-      reels.clear();
     }
 
     // if (!hasMoreData.value || (isLoading.value && !reset)) return;
@@ -296,7 +295,11 @@ class HomeScreenController extends BaseController
       }
     }
     if (newPosts.isNotEmpty) {
-      reels.addAll(newPosts);
+      if (resetData) {
+        reels.assignAll(newPosts);
+      } else {
+        reels.addAll(newPosts);
+      }
     }
     isLoading.value = false;
   }

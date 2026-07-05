@@ -24,6 +24,8 @@ import 'package:shortzz/screen/post_screen/post_screen_controller.dart';
 import 'package:shortzz/screen/saved_post_screen/saved_post_screen_controller.dart';
 
 class ReelController extends BaseController {
+  DateTime? _watchStartedAt;
+  bool _takeBreakShown = false;
   Rx<Post> reelData;
   bool isLikeLoading = false;
   bool isSavedLoading = false;
@@ -184,6 +186,64 @@ class ReelController extends BaseController {
         controller.unsavedIds.add(id);
       }
     }
+  }
+
+  void showPremiumActionToast(String message) {
+    Get.showSnackbar(GetSnackBar(
+      message: message,
+      duration: const Duration(seconds: 2),
+      snackPosition: SnackPosition.BOTTOM,
+      margin: const EdgeInsets.all(16),
+      borderRadius: 18,
+      backgroundColor: const Color(0xFF08141F).withValues(alpha: 0.95),
+      borderColor: const Color(0xFFD4AF37).withValues(alpha: 0.45),
+      borderWidth: 1,
+      icon: const Icon(Icons.check_circle_rounded, color: Color(0xFF00D4C7)),
+    ));
+  }
+
+  void maybeShowTakeBreakPopup() {
+    _watchStartedAt ??= DateTime.now();
+    if (_takeBreakShown) return;
+
+    final watched = DateTime.now().difference(_watchStartedAt!);
+    if (watched.inMinutes < 45) return;
+
+    _takeBreakShown = true;
+    Get.dialog(
+      AlertDialog(
+        backgroundColor: const Color(0xFF08141F),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        title: const Text(
+          'Take a Moment',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        content: const Text(
+          'You\'ve been watching for a while. Stretch, hydrate, or take a moment to reset before continuing.',
+          style: TextStyle(color: Colors.white70),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Get.back();
+              _watchStartedAt = DateTime.now();
+              _takeBreakShown = false;
+            },
+            child: const Text(
+              'Continue Watching',
+              style: TextStyle(color: Color(0xFF00D4C7)),
+            ),
+          ),
+          TextButton(
+            onPressed: () => Get.back(),
+            child: const Text(
+              'Take a Break',
+              style: TextStyle(color: Color(0xFFD4AF37)),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   void onShareTap() {

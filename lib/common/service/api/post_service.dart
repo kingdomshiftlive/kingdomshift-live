@@ -423,6 +423,31 @@ class PostService {
         fromJson: StatusModel.fromJson);
   }
 
+
+  Future<bool> increaseSupabaseShareCount({
+    required String supabaseId,
+  }) async {
+    try {
+      final response = await supabase.Supabase.instance.client
+          .from('videos')
+          .select('shares_count')
+          .eq('id', supabaseId)
+          .maybeSingle();
+
+      final current = response == null ? 0 : (response['shares_count'] ?? 0) as int;
+
+      await supabase.Supabase.instance.client
+          .from('videos')
+          .update({'shares_count': current + 1})
+          .eq('id', supabaseId);
+
+      return true;
+    } catch (e) {
+      Loggers.error('Supabase share count failed: $e');
+      return false;
+    }
+  }
+
   Future<StatusModel> increaseShareCount({int? postId}) async {
     return await ApiService.instance.call(
         url: WebService.post.increaseShareCount,
