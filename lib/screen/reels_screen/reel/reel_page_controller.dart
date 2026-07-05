@@ -75,13 +75,6 @@ class ReelController extends BaseController {
       val?.likeToggle(val.isLiked == true ? false : true);
     });
 
-    // Bug #6 fix: showPremiumActionToast already existed but was never
-    // called from anywhere, so likes/saves/etc never showed the branded
-    // KingdomShift confirmation toast.
-    if (reelData.value.isLiked == true) {
-      showPremiumActionToast('Liked');
-    }
-
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 700), () async {
       try {
@@ -156,10 +149,6 @@ class ReelController extends BaseController {
     reelData.update((val) {
       val?.saveToggle(val.isSaved == true ? false : true);
     });
-
-    if (reelData.value.isSaved == true) {
-      showPremiumActionToast('Saved');
-    }
 
     DebounceAction.shared.call(() async {
       if (reelData.value.id == null) {
@@ -264,7 +253,6 @@ class ReelController extends BaseController {
         post: reelData.value,
         onShareSuccess: () {
           reelData.update((val) => val?.increaseShares(1));
-          showPremiumActionToast('Shared');
         });
   }
 

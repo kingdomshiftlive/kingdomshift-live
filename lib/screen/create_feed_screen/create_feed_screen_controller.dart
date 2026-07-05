@@ -363,18 +363,6 @@ class CreateFeedScreenController extends BaseController {
               tag: ProfileScreenController.tag);
           profileController.onAddPost(post: post, type: createType);
         }
-
-        // Bug #1 fix: the Home feed was never told about a fresh upload, so
-        // a new video only appeared after a manual pull-to-refresh. Insert
-        // it at the top of the live Home feed immediately, same as Profile.
-        if (Get.isRegistered<HomeScreenController>()) {
-          final homeController = Get.find<HomeScreenController>();
-          if (!homeController.reels
-              .any((existing) => existing.supabaseId == post.supabaseId)) {
-            homeController.reels.insert(0, post);
-          }
-        }
-
         Loggers.info('''
                 Post ID: ${post.id}
                 Mention User IDs: ${post.mentionedUsers?.map((e) => e.id).toList()} 
@@ -382,20 +370,6 @@ class CreateFeedScreenController extends BaseController {
         _notifyMentionedUsers(post);
         _lastUploadType = UploadType.finish;
         updateUploadingProgress(progress: 100);
-
-        // Bug #6 fix: matches the same branded toast style used for
-        // like/save/follow/share, so upload completion is consistent too.
-        Get.showSnackbar(GetSnackBar(
-          message: 'Upload complete',
-          duration: const Duration(seconds: 2),
-          snackPosition: SnackPosition.BOTTOM,
-          margin: const EdgeInsets.all(16),
-          borderRadius: 18,
-          backgroundColor: const Color(0xFF08141F).withValues(alpha: 0.95),
-          borderColor: const Color(0xFFD4AF37).withValues(alpha: 0.45),
-          borderWidth: 1,
-          icon: const Icon(Icons.check_circle_rounded, color: Color(0xFF00D4C7)),
-        ));
       } else {
         Loggers.error('Post upload failed ❌: ${postResponse?.message}');
 

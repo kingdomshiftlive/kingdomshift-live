@@ -43,28 +43,16 @@ class ReelsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Bug #4 fix: same root cause as HomeScreen — Get.put() here was
-    // constructing a brand-new ReelsScreenController (with a brand-new
-    // PageController(initialPage: 0)) every time this widget rebuilt,
-    // because the `position` argument passed in from Home is always the
-    // literal 0. That discarded whatever page the user had actually
-    // scrolled to. For the Home feed specifically, reuse the existing
-    // controller (and its live position/PageController) if one is already
-    // registered instead of rebuilding it from scratch.
-    final String tag = isHomePage
-        ? ReelsScreenController.tag
-        : '${DateTime.now().millisecondsSinceEpoch}';
-    final ReelsScreenController controller =
-        (isHomePage && Get.isRegistered<ReelsScreenController>(tag: tag))
-            ? Get.find<ReelsScreenController>(tag: tag)
-            : Get.put(
-                ReelsScreenController(
-                    reels: reels,
-                    position: position.obs,
-                    onFetchMoreData: onFetchMoreData,
-                    onRefresh: onRefresh,
-                    isHomePage: isHomePage),
-                tag: tag);
+    final ReelsScreenController controller = Get.put(
+        ReelsScreenController(
+            reels: reels,
+            position: position.obs,
+            onFetchMoreData: onFetchMoreData,
+            onRefresh: onRefresh,
+            isHomePage: isHomePage),
+        tag: isHomePage
+            ? ReelsScreenController.tag
+            : '${DateTime.now().millisecondsSinceEpoch}');
 
     return Scaffold(
       backgroundColor: blackPure(context),

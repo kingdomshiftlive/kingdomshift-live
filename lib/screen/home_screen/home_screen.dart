@@ -19,16 +19,7 @@ class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
   @override
   Widget build(BuildContext context) {
-    // Bug #4 fix: Get.put() replaces any existing registered instance every
-    // time build() runs. If this StatelessWidget's build() ever re-executes
-    // for any reason (parent rebuild, keyboard show/hide, etc.), this was
-    // silently throwing away the live HomeScreenController — including its
-    // in-memory reels list and, more importantly, blowing away the
-    // ReelsScreenController + PageController below it, which is what reset
-    // the feed back to the first video. Get.put only if not already there.
-    final controller = Get.isRegistered<HomeScreenController>()
-        ? Get.find<HomeScreenController>()
-        : Get.put(HomeScreenController());
+    final controller = Get.put(HomeScreenController());
     return Scaffold(
       backgroundColor: kBgPrimary,
       body: Stack(children: [

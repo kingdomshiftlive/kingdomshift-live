@@ -132,9 +132,6 @@ class _FollowButtonState extends State<FollowButton> {
                         val?.updateFollowerCount(isNowFollowing);
                       });
                       followController.user.refresh();
-                      if (isNowFollowing) {
-                        widget.controller.showPremiumActionToast('Following');
-                      }
                     }
                   } else {
                     await followController.followUnFollowUser();
