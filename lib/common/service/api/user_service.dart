@@ -342,10 +342,20 @@ class UserService {
           SessionManager.instance.getUserID().toString();
 
       if (isFollowing) {
-        await supabase.Supabase.instance.client.from('user_follows').upsert({
-          'follower_key': followerKey,
-          'following_key': followingKey,
-        });
+        // Bug #3 fix: without onConflict, upsert() targets the primary key
+        // (id), which is a fresh uuid every time, so this was never really
+        // upserting. If the pair already existed (e.g. after the app
+        // restarted and isFollowing reset to false client-side, then the
+        // user tapped follow again), this hit the
+        // unique(follower_key, following_key) constraint and threw, which
+        // was silently swallowed below and made the button look broken.
+        await supabase.Supabase.instance.client.from('user_follows').upsert(
+          {
+            'follower_key': followerKey,
+            'following_key': followingKey,
+          },
+          onConflict: 'follower_key,following_key',
+        );
       } else {
         await supabase.Supabase.instance.client
             .from('user_follows')
@@ -357,6 +367,53 @@ class UserService {
     } catch (e) {
       Loggers.error('Supabase follow failed: $e');
       return false;
+    }
+  }
+
+  /// Bug #3 fix: this read path never existed. setSupabaseFollow could
+  /// write to user_follows, but nothing ever checked it back, so the follow
+  /// button always rendered as "not following" on every fresh feed load or
+  /// app restart, regardless of what was actually persisted.
+  Future<bool> getSupabaseFollowState({required String followingKey}) async {
+    try {
+      final followerKey = firebase_auth.FirebaseAuth.instance.currentUser?.uid ??
+          SessionManager.instance.getUserID().toString();
+
+      final row = await supabase.Supabase.instance.client
+          .from('user_follows')
+          .select('id')
+          .eq('follower_key', followerKey)
+          .eq('following_key', followingKey)
+          .maybeSingle();
+
+      return row != null;
+    } catch (e) {
+      Loggers.error('Supabase follow state fetch failed: $e');
+      return false;
+    }
+  }
+
+  /// Batched version so the feed doesn't do one query per video row.
+  Future<Set<String>> getSupabaseFollowingKeys(
+      {required List<String> followingKeys}) async {
+    if (followingKeys.isEmpty) return {};
+    try {
+      final followerKey = firebase_auth.FirebaseAuth.instance.currentUser?.uid ??
+          SessionManager.instance.getUserID().toString();
+
+      final rows = await supabase.Supabase.instance.client
+          .from('user_follows')
+          .select('following_key')
+          .eq('follower_key', followerKey)
+          .inFilter('following_key', followingKeys.toSet().toList());
+
+      return (rows as List)
+          .map((r) => r['following_key']?.toString() ?? '')
+          .where((k) => k.isNotEmpty)
+          .toSet();
+    } catch (e) {
+      Loggers.error('Supabase batched follow state fetch failed: $e');
+      return {};
     }
   }
 

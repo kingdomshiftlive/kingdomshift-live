@@ -57,6 +57,14 @@ class AddPostStoryService {
       if (thumbnailUrl.isEmpty)
         thumbnailUrl = param['thumbnail']?.toString() ?? '';
       print('FINAL VIDEO URL: $videoUrl');
+
+      // Bug #8 fix: never write a row with an empty video_url. This was the
+      // source of the bad Supabase row that broke feed scrolling before.
+      if (videoUrl.isEmpty) {
+        print('SAVE ABORTED: video_url resolved empty, refusing to insert');
+        return PostModel(status: false, message: 'Video upload did not return a valid URL');
+      }
+
       final inserted = await supabase.Supabase.instance.client.from('videos').insert({
         'creator_id': firebaseUser.uid,
         'title': param['description'] ?? param['caption'] ?? '',

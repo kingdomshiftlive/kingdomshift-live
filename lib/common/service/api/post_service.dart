@@ -4,6 +4,7 @@ import 'package:shortzz/common/controller/base_controller.dart';
 import 'package:shortzz/common/manager/logger.dart';
 import 'package:shortzz/common/manager/session_manager.dart';
 import 'package:shortzz/common/service/api/api_service.dart';
+import 'package:shortzz/common/service/api/user_service.dart';
 import 'package:shortzz/common/service/utils/params.dart';
 import 'package:shortzz/common/service/utils/web_service.dart';
 import 'package:shortzz/model/general/status_model.dart';
@@ -112,12 +113,19 @@ class PostService {
   Future<List<Post>> fetchPostsDiscover(
       {required String type, int page = 1, CancelToken? cancelToken}) async {
     try {
-      print('QUERYING SUPABASE VIDEOS TABLE...');
+      print('QUERYING SUPABASE VIDEOS TABLE... page=$page');
+      // Bug #2 fix: this query never used an offset, so "load more" near
+      // the end of the feed kept re-fetching the exact same top N rows.
+      // hasMoreData never correctly flipped to false and the end-of-feed
+      // card kept flickering because nothing new was ever actually added.
+      final int limit = AppRes.paginationLimit;
+      final int from = (page - 1) * limit;
+      final int to = from + limit - 1;
       final response = await supabase.Supabase.instance.client
           .from('videos')
           .select()
           .order('created_at', ascending: false)
-          .limit(AppRes.paginationLimit);
+          .range(from, to);
       print('RAW VIDEO RESPONSE: $response');
       final responseList = response as List;
       final validVideos = responseList.where((item) {
@@ -125,12 +133,25 @@ class PostService {
         return videoUrl.isNotEmpty;
       }).toList();
 
+      // Bug #3 fix: fetch which of these creators the current user already
+      // follows in one batched query, instead of never checking at all
+      // (which made isFollowing default to false for everyone, every time).
+      final creatorIds = validVideos
+          .map((item) => item['creator_id']?.toString() ?? '')
+          .where((id) => id.isNotEmpty)
+          .toList();
+      final followingKeys = await UserService.instance
+          .getSupabaseFollowingKeys(followingKeys: creatorIds);
+
       List<Post> posts = [];
       for (final item in validVideos) {
         final social = await getSupabaseVideoSocialState(item['id'].toString());
+        final creatorId = item['creator_id']?.toString();
         posts.add(Post(
           id: item['id'].hashCode,
           supabaseId: item['id']?.toString(),
+          userId: item['creator_id']?.toString().hashCode,
+          metadata: item['creator_id']?.toString(),
           description: item['title'] ?? '',
           video: item['video_url'] ?? '',
           thumbnail: item['thumbnail_url'] ?? '',
@@ -143,14 +164,13 @@ class PostService {
           shares: item['shares_count'] ?? 0,
           postType: PostType.reel,
           createdAt: item['created_at'] ?? '',
-          user: item['app_profiles'] != null
-              ? User(
-                  id: 100,
-                  fullname: item['app_profiles']['full_name'] ?? '',
-                  username: item['app_profiles']['username'] ?? '',
-                  profilePhoto: item['app_profiles']['avatar_url'] ?? '',
-                )
-              : null,
+          user: User(
+            id: creatorId?.hashCode,
+            fullname: item['app_profiles'] != null ? (item['app_profiles']['full_name'] ?? '') : '',
+            username: item['app_profiles'] != null ? (item['app_profiles']['username'] ?? '') : '',
+            profilePhoto: item['app_profiles'] != null ? (item['app_profiles']['avatar_url'] ?? '') : '',
+            isFollowing: creatorId != null && followingKeys.contains(creatorId),
+          ),
         ));
       }
       print('MAPPED ${posts.length} POSTS, FILTERED OUT ${responseList.length - validVideos.length} BAD VIDEO ROWS');
@@ -173,6 +193,8 @@ class PostService {
         return Post(
           id: item['id'].hashCode,
           supabaseId: item['id']?.toString(),
+          userId: item['creator_id']?.toString().hashCode,
+          metadata: item['creator_id']?.toString(),
           description: item['title'] ?? '',
           video: item['video_url'] ?? '',
           thumbnail: item['thumbnail_url'] ?? '',
@@ -182,6 +204,12 @@ class PostService {
           shares: item['shares_count'] ?? 0,
           postType: PostType.reel,
           createdAt: item['created_at'] ?? '',
+          user: User(
+            id: item['creator_id']?.toString().hashCode,
+            username: 'creator',
+            fullname: 'Creator',
+            isFollowing: false,
+          ),
         );
       }).toList();
       return posts;
@@ -272,6 +300,8 @@ class PostService {
         return Post(
           id: item['id'].hashCode,
           supabaseId: item['id']?.toString(),
+          userId: item['creator_id']?.toString().hashCode,
+          metadata: item['creator_id']?.toString(),
           description: item['title'] ?? '',
           video: item['video_url'] ?? '',
           thumbnail: item['thumbnail_url'] ?? '',
@@ -281,6 +311,12 @@ class PostService {
           shares: item['shares_count'] ?? 0,
           postType: PostType.reel,
           createdAt: item['created_at'] ?? '',
+          user: User(
+            id: item['creator_id']?.toString().hashCode,
+            username: 'creator',
+            fullname: 'Creator',
+            isFollowing: false,
+          ),
         );
       }).toList();
 
