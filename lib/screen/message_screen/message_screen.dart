@@ -5,6 +5,7 @@ import 'package:shortzz/common/widget/custom_image.dart';
 import 'package:shortzz/model/chat/chat_thread.dart';
 import 'package:shortzz/model/livestream/app_user.dart';
 import 'package:shortzz/screen/chat_screen/chat_screen.dart';
+import 'widget/new_message_sheet.dart';
 import 'message_screen_controller.dart';
 
 class MessageScreen extends StatelessWidget {
@@ -24,7 +25,9 @@ class MessageScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color(0xFF7B2FF7),
-        onPressed: () {},
+        onPressed: () {
+          Get.bottomSheet(const NewMessageSheet(), isScrollControlled: true);
+        },
         child: const Icon(Icons.edit, color: Colors.white),
       ),
     );
@@ -115,10 +118,19 @@ class MessageScreen extends StatelessWidget {
               style: TextStyle(color: Colors.white54, fontSize: 14)),
         );
       }
+      final filtered = c.selectedTab.value == 2
+          ? c.threads.where((t) => t.chatType == ChatType.request).toList()
+          : c.threads.where((t) => t.chatType != ChatType.request).toList();
+      if (filtered.isEmpty) {
+        return const Center(
+          child: Text('No conversations yet',
+              style: TextStyle(color: Colors.white54, fontSize: 14)),
+        );
+      }
       return ListView.builder(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 80),
-        itemCount: c.threads.length,
-        itemBuilder: (_, i) => _msgTile(c.threads[i]),
+        itemCount: filtered.length,
+        itemBuilder: (_, i) => _msgTile(filtered[i]),
       );
     });
   }
