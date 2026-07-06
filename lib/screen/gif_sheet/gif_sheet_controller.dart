@@ -17,7 +17,7 @@ class GifSheetController extends BaseController {
     if (key.trim().isNotEmpty) return key.trim();
 
     // Temporary fallback until admin settings are restored.
-    return 'dc6zaTOxFJmzC';
+    return 'tCX9tP23tZuDtZkBMtnW0drVwK4c5aus';
   }
   RxBool isTrendingLoading = false.obs;
   RxBool isSearchLoading = false.obs;
