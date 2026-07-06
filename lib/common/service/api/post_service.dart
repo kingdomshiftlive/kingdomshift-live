@@ -266,7 +266,8 @@ class PostService {
   Future<UserPostData?> fetchUserPosts(
       {required String type,
       required int? userId,
-      required int? lastItemId}) async {
+      required int? lastItemId,
+      String? targetCreatorId}) async {
     try {
       final firebaseUser = firebase_auth.FirebaseAuth.instance.currentUser;
       if (firebaseUser == null) return null;
@@ -274,7 +275,7 @@ class PostService {
       final response = await supabase.Supabase.instance.client
           .from('videos')
           .select()
-          .eq('creator_id', firebaseUser.uid)
+          .eq('creator_id', targetCreatorId ?? firebaseUser.uid)
           .eq('status', 'published')
           .order('created_at', ascending: false)
           .limit(AppRes.paginationLimit);

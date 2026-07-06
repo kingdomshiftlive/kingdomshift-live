@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shortzz/common/extensions/string_extension.dart';
+import 'package:shortzz/common/widget/custom_image.dart';
+import 'package:shortzz/model/chat/chat_thread.dart';
+import 'package:shortzz/model/livestream/app_user.dart';
+import 'package:shortzz/screen/chat_screen/chat_screen.dart';
 import 'message_screen_controller.dart';
 
 class MessageScreen extends StatelessWidget {
@@ -14,9 +19,7 @@ class MessageScreen extends StatelessWidget {
         child: Column(children: [
           _buildHeader(c),
           _buildTabs(c),
-          _buildStoryRow(),
-          _buildPinned(),
-          Expanded(child: _buildMessageList()),
+          Expanded(child: _buildMessageList(c)),
         ]),
       ),
       floatingActionButton: FloatingActionButton(
@@ -70,7 +73,7 @@ class MessageScreen extends StatelessWidget {
   }
 
   Widget _buildTabs(MessageScreenController c) {
-    final tabs = ['Primary', 'Groups', 'Requests 3', 'Archived'];
+    final tabs = ['Primary', 'Groups', 'Requests', 'Archived'];
     return Obx(() => Row(
           children: List.generate(tabs.length, (i) {
             final sel = c.selectedTab.value == i;
@@ -100,202 +103,68 @@ class MessageScreen extends StatelessWidget {
         ));
   }
 
-  Widget _buildStoryRow() {
-    final stories = [
-      {'label': 'New Message', 'emoji': '+', 'isNew': true},
-      {'label': 'Your Note', 'emoji': '📝', 'online': true},
-      {'label': 'Sarah J.', 'emoji': '👩🏽', 'online': true},
-      {'label': 'Justin M.', 'emoji': '👨🏾', 'online': true},
-      {'label': 'KE Group', 'emoji': 'KE'},
-      {'label': 'Bible Study', 'emoji': '📖'},
-    ];
-    return SizedBox(
-      height: 90,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        itemCount: stories.length,
-        itemBuilder: (_, i) {
-          final s = stories[i];
-          final isNew = s['isNew'] == true;
-          return Container(
-            width: 70,
-            margin: const EdgeInsets.only(right: 12),
-            child: Column(children: [
-              Stack(children: [
-                Container(
-                    width: 56,
-                    height: 56,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      gradient: isNew
-                          ? null
-                          : const LinearGradient(
-                              colors: [Color(0xFF7B2FF7), Color(0xFFFF006E)]),
-                      color: isNew ? const Color(0xFF1A1A2E) : null,
-                      border: isNew ? Border.all(color: Colors.white24) : null,
-                    ),
-                    child: Center(
-                        child: Text(s['emoji'] as String,
-                            style: TextStyle(
-                                fontSize: isNew ? 24 : 22,
-                                color: Colors.white)))),
-                if (s['online'] == true)
-                  Positioned(
-                      bottom: 2,
-                      right: 2,
-                      child: Container(
-                          width: 12,
-                          height: 12,
-                          decoration: BoxDecoration(
-                              color: Colors.green,
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                  color: const Color(0xFF0A0A0F), width: 2)))),
-              ]),
-              const SizedBox(height: 4),
-              Text(s['label'] as String,
-                  style: const TextStyle(color: Colors.white70, fontSize: 10),
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis),
-            ]),
-          );
-        },
-      ),
-    );
+  Widget _buildMessageList(MessageScreenController c) {
+    return Obx(() {
+      if (c.isLoading.value) {
+        return const Center(
+            child: CircularProgressIndicator(color: Color(0xFF7B2FF7)));
+      }
+      if (c.threads.isEmpty) {
+        return const Center(
+          child: Text('No conversations yet',
+              style: TextStyle(color: Colors.white54, fontSize: 14)),
+        );
+      }
+      return ListView.builder(
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 80),
+        itemCount: c.threads.length,
+        itemBuilder: (_, i) => _msgTile(c.threads[i]),
+      );
+    });
   }
 
-  Widget _buildPinned() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          const Row(children: [
-            Icon(Icons.push_pin, color: Color(0xFFFFB800), size: 16),
-            SizedBox(width: 6),
-            Text('Pinned',
-                style: TextStyle(
-                    color: Color(0xFFFFB800), fontWeight: FontWeight.bold)),
-          ]),
-          GestureDetector(
-              onTap: () {},
-              child: const Text('View All',
-                  style: TextStyle(color: Color(0xFFFFB800), fontSize: 13))),
-        ]),
-        const SizedBox(height: 8),
-        _msgTile('👨🏾', 'Pastor David Wilson',
-            "Let's connect about the conference next month.", '10:30 AM',
-            tag: 'MINISTRY', pinned: true, unread: 1),
-        _msgTile('👩🏾', 'Tasha Entrepreneur', '🎤 Voice message', 'Yesterday',
-            tag: 'BUSINESS', pinned: true, unread: 2),
-        _msgTile('👑', 'WealthShift Community',
-            "Robert: Don't forget our call tonight at 8pm EST!", 'Yesterday',
-            tag: 'GROUP', pinned: true),
-      ]),
-    );
-  }
+  Widget _msgTile(ChatThread thread) {
+    final AppUser? user = thread.chatUser;
+    final String name = user?.fullname ?? user?.username ?? 'Unknown';
+    final String? photo = user?.profile;
+    final int unread = thread.msgCount ?? 0;
 
-  Widget _buildMessageList() {
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 80),
-      children: [
-        _msgTile('👨🏿', 'Marcus Johnson',
-            'Thanks for the resource! It helped a lot. 🔥', '9:45 AM',
-            unread: 1),
-        _msgTile('👨👩👧', 'Kingdom Creators',
-            "Lisa: Here's the content calendar for this week.", '8:15 AM',
-            tag: 'GROUP', unread: 5),
-        _msgTile('👩🏽', 'Brittany Love',
-            'Can\'t wait to see what God does! 🙌', 'Yesterday'),
-        _msgTile(
-            '🛡️',
-            'KingdomShift Team',
-            'System Update: Live stream was completed successfully.',
-            'Yesterday',
-            tag: 'OFFICIAL',
-            unread: 2),
-        _msgTile('👨🏾', 'Jonathan Wright',
-            'Appreciate the collaboration brother!', 'Mon'),
-      ],
-    );
-  }
-
-  Widget _msgTile(String avatar, String name, String preview, String time,
-      {String? tag, bool pinned = false, int? unread}) {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 4),
-      leading: Stack(children: [
-        CircleAvatar(
-            radius: 26,
-            backgroundColor: const Color(0xFF1A1A2E),
-            child: Text(avatar, style: const TextStyle(fontSize: 22))),
-        Positioned(
-            bottom: 0,
-            left: 0,
-            child: Container(
-                width: 12,
-                height: 12,
-                decoration: BoxDecoration(
-                    color: Colors.green,
-                    shape: BoxShape.circle,
-                    border:
-                        Border.all(color: const Color(0xFF0A0A0F), width: 2)))),
-      ]),
-      title: Row(children: [
-        Text(name,
-            style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 14)),
-        if (tag != null) ...[
-          const SizedBox(width: 6),
-          Container(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-              decoration: BoxDecoration(
-                  color: const Color(0xFF7B2FF7).withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(4),
-                  border: Border.all(
-                      color: const Color(0xFF7B2FF7).withValues(alpha: 0.5))),
-              child: Text(tag,
-                  style: const TextStyle(
-                      color: Color(0xFF7B2FF7),
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold))),
-        ],
-      ]),
-      subtitle: Text(preview,
+      leading: CircleAvatar(
+        radius: 26,
+        backgroundColor: const Color(0xFF1A1A2E),
+        child: ClipOval(
+          child: CustomImage(
+            size: const Size(52, 52),
+            image: photo?.addBaseURL(),
+            fullName: name,
+          ),
+        ),
+      ),
+      title: Text(name,
+          style: const TextStyle(
+              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14)),
+      subtitle: Text(thread.lastMsg ?? '',
           style: const TextStyle(color: Colors.white54, fontSize: 13),
           maxLines: 1,
           overflow: TextOverflow.ellipsis),
-      trailing: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Text(time,
-              style: const TextStyle(color: Colors.white54, fontSize: 12)),
-          const SizedBox(height: 4),
-          Row(mainAxisSize: MainAxisSize.min, children: [
-            if (pinned)
-              const Icon(Icons.push_pin, color: Color(0xFFFFB800), size: 14),
-            if (unread != null) ...[
-              const SizedBox(width: 4),
-              Container(
-                  width: 20,
-                  height: 20,
-                  decoration: const BoxDecoration(
-                      color: Color(0xFF7B2FF7), shape: BoxShape.circle),
-                  child: Center(
-                      child: Text('$unread',
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 11,
-                              fontWeight: FontWeight.bold)))),
-            ],
-          ]),
-        ],
-      ),
-      onTap: () {},
+      trailing: unread > 0
+          ? Container(
+              width: 20,
+              height: 20,
+              decoration: const BoxDecoration(
+                  color: Color(0xFF7B2FF7), shape: BoxShape.circle),
+              child: Center(
+                  child: Text('$unread',
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold))))
+          : null,
+      onTap: () {
+        Get.to(() => ChatScreen(conversationUser: thread));
+      },
     );
   }
 }
