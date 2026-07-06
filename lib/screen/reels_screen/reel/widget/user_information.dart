@@ -136,8 +136,7 @@ class _FollowButtonState extends State<FollowButton> {
       if (creatorKey != null) {
         loadFollowState(creatorKey);
       }
-      bool isFollow = localFollow.value ||
-          (followController.user.value?.isFollowing ?? false);
+      bool isFollow = localFollow.value;
       if (followController.user.value?.id ==
           SessionManager.instance.getUserID()) {
         return const SizedBox();
@@ -153,19 +152,21 @@ class _FollowButtonState extends State<FollowButton> {
                           widget.controller.reelData.value.userId?.toString();
 
                   if (creatorKey != null) {
-                    final isNowFollowing =
-                        !(followController.user.value?.isFollowing ?? false);
+                    final isNowFollowing = !localFollow.value;
                     localFollow.value = isNowFollowing;
                     final ok = await UserService.instance.setSupabaseFollow(
                       followingKey: creatorKey,
                       isFollowing: isNowFollowing,
                     );
                     if (ok) {
+                      localFollow.value = isNowFollowing;
                       followController.user.update((val) {
                         val?.isFollowing = isNowFollowing;
                         val?.updateFollowerCount(isNowFollowing);
                       });
                       followController.user.refresh();
+                    } else {
+                      localFollow.value = !isNowFollowing;
                     }
                   } else {
                     await followController.followUnFollowUser();
