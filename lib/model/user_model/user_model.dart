@@ -88,6 +88,7 @@ class User {
       this.createdAt,
       this.updatedAt,
       this.isFollowing,
+      this.firebaseUid,
       this.followStatus,
       this.isBlock,
       this.links,
@@ -322,6 +323,7 @@ class User {
   String? updatedAt;
   String? appLanguage;
   bool? isFollowing;
+  String? firebaseUid;
   int? followStatus;
   bool? isBlock;
   bool? newRegister;

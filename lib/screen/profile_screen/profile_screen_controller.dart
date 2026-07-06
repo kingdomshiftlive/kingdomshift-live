@@ -115,6 +115,7 @@ class ProfileScreenController extends BlockUserController
       UserPostData? items = await PostService.instance.fetchUserPosts(
           type: PostType.reels,
           userId: userData.value?.id?.toInt(),
+          targetCreatorId: userData.value?.firebaseUid,
           lastItemId: isEmpty ? null : reels.lastOrNull?.id?.toInt());
       if (isEmpty) reels.clear();
 
@@ -143,6 +144,7 @@ class ProfileScreenController extends BlockUserController
       type: PostType.posts,
       userId:
           userData.value?.id?.toInt() ?? SessionManager.instance.getUserID(),
+      targetCreatorId: userData.value?.firebaseUid,
       lastItemId: isEmpty ? null : posts.lastOrNull?.id?.toInt(),
     );
 
@@ -171,6 +173,7 @@ class ProfileScreenController extends BlockUserController
       UserPostData? items = await PostService.instance.fetchUserPosts(
           type: '${PostType.podcast.type}',
           userId: userData.value?.id?.toInt(),
+          targetCreatorId: userData.value?.firebaseUid,
           lastItemId: isEmpty ? null : podcasts.lastOrNull?.id?.toInt());
       if (isEmpty) podcasts.clear();
 

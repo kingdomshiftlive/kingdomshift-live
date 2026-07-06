@@ -192,6 +192,7 @@ class PostService {
             username: 'creator',
             fullname: 'Creator',
             isFollowing: false,
+            firebaseUid: item['creator_id']?.toString(),
           ),
         );
       }).toList();
@@ -300,6 +301,7 @@ class PostService {
             username: 'creator',
             fullname: 'Creator',
             isFollowing: false,
+            firebaseUid: item['creator_id']?.toString(),
           ),
         );
       }).toList();
