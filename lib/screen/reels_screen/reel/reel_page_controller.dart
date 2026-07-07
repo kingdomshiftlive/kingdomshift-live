@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shortzz/common/widget/kingdom_reveal/kingdom_reveal_overlay.dart';
 import 'package:shortzz/common/controller/base_controller.dart';
 import 'package:shortzz/common/functions/debounce_action.dart';
 import 'package:shortzz/common/manager/branch_io_manager.dart';
@@ -122,6 +123,7 @@ class ReelController extends BaseController {
   Future<void> onCommentTap(
       {PostByIdData? postByIdData, bool isFromNotification = false}) async {
     FocusManager.instance.primaryFocus?.unfocus();
+    KingdomRevealOverlay.pauseForModal();
 
     await Get.bottomSheet(
         CommentSheet(
@@ -132,6 +134,7 @@ class ReelController extends BaseController {
         ),
         isScrollControlled: true,
         backgroundColor: Colors.transparent);
+    KingdomRevealOverlay.resumeAfterModal();
   }
 
   void onSaved() {

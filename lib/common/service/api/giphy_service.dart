@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
 import 'package:shortzz/common/manager/logger.dart';
 import 'package:shortzz/model/giphy/giphy_model.dart';
@@ -27,9 +26,9 @@ enum GiphyRating {
 
 class GiphyService {
   GiphyService._();
-
   static final GiphyService instance = GiphyService._();
 
+  static const String _giphyApiKey = 'tCX9tP23tZuDtZkBMtnW0drVwK4c5aus';
   int paginationLimit = 30;
 
   Future<List<GiphyData>> search({
@@ -38,58 +37,35 @@ class GiphyService {
     required int startCount,
     GiphyRating giphyRating = GiphyRating.g,
   }) async {
-    String url =
-        'https://tenor.googleapis.com/v2/search?key=LIVDSRZULELA&q=$keyWord&limit=$paginationLimit&pos=$startCount&media_filter=gif';
-    http.Response response = await http.get(Uri.parse(url));
+    final url =
+        'https://api.giphy.com/v1/gifs/search?api_key=$_giphyApiKey&q=$keyWord&limit=$paginationLimit&offset=$startCount&rating=${giphyRating.title}';
     Loggers.info(url);
-    print('TENOR SEARCH STATUS: ${response.statusCode}');
-    print('TENOR SEARCH BODY: ${response.body.substring(0, response.body.length > 300 ? 300 : response.body.length)}');
+    final response = await http.get(Uri.parse(url));
     print('GIPHY SEARCH STATUS: ${response.statusCode}');
     print('GIPHY SEARCH BODY: ${response.body.substring(0, response.body.length > 300 ? 300 : response.body.length)}');
     if (response.statusCode == 200) {
       final decoded = jsonDecode(response.body);
-      final results = (decoded['results'] ?? []) as List;
-      return results.map((item) {
-        final gifUrl = item['media_formats']?['gif']?['url']?.toString() ??
-            item['media_formats']?['tinygif']?['url']?.toString() ??
-            '';
-        return GiphyData(
-          images: GiphyImages(
-            fixedWidth: FixedWidth(url: gifUrl),
-            original: Original(url: gifUrl),
-          ),
-        );
-      }).where((item) => (item.images?.fixedWidth?.url ?? '').isNotEmpty).toList();
+      final model = GiphyModel.fromJson(decoded);
+      return model.data ?? [];
     }
     return [];
   }
 
-  Future<List<GiphyData>> trending(
-      {required String apiKey,
-      GiphyRating giphyRating = GiphyRating.g,
-      required int startCount}) async {
-    String url =
-        'https://tenor.googleapis.com/v2/featured?key=LIVDSRZULELA&limit=$paginationLimit&pos=$startCount&media_filter=gif';
+  Future<List<GiphyData>> trending({
+    required String apiKey,
+    GiphyRating giphyRating = GiphyRating.g,
+    required int startCount,
+  }) async {
+    final url =
+        'https://api.giphy.com/v1/gifs/trending?api_key=$_giphyApiKey&limit=$paginationLimit&offset=$startCount&rating=${giphyRating.title}';
     Loggers.info(url);
-    http.Response response = await http.get(Uri.parse(url));
-    print('TENOR TRENDING STATUS: ${response.statusCode}');
-    print('TENOR TRENDING BODY: ${response.body.substring(0, response.body.length > 300 ? 300 : response.body.length)}');
+    final response = await http.get(Uri.parse(url));
     print('GIPHY TRENDING STATUS: ${response.statusCode}');
     print('GIPHY TRENDING BODY: ${response.body.substring(0, response.body.length > 300 ? 300 : response.body.length)}');
     if (response.statusCode == 200) {
       final decoded = jsonDecode(response.body);
-      final results = (decoded['results'] ?? []) as List;
-      return results.map((item) {
-        final gifUrl = item['media_formats']?['gif']?['url']?.toString() ??
-            item['media_formats']?['tinygif']?['url']?.toString() ??
-            '';
-        return GiphyData(
-          images: GiphyImages(
-            fixedWidth: FixedWidth(url: gifUrl),
-            original: Original(url: gifUrl),
-          ),
-        );
-      }).where((item) => (item.images?.fixedWidth?.url ?? '').isNotEmpty).toList();
+      final model = GiphyModel.fromJson(decoded);
+      return model.data ?? [];
     }
     return [];
   }

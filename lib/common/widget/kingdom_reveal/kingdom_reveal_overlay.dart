@@ -13,6 +13,14 @@ class KingdomRevealOverlay extends StatefulWidget {
   final String? characterId;
   final bool active;
 
+  static void pauseForModal() {
+    _KingdomRevealOverlayState.pauseForModal();
+  }
+
+  static void resumeAfterModal() {
+    _KingdomRevealOverlayState.resumeAfterModal();
+  }
+
   @override
   State<KingdomRevealOverlay> createState() => _KingdomRevealOverlayState();
 }
@@ -25,8 +33,19 @@ class _KingdomRevealOverlayState extends State<KingdomRevealOverlay>
   static const _frameDuration = Duration(milliseconds: 125);
   OverlayEntry? _entry;
   static OverlayEntry? _globalEntry;
+  static bool _globallyPaused = false;
   AudioPlayer? _audioPlayer;
   String? _loadedAudioUrl;
+
+  static void pauseForModal() {
+    _globallyPaused = true;
+    _globalEntry?.markNeedsBuild();
+  }
+
+  static void resumeAfterModal() {
+    _globallyPaused = false;
+    _globalEntry?.markNeedsBuild();
+  }
 
   KingdomRevealCharacter? get _character {
     if (widget.characterId == null || widget.characterId == 'none') return null;
@@ -55,22 +74,32 @@ class _KingdomRevealOverlayState extends State<KingdomRevealOverlay>
   Future<void> _playAudio() async {
     final audioUrl = _character?.audioUrl;
     if (audioUrl == null) return;
-    if (_loadedAudioUrl != audioUrl) {
-      _audioPlayer?.dispose();
-      _audioPlayer = AudioPlayer();
-      _loadedAudioUrl = audioUrl;
-      try {
-        await _audioPlayer!.setUrl(audioUrl);
-        await _audioPlayer!.setLoopMode(LoopMode.one);
-      } catch (_) {
-        return;
+    try {
+      if (_loadedAudioUrl != audioUrl) {
+        final oldPlayer = _audioPlayer;
+        _audioPlayer = null;
+        await oldPlayer?.dispose();
+        if (!mounted) return;
+        final newPlayer = AudioPlayer();
+        await newPlayer.setUrl(audioUrl);
+        await newPlayer.setLoopMode(LoopMode.one);
+        if (!mounted) {
+          await newPlayer.dispose();
+          return;
+        }
+        _audioPlayer = newPlayer;
+        _loadedAudioUrl = audioUrl;
       }
+      await _audioPlayer?.play();
+    } catch (_) {
+      // Ignore audio errors silently so they never affect the visual overlay.
     }
-    _audioPlayer?.play();
   }
 
   void _stopAudio() {
-    _audioPlayer?.pause();
+    try {
+      _audioPlayer?.pause();
+    } catch (_) {}
   }
 
   void _showOverlay() {
@@ -98,7 +127,7 @@ class _KingdomRevealOverlayState extends State<KingdomRevealOverlay>
     if (_accumulated >= _frameDuration) {
       _accumulated = Duration.zero;
       _frameIndex = (_frameIndex + 1) % frames.length;
-      _entry?.markNeedsBuild();
+      WidgetsBinding.instance.addPostFrameCallback((_) => _entry?.markNeedsBuild());
     }
   }
 
@@ -110,17 +139,22 @@ class _KingdomRevealOverlayState extends State<KingdomRevealOverlay>
     final wasShowing = _entry != null;
 
     if (widget.characterId != oldWidget.characterId && _entry != null) {
-      _entry?.markNeedsBuild();
+      _frameIndex = 0;
+      WidgetsBinding.instance.addPostFrameCallback((_) => _entry?.markNeedsBuild());
     }
 
     if (shouldShow && !wasShowing) {
-      _showOverlay();
-      _ticker?.start();
-      _playAudio();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _showOverlay();
+        _ticker?.start();
+        _playAudio();
+      });
     } else if (!shouldShow && wasShowing) {
-      _hideOverlay();
-      _ticker?.stop();
-      _stopAudio();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _hideOverlay();
+        _ticker?.stop();
+        _stopAudio();
+      });
     }
   }
 
@@ -133,6 +167,9 @@ class _KingdomRevealOverlayState extends State<KingdomRevealOverlay>
   }
 
   Widget _buildFloatingCharacter(BuildContext context) {
+    if (_globallyPaused) {
+      return const SizedBox.shrink();
+    }
     final frames = _frames;
     if (frames.isEmpty) {
       return const SizedBox.shrink();
@@ -161,6 +198,9 @@ class _KingdomRevealOverlayState extends State<KingdomRevealOverlay>
             frames[safeIndex],
             fit: BoxFit.contain,
             gaplessPlayback: true,
+            errorBuilder: (context, error, stackTrace) {
+              return const SizedBox.shrink();
+            },
           ),
         ),
       ),
