@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
 import 'package:flutter/scheduler.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:shortzz/common/model/kingdom_reveal/kingdom_reveal_character.dart';
 
 class KingdomRevealOverlay extends StatefulWidget {
@@ -34,9 +32,15 @@ class _KingdomRevealOverlayState extends State<KingdomRevealOverlay>
   static const _frameDuration = Duration(milliseconds: 125);
   OverlayEntry? _entry;
   static bool _globallyPaused = false;
-  AudioPlayer? _audioPlayer;
-  String? _loadedAudioUrl;
   bool _markScheduled = false;
+
+  static void pauseForModal() {
+    _globallyPaused = true;
+  }
+
+  static void resumeAfterModal() {
+    _globallyPaused = false;
+  }
 
   void _safeMarkNeedsBuild() {
     if (_markScheduled || !mounted || _entry == null) return;
@@ -46,15 +50,6 @@ class _KingdomRevealOverlayState extends State<KingdomRevealOverlay>
       if (!mounted || _entry == null) return;
       _entry!.markNeedsBuild();
     });
-  }
-  bool _wasActive = false;
-
-  static void pauseForModal() {
-    _globallyPaused = true;
-  }
-
-  static void resumeAfterModal() {
-    _globallyPaused = false;
   }
 
   KingdomRevealCharacter? get _character {
@@ -74,7 +69,6 @@ class _KingdomRevealOverlayState extends State<KingdomRevealOverlay>
     _ticker = createTicker(_onTick);
     if (_frames.isNotEmpty) {
       _ticker!.start();
-      // _preloadAudio();
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
         final overlayState = Overlay.of(context, rootOverlay: true);
@@ -84,55 +78,11 @@ class _KingdomRevealOverlayState extends State<KingdomRevealOverlay>
     }
   }
 
-  Future<void> _preloadAudio() async {
-    final audioUrl = _character?.audioUrl;
-    if (audioUrl == null || _loadedAudioUrl == audioUrl) return;
-    try {
-      final oldPlayer = _audioPlayer;
-      _audioPlayer = null;
-      unawaited(oldPlayer?.dispose());
-      final newPlayer = AudioPlayer();
-      _loadedAudioUrl = audioUrl;
-      await newPlayer.setUrl(audioUrl);
-      await newPlayer.setLoopMode(LoopMode.one);
-      if (!mounted) {
-        unawaited(newPlayer.dispose());
-        return;
-      }
-      _audioPlayer = newPlayer;
-      if (_wasActive) {
-        // _playAudio();
-      }
-    } catch (_) {
-      _loadedAudioUrl = null;
-    }
-  }
-
-  void _playAudio() {
-    unawaited(_audioPlayer?.play());
-  }
-
-  void _stopAudio() {
-    unawaited(_audioPlayer?.pause());
-  }
-
   void _onTick(Duration elapsed) {
     final frames = _frames;
     if (frames.isEmpty) return;
-
     final isActiveNow = widget.active && !_globallyPaused;
-    if (isActiveNow != _wasActive) {
-      _wasActive = isActiveNow;
-      if (isActiveNow) {
-        // _playAudio();
-      } else {
-        // _stopAudio();
-      }
-      _safeMarkNeedsBuild();
-    }
-
     if (!isActiveNow) return;
-
     _accumulated += const Duration(milliseconds: 16);
     if (_accumulated >= _frameDuration) {
       _accumulated = Duration.zero;
@@ -146,7 +96,6 @@ class _KingdomRevealOverlayState extends State<KingdomRevealOverlay>
     super.didUpdateWidget(oldWidget);
     if (widget.characterId != oldWidget.characterId) {
       _frameIndex = 0;
-      _loadedAudioUrl = null;
       _safeMarkNeedsBuild();
       if (_frames.isNotEmpty && _entry == null) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -167,7 +116,6 @@ class _KingdomRevealOverlayState extends State<KingdomRevealOverlay>
     _entry?.remove();
     _entry = null;
     _ticker?.dispose();
-    _audioPlayer?.dispose();
     super.dispose();
   }
 

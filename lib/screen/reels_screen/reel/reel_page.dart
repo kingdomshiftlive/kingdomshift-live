@@ -171,6 +171,7 @@ class ReelPage extends StatelessWidget {
                   ValueListenableBuilder(
                     valueListenable: videoPlayerController!,
                     builder: (context, value, child) {
+                      // Reveal audio disabled for launch due to video transition performance issue.
                       return KingdomRevealOverlay(
                         characterId: reelData.kingdomRevealCharacter,
                         active: value.isPlaying,
