@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:shortzz/common/widget/kingdom_reveal/kingdom_reveal_overlay.dart';
 import 'package:get/get.dart';
 import 'package:proste_indexed_stack/proste_indexed_stack.dart';
 import 'package:shortzz/common/service/subscription/subscription_manager.dart';
@@ -289,7 +290,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
         child: GestureDetector(
           onTap: () {
             if (isCreate) {
-              Get.to(() => const CameraScreen(cameraType: CameraScreenType.post));
+              KingdomRevealOverlay.pauseForModal();
+              Get.to(() => const CameraScreen(cameraType: CameraScreenType.post))?.then((_) {
+                KingdomRevealOverlay.resumeAfterModal();
+              });
               return;
             }
             controller.onChanged(index);

@@ -32,10 +32,16 @@ class _KingdomRevealOverlayState extends State<KingdomRevealOverlay>
   static const _frameDuration = Duration(milliseconds: 125);
   OverlayEntry? _entry;
   static bool _globallyPaused = false;
+  static OverlayEntry? _activeEntry;
   bool _markScheduled = false;
 
   static void pauseForModal() {
     _globallyPaused = true;
+    if (_activeEntry != null) {
+      print("KR_OVERLAY removed for create");
+      _activeEntry?.remove();
+      _activeEntry = null;
+    }
   }
 
   static void resumeAfterModal() {
@@ -74,6 +80,8 @@ class _KingdomRevealOverlayState extends State<KingdomRevealOverlay>
         final overlayState = Overlay.of(context, rootOverlay: true);
         _entry = OverlayEntry(builder: (context) => _buildFloatingCharacter(context));
         overlayState.insert(_entry!);
+        _activeEntry = _entry;
+        print("KR_OVERLAY inserted on feed");
       });
     }
   }
@@ -103,6 +111,8 @@ class _KingdomRevealOverlayState extends State<KingdomRevealOverlay>
           final overlayState = Overlay.of(context, rootOverlay: true);
           _entry = OverlayEntry(builder: (context) => _buildFloatingCharacter(context));
           overlayState.insert(_entry!);
+          _activeEntry = _entry;
+          print("KR_OVERLAY inserted on feed");
         });
       }
       if (_ticker != null && !_ticker!.isActive && _frames.isNotEmpty) {
