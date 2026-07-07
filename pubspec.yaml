@@ -75,6 +75,7 @@ dependencies:
   cached_network_image: ^3.4.1
   audio_waveforms: ^2.0.2
   just_audio: ^0.10.5
+  speech_to_text: ^7.0.0
   video_player: ^2.10.1
   video_compress: ^3.1.4
   flutter_image_compress: ^2.4.0

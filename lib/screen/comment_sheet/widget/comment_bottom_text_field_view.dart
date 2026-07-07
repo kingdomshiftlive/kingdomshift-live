@@ -9,10 +9,12 @@ import 'package:shortzz/languages/languages_keys.dart';
 import 'package:shortzz/model/user_model/user_model.dart';
 import 'package:shortzz/screen/comment_sheet/comment_sheet_controller.dart';
 import 'package:shortzz/screen/comment_sheet/helper/comment_helper.dart';
+import 'package:shortzz/screen/comment_sheet/helper/speech_input_helper.dart';
 import 'package:shortzz/utilities/text_style_custom.dart';
 import 'package:shortzz/utilities/theme_res.dart';
 
 class CommentBottomTextFieldView extends StatelessWidget {
+  static final SpeechInputHelper _speechHelper = SpeechInputHelper();
   final CommentHelper helper;
   final bool isFromBottomSheet;
 
@@ -103,6 +105,23 @@ class CommentBottomTextFieldView extends StatelessWidget {
                                       fontSize: 16),
                                   onChanged: helper.onChanged,
                                   decoration: InputDecoration(
+                                    prefixIcon: ValueListenableBuilder<bool>(
+                                      valueListenable: _speechHelper.isListening,
+                                      builder: (context, listening, _) {
+                                        return IconButton(
+                                          icon: Icon(
+                                            listening ? Icons.mic : Icons.mic_none,
+                                            color: listening ? Colors.red : textLightGrey(context),
+                                          ),
+                                          onPressed: () {
+                                            _speechHelper.toggleListening(
+                                              controller: helper.detectableTextController,
+                                              onChanged: () => helper.onChanged(helper.detectableTextController.text),
+                                            );
+                                          },
+                                        );
+                                      },
+                                    ),
                                     border: InputBorder.none,
                                     contentPadding: const EdgeInsets.symmetric(
                                         horizontal: 15, vertical: 8),
