@@ -104,70 +104,16 @@ class ReelsScreenController extends BaseController {
     _warmNext(position.value);
   }
 
-  // void _playNextReel(int index) {
-  //   _stopControllerAtIndex(index - 1);
-  //   _disposeControllerAtIndex(index - 2);
-  //   _playControllerAtIndex(index);
-  //   // Initialize only the next neighbor; remove +2 initialization.
-  //   _initializeControllerAtIndex(index + 1);
-  //   // Warm cache only (no initialize) for +2
-  //   _warmNext(index); // already caches +1,+2
-  // }
-  //
-  // void _playPreviousReel(int index) {
-  //   _stopControllerAtIndex(index + 1);
-  //   _disposeControllerAtIndex(index + 2);
-  //   _playControllerAtIndex(index);
-  //   _initializeControllerAtIndex(index - 1);
-  //   _initializeControllerAtIndex(index - 2); // optional for reverse scrolls
-  // }
-  //
-  // Future _initializeControllerAtIndex(int index) async {
-  //   if (index < 0 || index >= reels.length) return;
-  //   final url = reels[index].video?.addBaseURL() ?? '';
-  //   if (url.isEmpty) return Loggers.error('Video URL not found!!!');
-  //
-  //   // Prefer local file if already cached
-  //   final cached = await VideoCacheHelper.getValidCachedVideo(url);
-  //   late final VideoPlayerController ctrl;
-  //   if (cached != null) {
-  //     ctrl = VideoPlayerController.file(cached.file);
-  //   } else {
-  //     // For non-current items: avoid initializing; just cache and return
-  //     if (index != position.value) {
-  //       // Disabled: background caching caused scroll hangs on home feed.
-  //       return;
-  //     }
-  //     ctrl = VideoPlayerController.networkUrl(Uri.parse(url));
-  //     unawaited(VideoCacheHelper.downloadAndCacheVideo(url));
-  //   }
-  //
-  //   videoControllers[index] = ctrl;
-  //   try {
-  //     await ctrl.initialize();
-  //   } catch (e) {
-  //     Loggers.error('Initialize failed @ $index: $e');
-  //     await ctrl.dispose();
-  //     videoControllers.remove(index);
-  //     return;
-  //   }
-  //   Loggers.info('INITIALIZED $index');
-  // }
-
   void _playNextReel(int index) {
-    _stopControllerAtIndex(index - 1);
-    _disposeControllerAtIndex(index - 2);
+    _disposeControllerAtIndex(index - 1);
     _playControllerAtIndex(index);
     _initializeControllerAtIndex(index + 1);
-    _initializeControllerAtIndex(index + 2);
   }
 
   void _playPreviousReel(int index) {
-    _stopControllerAtIndex(index + 1);
-    _disposeControllerAtIndex(index + 2);
+    _disposeControllerAtIndex(index + 1);
     _playControllerAtIndex(index);
     _initializeControllerAtIndex(index - 1);
-    _initializeControllerAtIndex(index - 2);
   }
 
   Future<void> _initializeControllerAtIndex(int index) async {
@@ -307,15 +253,13 @@ class ReelsScreenController extends BaseController {
   // }
 
   final Set<String> _warmed = {};
-
   Future _warmNext(int index) async {
-    for (final i in [index + 1, index + 2]) {
-      if (i < 0 || i >= reels.length) continue;
-      final url = reels[i].video?.addBaseURL() ?? '';
-      if (url.isEmpty || _warmed.contains(url)) continue;
-      _warmed.add(url);
-      // Disabled: background caching caused scroll hangs on home feed.
-    }
+    final i = index + 1;
+    if (i < 0 || i >= reels.length) return;
+    final url = reels[i].video?.addBaseURL() ?? '';
+    if (url.isEmpty || _warmed.contains(url)) return;
+    _warmed.add(url);
+    unawaited(VideoCacheHelper.downloadAndCacheVideo(url));
   }
 
   void onPageChanged(int index) {

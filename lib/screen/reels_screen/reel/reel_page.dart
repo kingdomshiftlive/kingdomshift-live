@@ -18,6 +18,7 @@ import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import '../reels_screen_controller.dart';
+import 'package:shortzz/common/widget/kingdom_reveal/kingdom_reveal_overlay.dart';
 
 class ReelPage extends StatelessWidget {
   final Post reelData;
@@ -163,8 +164,19 @@ class ReelPage extends StatelessWidget {
             },
             child: Stack(
               alignment: Alignment.bottomCenter,
+              clipBehavior: Clip.none,
               children: [
                 _buildVideoContent(),
+                if (videoPlayerController != null)
+                  ValueListenableBuilder(
+                    valueListenable: videoPlayerController!,
+                    builder: (context, value, child) {
+                      return KingdomRevealOverlay(
+                        characterId: reelData.kingdomRevealCharacter,
+                        active: value.isPlaying,
+                      );
+                    },
+                  ),
                 const BlackGradientShadow(),
                 ReelInfoSection(
                   controller: controller,

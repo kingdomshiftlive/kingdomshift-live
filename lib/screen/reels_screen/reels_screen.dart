@@ -83,6 +83,7 @@ class ReelsScreen extends StatelessWidget {
                                     physics: const PageScrollPhysics(),
                                     onPageChanged: controller.onPageChanged,
                                     scrollDirection: Axis.vertical,
+                                    clipBehavior: Clip.none,
                                     itemBuilder: (context, index) {
                                       if (index >= reels.length) {
                                         return Container(

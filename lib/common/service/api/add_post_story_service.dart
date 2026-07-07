@@ -54,8 +54,9 @@ class AddPostStoryService {
         }
       }
       if (videoUrl.isEmpty) videoUrl = param['video']?.toString() ?? '';
-      if (thumbnailUrl.isEmpty)
+        if (thumbnailUrl.isEmpty) {
         thumbnailUrl = param['thumbnail']?.toString() ?? '';
+        }
       print('FINAL VIDEO URL: $videoUrl');
       final inserted = await supabase.Supabase.instance.client.from('videos').insert({
         'creator_id': firebaseUser.uid,
@@ -65,6 +66,7 @@ class AddPostStoryService {
         'thumbnail_url': thumbnailUrl,
         'category': param['category'] ?? 'Faith',
         'status': 'published',
+          'kingdom_reveal_character': param['kingdom_reveal_character'] ?? param['kingdomRevealCharacter'] ?? 'none',
       }).select().single().timeout(const Duration(seconds: 15));
       print('SAVED TO VIDEOS TABLE SUCCESS: $inserted');
       return PostModel(
@@ -78,6 +80,7 @@ class AddPostStoryService {
           description: inserted['title'] ?? '',
           video: inserted['video_url'] ?? '',
           thumbnail: inserted['thumbnail_url'] ?? '',
+            kingdomRevealCharacter: inserted['kingdom_reveal_character'] ?? 'none',
           likes: 0,
           comments: 0,
           views: 0,

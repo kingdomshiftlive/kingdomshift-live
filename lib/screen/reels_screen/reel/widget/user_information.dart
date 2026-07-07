@@ -11,6 +11,7 @@ import 'package:readmore/readmore.dart';
 import 'package:shortzz/common/controller/follow_controller.dart';
 import 'package:shortzz/common/controller/profile_controller.dart';
 import 'package:shortzz/common/extensions/string_extension.dart';
+import 'package:shortzz/common/manager/logger.dart';
 import 'package:shortzz/common/manager/session_manager.dart';
 import 'package:shortzz/common/service/api/user_service.dart';
 import 'package:shortzz/common/service/navigation/navigate_with_controller.dart';
@@ -109,13 +110,15 @@ class _FollowButtonState extends State<FollowButton> {
     try {
       final row = await supabase.Supabase.instance.client
           .from('user_follows')
-          .select('id')
+          .select()
           .eq('follower_key', followerKey)
           .eq('following_key', creatorKey)
           .maybeSingle();
 
       localFollow.value = row != null;
-    } catch (_) {}
+    } catch (e) {
+      Loggers.error('Follow check failed: $e');
+    }
   }
 
   @override
@@ -137,15 +140,12 @@ class _FollowButtonState extends State<FollowButton> {
         loadFollowState(creatorKey);
       }
       bool isFollow = localFollow.value;
-      if (followController.user.value?.id ==
-          SessionManager.instance.getUserID()) {
-        return const SizedBox();
-      }
       return AnimatedOpacity(
         opacity: 1,
         duration: const Duration(milliseconds: 10),
         child: InkWell(
           onTap: () async {
+                  if (isLoading.value) return;
                   isLoading.value = true;
                   final creatorKey =
                       widget.controller.reelData.value.metadata ??

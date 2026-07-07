@@ -74,6 +74,9 @@ class CreateFeedScreen extends StatelessWidget {
                               FeedVideoView(controller: controller),
                           },
                         ),
+                        Obx(() => controller.feedPostType.value == FeedPostType.video || controller.createType == CreateFeedType.reel
+                            ? _kingdomRevealButton(controller, context)
+                            : const SizedBox()),
                         const FeedCommentToggle(),
                         _uploadButton(controller, context),
                       ],
@@ -104,6 +107,38 @@ class CreateFeedScreen extends StatelessWidget {
                       onTap: () => controller.onMediaTap(FeedPostType.video)),
                 ],
               ));
+  }
+
+  Widget _kingdomRevealButton(
+      CreateFeedScreenController controller, BuildContext context) {
+    return Obx(() {
+      final selected = controller.selectedKingdomRevealCharacter.value;
+      return GestureDetector(
+        onTap: () => controller.openKingdomRevealPicker(context),
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: textDarkGrey(context).withValues(alpha: 0.3)),
+          ),
+          child: Row(
+            children: [
+              const Icon(Icons.auto_awesome, size: 20),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  selected == null
+                      ? 'Add Kingdom Reveal'
+                      : 'Reveal: ${selected.name}',
+                ),
+              ),
+              const Icon(Icons.chevron_right, size: 20),
+            ],
+          ),
+        ),
+      );
+    });
   }
 
   Widget _uploadButton(

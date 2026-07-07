@@ -57,6 +57,7 @@ class Post {
     this.hashtags,
     this.video,
     this.thumbnail,
+    this.kingdomRevealCharacter,
     this.views,
     this.likes,
     this.comments,
@@ -95,6 +96,7 @@ class Post {
     hashtags = json['hashtags'];
     video = json['video'];
     thumbnail = json['thumbnail'];
+    kingdomRevealCharacter = json['kingdom_reveal_character'];
     views = json['views'];
     likes = json['likes'];
     comments = json['comments'];
@@ -140,6 +142,7 @@ class Post {
   String? hashtags;
   String? video;
   String? thumbnail;
+  String? kingdomRevealCharacter;
   num? views;
   num? likes;
   num? comments;
@@ -176,6 +179,7 @@ class Post {
     map['hashtags'] = hashtags;
     map['video'] = video;
     map['thumbnail'] = thumbnail;
+    map['kingdom_reveal_character'] = kingdomRevealCharacter;
     map['views'] = views;
     map['likes'] = likes;
     map['comments'] = comments;
@@ -224,6 +228,7 @@ class Post {
     map['hashtags'] = hashtags;
     map['video'] = video;
     map['thumbnail'] = thumbnail;
+    map['kingdom_reveal_character'] = kingdomRevealCharacter;
     // map['views'] = views;
     // map['likes'] = likes;
     // map['comments'] = comments;

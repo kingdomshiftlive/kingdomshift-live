@@ -37,6 +37,8 @@ import 'package:shortzz/screen/color_filter_screen/widget/color_filtered.dart';
 import 'package:shortzz/screen/comment_sheet/helper/comment_helper.dart';
 import 'package:shortzz/screen/create_feed_screen/create_feed_screen.dart';
 import 'package:shortzz/screen/create_feed_screen/video_copression_helper.dart';
+import 'package:shortzz/common/model/kingdom_reveal/kingdom_reveal_character.dart';
+import 'package:shortzz/screen/kingdom_reveal/kingdom_reveal_picker_sheet.dart';
 import 'package:shortzz/screen/dashboard_screen/dashboard_screen_controller.dart';
 import 'package:shortzz/screen/profile_screen/profile_screen_controller.dart';
 import 'package:shortzz/screen/selected_music_sheet/selected_music_sheet_controller.dart';
@@ -50,6 +52,7 @@ class CreateFeedScreenController extends BaseController {
   final dashboardController = Get.find<DashboardScreenController>();
   Rx<FeedPostType> feedPostType = FeedPostType.text.obs;
   RxBool canComment = true.obs;
+  Rx<KingdomRevealCharacter?> selectedKingdomRevealCharacter = Rx<KingdomRevealCharacter?>(null);
   final RetrytechPlugin _retrytechPlugin = RetrytechPlugin();
 
   CommentHelper commentHelper = CommentHelper();
@@ -150,6 +153,7 @@ class CreateFeedScreenController extends BaseController {
       if (rawDescription.isNotEmpty) Params.description: rawDescription,
       Params.canComment: canComment.value ? 1 : 0,
       if (createType == CreateFeedType.podcast) 'post_type': 5,
+      if (selectedKingdomRevealCharacter.value != null) 'kingdom_reveal_character': selectedKingdomRevealCharacter.value!.id,
     };
 
     _addTextDetections(params, rawDescription);
@@ -160,6 +164,18 @@ class CreateFeedScreenController extends BaseController {
     }
 
     return params;
+  }
+
+  Future<void> openKingdomRevealPicker(BuildContext context) async {
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => KingdomRevealPickerSheet(
+        onSelected: (character) {
+          selectedKingdomRevealCharacter.value = character;
+        },
+      ),
+    );
   }
 
   void _addTextDetections(Map<String, dynamic> params, String rawDescription) {
