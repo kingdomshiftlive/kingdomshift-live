@@ -378,7 +378,7 @@ class PostService {
           likes: 0,
           repliesCount: 0,
           isPinned: 0,
-          type: (item['type'] == 1) ? CommentType.image : CommentType.text,
+          type: (item['type']?.toString() == '1') ? CommentType.image : CommentType.text,
           createdAt: item['created_at']?.toString(),
           user: null,
         );
@@ -420,7 +420,7 @@ class PostService {
         likes: 0,
         repliesCount: 0,
         isPinned: 0,
-        type: (item['type'] == 1) ? CommentType.image : CommentType.text,
+        type: (item['type']?.toString() == '1') ? CommentType.image : CommentType.text,
         createdAt: item['created_at']?.toString(),
         user: SessionManager.instance.getUser(),
       );
