@@ -36,6 +36,17 @@ class _KingdomRevealOverlayState extends State<KingdomRevealOverlay>
   static bool _globallyPaused = false;
   AudioPlayer? _audioPlayer;
   String? _loadedAudioUrl;
+  bool _markScheduled = false;
+
+  void _safeMarkNeedsBuild() {
+    if (_markScheduled || !mounted || _entry == null) return;
+    _markScheduled = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _markScheduled = false;
+      if (!mounted || _entry == null) return;
+      _entry!.markNeedsBuild();
+    });
+  }
   bool _wasActive = false;
 
   static void pauseForModal() {
@@ -117,7 +128,7 @@ class _KingdomRevealOverlayState extends State<KingdomRevealOverlay>
       } else {
         // _stopAudio();
       }
-      WidgetsBinding.instance.addPostFrameCallback((_) => _entry?.markNeedsBuild());
+      _safeMarkNeedsBuild();
     }
 
     if (!isActiveNow) return;
@@ -126,7 +137,7 @@ class _KingdomRevealOverlayState extends State<KingdomRevealOverlay>
     if (_accumulated >= _frameDuration) {
       _accumulated = Duration.zero;
       _frameIndex = (_frameIndex + 1) % frames.length;
-      WidgetsBinding.instance.addPostFrameCallback((_) => _entry?.markNeedsBuild());
+      _safeMarkNeedsBuild();
     }
   }
 
@@ -136,7 +147,7 @@ class _KingdomRevealOverlayState extends State<KingdomRevealOverlay>
     if (widget.characterId != oldWidget.characterId) {
       _frameIndex = 0;
       _loadedAudioUrl = null;
-      WidgetsBinding.instance.addPostFrameCallback((_) => _entry?.markNeedsBuild());
+      _safeMarkNeedsBuild();
       if (_frames.isNotEmpty && _entry == null) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (!mounted || _entry != null) return;
