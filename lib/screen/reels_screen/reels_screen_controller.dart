@@ -201,14 +201,17 @@ class ReelsScreenController extends BaseController {
       }
     }
   }
-
   void _stopControllerAtIndex(int index) {
     if (reels.length > index && index >= 0) {
       final controller = videoControllers[index];
-      if (controller != null) {
-        controller.pause();
-        controller.seekTo(const Duration()); // Reset position
-        Loggers.info('🚀🚀🚀 STOPPED $index');
+      if (controller != null && controller.value.isInitialized) {
+        try {
+          controller.pause();
+          controller.seekTo(const Duration());
+          Loggers.info("VIDEO_LIFE: safe stop at index $index");
+        } catch (e) {
+          Loggers.error("VIDEO_LIFE: safeStop failed (likely disposed): $e");
+        }
       }
     }
   }
