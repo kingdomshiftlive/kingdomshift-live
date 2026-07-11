@@ -80,6 +80,7 @@ class Post {
     this.images,
     this.music,
     this.user,
+    this.durationSeconds,
   });
 
   Post.fromJson(dynamic json) {
@@ -129,6 +130,7 @@ class Post {
     }
     music = json['music'] != null ? Music.fromJson(json['music']) : null;
     user = json['user'] != null ? User.fromJson(json['user']) : null;
+    durationSeconds = json['duration_seconds'];
   }
 
   int? id;
@@ -165,6 +167,7 @@ class Post {
   List<Images>? images;
   Music? music;
   User? user;
+  int? durationSeconds;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -172,6 +175,7 @@ class Post {
     map['supabase_id'] = supabaseId;
     map['post_save_id'] = postSaveId;
     map['post_type'] = postType.type;
+    map['duration_seconds'] = durationSeconds;
     map['user_id'] = userId;
     map['sound_id'] = soundId;
     map['metadata'] = metadata;

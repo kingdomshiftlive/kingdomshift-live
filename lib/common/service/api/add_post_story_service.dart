@@ -66,6 +66,9 @@ class AddPostStoryService {
         'thumbnail_url': thumbnailUrl,
         'category': param['category'] ?? 'Faith',
         'status': 'published',
+        'content_type': type,
+        'duration_seconds': param['duration_seconds'] ?? param['duration'],
+        'visibility': param['visibility'] ?? 'public',
           'kingdom_reveal_character': param['kingdom_reveal_character'] ?? param['kingdomRevealCharacter'] ?? 'none',
       }).select().single().timeout(const Duration(seconds: 15));
       print('SAVED TO VIDEOS TABLE SUCCESS: $inserted');
@@ -89,6 +92,7 @@ class AddPostStoryService {
           isLiked: false,
           isSaved: false,
           createdAt: inserted['created_at'] ?? '',
+          durationSeconds: inserted['duration_seconds'],
         ),
       );
     } catch (e) {

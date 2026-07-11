@@ -78,6 +78,8 @@ class CreateFeedScreen extends StatelessWidget {
                             ? _kingdomRevealButton(controller, context)
                             : const SizedBox()),
                         const FeedCommentToggle(),
+                        if (createType == CreateFeedType.podcast)
+                          _podcastPrivacyToggle(controller),
                         _uploadButton(controller, context),
                       ],
                     ),
@@ -139,6 +141,39 @@ class CreateFeedScreen extends StatelessWidget {
         ),
       );
     });
+  }
+
+  Widget _podcastPrivacyToggle(CreateFeedScreenController controller) {
+    return Obx(
+      () => Container(
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              controller.isPrivatePodcast.value ? Icons.lock_outline : Icons.public,
+              size: 20,
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                controller.isPrivatePodcast.value
+                    ? 'Private (only you can see this episode)'
+                    : 'Public (visible to everyone)',
+              ),
+            ),
+            Switch(
+              value: controller.isPrivatePodcast.value,
+              onChanged: (val) => controller.isPrivatePodcast.value = val,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _uploadButton(

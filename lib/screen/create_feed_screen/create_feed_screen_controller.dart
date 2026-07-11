@@ -68,6 +68,9 @@ class CreateFeedScreenController extends BaseController {
   Function({Post? post, CreateFeedType? type})? onAddPost;
   CreateFeedType createType;
   Rx<PostStoryContent?> content;
+  // Only relevant for podcast episodes: whether this episode is private
+  // (draft, visible only to the creator) or public (visible in the feed).
+  RxBool isPrivatePodcast = false.obs;
 
   Rx<Setting?> setting = Rx(null);
 
@@ -787,6 +790,7 @@ class CreateFeedScreenController extends BaseController {
     // Explicitly enforce post_type = 5 for podcast
     if (createType == CreateFeedType.podcast) {
       params['post_type'] = 5;
+      params['visibility'] = isPrivatePodcast.value ? 'private' : 'public';
     }
 
     Loggers.success('Uploading final video post... Params: $params');

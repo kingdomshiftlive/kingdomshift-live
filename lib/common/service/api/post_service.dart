@@ -61,6 +61,22 @@ enum PostType {
       orElse: () => throw ArgumentError('Invalid MessageType: $value'),
     );
   }
+
+  static PostType fromContentType(String? value) {
+    switch (value) {
+      case 'reel':
+        return PostType.reel;
+      case 'image':
+        return PostType.image;
+      case 'text':
+        return PostType.text;
+      case 'podcast':
+        return PostType.podcast;
+      case 'video':
+      default:
+        return PostType.video;
+    }
+  }
 }
 
 class PostService {
@@ -126,8 +142,14 @@ class PostService {
         return videoUrl.isNotEmpty;
       }).toList();
 
+      final requestedTypes = type.split(',').map((e) => int.tryParse(e.trim())).whereType<int>().toSet();
+
       List<Post> posts = [];
       for (final item in validVideos) {
+        final resolvedType = PostType.fromContentType(item['content_type'] as String?);
+        if (requestedTypes.isNotEmpty && !requestedTypes.contains(resolvedType.type)) {
+          continue;
+        }
         final social = await getSupabaseVideoSocialState(item['id'].toString());
         posts.add(Post(
           id: item['id'].hashCode,
@@ -145,7 +167,8 @@ class PostService {
           comments: item['comments_count'] ?? 0,
           views: item['views_count'] ?? 0,
           shares: item['shares_count'] ?? 0,
-          postType: PostType.reel,
+          postType: resolvedType,
+          durationSeconds: item['duration_seconds'],
           createdAt: item['created_at'] ?? '',
           user: item['app_profiles'] != null
               ? User(
@@ -173,7 +196,15 @@ class PostService {
           .select('*, app_profiles(id, full_name, username, avatar_url)')
           .order('created_at', ascending: false)
           .limit(AppRes.paginationLimit);
-      List<Post> posts = (response as List).map((item) {
+      final requestedTypes = type.split(',').map((e) => int.tryParse(e.trim())).whereType<int>().toSet();
+
+      List<Post> posts = (response as List)
+          .where((item) {
+            if (requestedTypes.isEmpty) return true;
+            final resolvedType = PostType.fromContentType(item['content_type'] as String?);
+            return requestedTypes.contains(resolvedType.type);
+          })
+          .map((item) {
         return Post(
           id: item['id'].hashCode,
           supabaseId: item['id']?.toString(),
@@ -187,7 +218,8 @@ class PostService {
           comments: item['comments_count'] ?? 0,
           views: item['views_count'] ?? 0,
           shares: item['shares_count'] ?? 0,
-          postType: PostType.reel,
+          postType: PostType.fromContentType(item['content_type'] as String?),
+          durationSeconds: item['duration_seconds'],
           createdAt: item['created_at'] ?? '',
           user: User(
             id: item['creator_id']?.toString().hashCode,
@@ -200,6 +232,64 @@ class PostService {
       }).toList();
       return posts;
     } catch (e) {
+      return [];
+    }
+  }
+
+
+  Future<List<Post>> fetchPodcasts({String? category}) async {
+    try {
+      final response = await supabase.Supabase.instance.client
+          .from('videos')
+          .select('*, app_profiles(id, full_name, username, avatar_url)')
+          .eq('content_type', 'podcast')
+          .eq('visibility', 'public')
+          .order('created_at', ascending: false)
+          .limit(AppRes.paginationLimit);
+
+      final responseList = response as List;
+      final validEpisodes = responseList.where((item) {
+        final audioUrl = (item['video_url'] ?? '').toString().trim();
+        final matchesCategory = category == null ||
+            category == 'All' ||
+            (item['category'] ?? '') == category;
+        return audioUrl.isNotEmpty && matchesCategory;
+      }).toList();
+
+      List<Post> podcasts = [];
+      for (final item in validEpisodes) {
+        final social = await getSupabaseVideoSocialState(item['id'].toString());
+        podcasts.add(Post(
+          id: item['id'].hashCode,
+          supabaseId: item['id']?.toString(),
+          userId: item['creator_id']?.toString().hashCode,
+          metadata: item['category'] ?? '',
+          description: item['title'] ?? '',
+          video: item['video_url'] ?? '',
+          thumbnail: item['thumbnail_url'] ?? '',
+          likes: social['likes'] ?? item['likes_count'] ?? 0,
+          saves: social['saves'] ?? 0,
+          isLiked: social['isLiked'] ?? false,
+          isSaved: social['isSaved'] ?? false,
+          comments: item['comments_count'] ?? 0,
+          views: item['views_count'] ?? 0,
+          shares: item['shares_count'] ?? 0,
+          postType: PostType.podcast,
+          durationSeconds: item['duration_seconds'],
+          createdAt: item['created_at'] ?? '',
+          user: item['app_profiles'] != null
+              ? User(
+                  id: item['creator_id']?.toString().hashCode,
+                  fullname: item['app_profiles']['full_name'] ?? '',
+                  username: item['app_profiles']['username'] ?? '',
+                  profilePhoto: item['app_profiles']['avatar_url'] ?? '',
+                )
+              : null,
+        ));
+      }
+      return podcasts;
+    } catch (e) {
+      print('FETCH PODCASTS ERROR: $e');
       return [];
     }
   }
@@ -345,6 +435,87 @@ class PostService {
     return model.data ?? [];
   }
 
+
+  Future<bool> saveRecordingAsPodcast({
+    required String videoUrl,
+    String? title,
+  }) async {
+    try {
+      final firebaseUser = firebase_auth.FirebaseAuth.instance.currentUser;
+      if (firebaseUser == null) return false;
+
+      await supabase.Supabase.instance.client.from('videos').insert({
+        'creator_id': firebaseUser.uid,
+        'title': title ?? 'Live Recording - ${DateTime.now().toIso8601String().split('T').first}',
+        'description': title ?? 'Saved from a live stream',
+        'video_url': videoUrl,
+        'thumbnail_url': '',
+        'category': 'Faith',
+        'status': 'published',
+        'content_type': 'podcast',
+      });
+      return true;
+    } catch (e) {
+      Loggers.error('Save recording as podcast failed: \$e');
+      return false;
+    }
+  }
+
+  Future<List<Post>> fetchMyLiveRecordings() async {
+    try {
+      final firebaseUser = firebase_auth.FirebaseAuth.instance.currentUser;
+      if (firebaseUser == null) return [];
+
+      final response = await supabase.Supabase.instance.client
+          .from('videos')
+          .select('*, app_profiles(id, full_name, username, avatar_url)')
+          .eq('content_type', 'live_recording')
+          .eq('creator_id', firebaseUser.uid)
+          .order('created_at', ascending: false)
+          .limit(AppRes.paginationLimit);
+
+      final responseList = response as List;
+      List<Post> recordings = [];
+      for (final item in responseList) {
+        recordings.add(Post(
+          id: item['id'].hashCode,
+          supabaseId: item['id']?.toString(),
+          userId: item['creator_id']?.toString().hashCode,
+          description: item['title'] ?? '',
+          video: item['video_url'] ?? '',
+          thumbnail: item['thumbnail_url'] ?? '',
+          postType: PostType.video,
+          durationSeconds: item['duration_seconds'],
+          createdAt: item['created_at'] ?? '',
+          user: item['app_profiles'] != null
+              ? User(
+                  id: item['creator_id']?.toString().hashCode,
+                  fullname: item['app_profiles']['full_name'] ?? '',
+                  username: item['app_profiles']['username'] ?? '',
+                  profilePhoto: item['app_profiles']['avatar_url'] ?? '',
+                )
+              : null,
+        ));
+      }
+      return recordings;
+    } catch (e) {
+      Loggers.error('Fetch my live recordings failed: $e');
+      return [];
+    }
+  }
+
+  Future<bool> publishLiveRecordingAsPodcast({required String supabaseId}) async {
+    try {
+      await supabase.Supabase.instance.client
+          .from('videos')
+          .update({'content_type': 'podcast', 'visibility': 'public'})
+          .eq('id', supabaseId);
+      return true;
+    } catch (e) {
+      Loggers.error('Publish live recording as podcast failed: $e');
+      return false;
+    }
+  }
 
   Future<bool> deleteSupabaseVideo({required String supabaseId}) async {
     try {

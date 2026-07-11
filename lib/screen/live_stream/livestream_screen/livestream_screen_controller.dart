@@ -40,6 +40,8 @@ import 'package:shortzz/utilities/firebase_const.dart';
 import 'package:video_player/video_player.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 import 'package:zego_express_engine/zego_express_engine.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 import '../../../common/service/utils/params.dart';
 import '../../../common/service/utils/web_service.dart';
 import '../../../utilities/const_res.dart';
@@ -338,12 +340,98 @@ class LivestreamScreenController extends BaseController {
       switch (state) {
         case ZegoPublisherState.NoPublish:
           streamViews.removeWhere((element) => element.streamId == streamID);
+          if (isHost) _stopLocalRecording();
         case ZegoPublisherState.PublishRequesting:
         case ZegoPublisherState.Publishing:
+          if (isHost) _startLocalRecording(streamID);
       }
       debugPrint(
           'onPublisherStateUpdate: streamID: $streamID, state: ${state.name}, errorCode: $errorCode, extendedData: $extendedData');
     };
+    // Callback for local (on-device) recording of the captured stream.
+    // This is our own recording path, independent of the legacy Railway
+    // startRecording/stopRecording endpoints (which no longer exist).
+    ZegoExpressEngine.onCapturedDataRecordStateUpdate =
+        (state, errorCode, config, channel) {
+      print('MY onCapturedDataRecordStateUpdate: state: ${state.name}, errorCode: $errorCode, path: ${config.filePath}');
+      if (state == ZegoDataRecordState.Success) {
+        if (errorCode == 0 && _recordingFilePath != null) {
+          print('MY RECORDING SUCCESS - starting upload of $_recordingFilePath');
+          _uploadRecordingToSupabase(_recordingFilePath!);
+        }
+        _recordingFilePath = null;
+        _isRecording = false;
+      } else if (state == ZegoDataRecordState.NoRecord && errorCode != 0) {
+        print('MY LOCAL RECORDING FAILED with errorCode: $errorCode');
+        _recordingFilePath = null;
+        _isRecording = false;
+      }
+    };
+  }
+  String? _recordingFilePath;
+  bool _isRecording = false;
+  Future<void> _startLocalRecording(String streamId) async {
+    if (_isRecording) return;
+    try {
+      final dir = await getTemporaryDirectory();
+      final path =
+          '${dir.path}/live_${streamId}_${DateTime.now().millisecondsSinceEpoch}.mp4';
+      _recordingFilePath = path;
+      final config = ZegoDataRecordConfig(path, ZegoDataRecordType.AudioAndVideo);
+      await ZegoExpressEngine.instance
+          .startRecordingCapturedData(config, channel: ZegoPublishChannel.Main);
+      _isRecording = true;
+      print('MY LOCAL RECORDING STARTED: $path');
+    } catch (e) {
+      print('MY LOCAL RECORDING START ERROR: $e');
+      _recordingFilePath = null;
+    }
+  }
+  Future<void> _stopLocalRecording() async {
+    if (!_isRecording) return;
+    try {
+      await ZegoExpressEngine.instance
+          .stopRecordingCapturedData(channel: ZegoPublishChannel.Main);
+      Loggers.info('Local recording stop requested');
+    } catch (e) {
+      Loggers.error('Failed to stop local recording: $e');
+    }
+  }
+  Future<void> _uploadRecordingToSupabase(String filePath) async {
+    try {
+      final firebaseUser = firebase_auth.FirebaseAuth.instance.currentUser;
+      if (firebaseUser == null) return;
+      final file = File(filePath);
+      if (!await file.exists()) {
+        Loggers.error('Recording file not found: $filePath');
+        return;
+      }
+      final fileName =
+          '${firebaseUser.uid}/live_${DateTime.now().millisecondsSinceEpoch}.mp4';
+      await supabase.Supabase.instance.client.storage.from('videos').upload(
+          fileName, file,
+          fileOptions: const supabase.FileOptions(upsert: true));
+      final videoUrl = supabase.Supabase.instance.client.storage
+          .from('videos')
+          .getPublicUrl(fileName);
+      final isPodcastStream = liveData.value.isPodcastMode;
+      await supabase.Supabase.instance.client.from('videos').insert({
+        'creator_id': firebaseUser.uid,
+        'title':
+            'Live Recording - ${DateTime.now().toIso8601String().split('T').first}',
+        'description': 'Saved from a live stream',
+        'video_url': videoUrl,
+        'thumbnail_url': '',
+        'category': 'Faith',
+        'status': 'published',
+        'content_type': isPodcastStream ? 'podcast' : 'live_recording',
+        'visibility': isPodcastStream ? 'public' : 'private',
+      });
+      print('MY UPLOAD SUCCESS: Live recording uploaded and saved as podcast episode');
+      await file.delete();
+    } catch (e) {
+      print('MY UPLOAD ERROR: Failed to upload live recording: $e');
+    }
   }
 
   ZegoScreenCaptureSource? screenCaptureSource;
@@ -469,6 +557,11 @@ class LivestreamScreenController extends BaseController {
     ZegoExpressEngine.onRoomStreamUpdate = null;
     ZegoExpressEngine.onRoomStateUpdate = null;
     ZegoExpressEngine.onPublisherStateUpdate = null;
+    // Deliberately NOT nulling onCapturedDataRecordStateUpdate here.
+    // The final "Success" recording event arrives asynchronously after
+    // stream teardown (once the file finishes writing), so nulling this
+    // callback during normal stop flow causes the completion event -
+    // and therefore the Supabase upload - to be silently dropped.
   }
 
   Future<void> startHostPublish() async {
@@ -1313,7 +1406,10 @@ class LivestreamScreenController extends BaseController {
     stopAnim();
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String taskId = preferences.getString('task_id') ?? '';
-    await http.get(Uri.parse('${WebService.post.stopRecording}/$taskId'), headers: header);
+    final response = await http.get(Uri.parse('${WebService.post.stopRecording}/$taskId'), headers: header);
+    print('STOP RECORDING TASK ID: $taskId');
+    print('STOP RECORDING STATUS: ${response.statusCode}');
+    print('STOP RECORDING BODY: ${response.body}');
   }
 
   void hostEndStream() {

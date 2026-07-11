@@ -25,6 +25,8 @@ import '../../../common/service/utils/params.dart';
 import '../../../utilities/const_res.dart';
 
 class CreateLiveStreamScreenController extends BaseController {
+  final bool isPodcastMode;
+  CreateLiveStreamScreenController({this.isPodcastMode = false});
   RxBool isRestricted = false.obs;
   bool isFrontCamera = true;
   FirebaseFirestore db = FirebaseFirestore.instance;
@@ -191,6 +193,8 @@ class CreateLiveStreamScreenController extends BaseController {
         description: titleController.text.trim(),
         restrictToJoin: isRestricted.value ? 1 : 0,
         hostViewId: localViewID.value);
+    livestream.isPodcastMode = isPodcastMode;
+    print('MY GO LIVE - isPodcastMode param: $isPodcastMode, livestream.isPodcastMode: ${livestream.isPodcastMode}');
 
     // Create LivestreamUser model
     AppUser livestreamUser = user.appUser;
@@ -237,13 +241,20 @@ class CreateLiveStreamScreenController extends BaseController {
   var header = {Params.apikey: apiKey};
 
   startRecording(String streamId) async {
+    print('START RECORDING STREAM ID: $streamId');
+    print('START RECORDING URL: ${WebService.post.startRecording}/$streamId');
     http.Response res = await http.get(Uri.parse('${WebService.post.startRecording}/$streamId'), headers: header);
+    print('START RECORDING STATUS: ${res.statusCode}');
+    print('START RECORDING BODY: ${res.body}');
     if (res.statusCode == 200) {
       var response = jsonDecode(res.body);
       print('test 2 start reco = ${response.toString()}');
       SharedPreferences preferences = await SharedPreferences.getInstance();
       String taskId = response['Data']['TaskId'];
       await preferences.setString('task_id', taskId);
+      print('START RECORDING TASK ID SAVED: $taskId');
+    } else {
+      print('START RECORDING FAILED - no task_id saved');
     }
   }
 }

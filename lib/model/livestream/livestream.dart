@@ -4,6 +4,10 @@ import 'package:shortzz/model/livestream/app_user.dart';
 import 'package:shortzz/utilities/app_res.dart';
 
 class Livestream {
+  // In-memory only flag: true if this stream was started from the Podcast
+  // page's "Go Live". Not persisted to Firestore - purely used to decide
+  // how the local recording gets tagged/uploaded when the stream ends.
+  bool isPodcastMode = false;
   int? watchingCount;
   String? description;
   LivestreamType? type;

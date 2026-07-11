@@ -5,6 +5,7 @@ import 'package:video_player/video_player.dart';
 
 import '../../../../utilities/theme_res.dart';
 import '../livestream_history_controller.dart';
+import 'package:shortzz/common/service/api/post_service.dart';
 import 'full_screen_video_player.dart';
 
 class LivestreamItemWidget extends StatefulWidget {
@@ -103,6 +104,21 @@ class _LivestreamItemWidgetState extends State<LivestreamItemWidget> {
                           final videoUrl = widget.videoUrl;
                           final fileName = videoUrl.split('/').last;
                           controller.downloadVideo(videoUrl, fileName);
+                        },
+                      ),
+                      PopupMenuItem(
+                        child: Text(
+                          'Save as Podcast Episode',
+                          style: TextStyle(color: whitePure(context)),
+                        ),
+                        onTap: () async {
+                          final success = await PostService.instance.saveRecordingAsPodcast(
+                            videoUrl: widget.videoUrl,
+                            title: 'Livestream - ${widget.livestream.createdAt?.split('T').first ?? ''}',
+                          );
+                          controller.showSnackBar(success
+                              ? 'Saved to Podcasts'
+                              : 'Failed to save as podcast episode');
                         },
                       ),
                     ],

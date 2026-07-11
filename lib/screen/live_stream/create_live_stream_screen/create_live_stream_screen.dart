@@ -17,11 +17,13 @@ import 'package:shortzz/utilities/text_style_custom.dart';
 import 'package:shortzz/utilities/theme_res.dart';
 
 class CreateLiveStreamScreen extends StatelessWidget {
-  const CreateLiveStreamScreen({super.key});
+  final bool isPodcastMode;
+  const CreateLiveStreamScreen({super.key, this.isPodcastMode = false});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(CreateLiveStreamScreenController());
+    final controller =
+        Get.put(CreateLiveStreamScreenController(isPodcastMode: isPodcastMode));
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Stack(

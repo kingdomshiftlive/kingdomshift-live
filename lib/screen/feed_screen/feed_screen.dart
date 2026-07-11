@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:shortzz/screen/feed_screen/feed_screen_controller.dart';
+import 'package:shortzz/model/user_model/user_model.dart';
 
 // ─── Brand Colors ───────────────────────────────────────────────
 const kBgPrimary = Color(0xFF08141F);
@@ -98,8 +101,15 @@ class FeedScreen extends StatefulWidget {
 }
 
 class _FeedScreenState extends State<FeedScreen> {
-  final _navTabs = ['Feed', 'Following', 'Live', 'Groups', 'Marketplace'];
-  final _filterTabs = ['For You', 'Trending', 'New', 'Saved', 'All Topics'];
+  final _navTabs = ["Feed", "Following", "Live", "Groups", "Marketplace"];
+  final _filterTabs = ["For You", "Trending", "New", "Saved", "All Topics"];
+  late final FeedScreenController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.put(FeedScreenController(Rx<User?>(widget.myUser)));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -113,65 +123,40 @@ class _FeedScreenState extends State<FeedScreen> {
         KSTabs(tabs: _filterTabs, initialIndex: 0, usePill: true),
         const Divider(color: Color(0xFF1A2A3A), height: 1),
         Expanded(
-            child: ListView(
-          padding: const EdgeInsets.only(top: 8),
-          children: [
-            _VideoPostCard(
-              name: 'Aaliyah Grace',
-              handle: '@aaliyahgrace',
-              role: 'Entrepreneur • Speaker • Author',
-              time: '2h ago',
-              text:
-                  'Purpose fuels passion.\nAction creates legacy.\nWhat are you building today?',
-              hashtag: '#KingdomMindset #MadeForMore',
-              likes: '12.4K',
-              comments: '342',
-              shares: '1.2K',
-              saves: '870',
-            ),
-            _ProductPostCard(
-              name: 'Minister Jay',
-              handle: '@ministerjay',
-              role: 'Faith Leader • Author • Coach',
-              time: '4h ago',
-              productName: 'Kingdom Mindset Devotional Journal',
-              productDesc:
-                  'Daily scriptures, powerful prayers, and kingdom strategies to help you grow spiritually and financially.',
-              price: '\$24.99',
-              likes: '3.2K',
-              comments: '128',
-              shares: '512',
-            ),
-            _PodcastPostCard(
-              name: 'Faith & Finance Live',
-              handle: '@faithfinance',
-              role: 'Podcast • Business • Wealth Building',
-              time: '6h ago',
-              episodeTitle: 'Building Wealth with Kingdom Principles',
-              duration: '28:45',
-              likes: '2.1K',
-              comments: '96',
-              shares: '388',
-              isLive: true,
-            ),
-            _VideoPostCard(
-              name: 'David Baker',
-              handle: '@dbaker',
-              role: 'Business Owner • Coach',
-              time: '8h ago',
-              text:
-                  'Kingdom principles work in every area of life. Business, family, health — all of it.',
-              hashtag: '#KingdomBusiness #Marketplace',
-              likes: '5.1K',
-              comments: '127',
-              shares: '432',
-              saves: '210',
-            ),
-          ],
-        )),
+          child: Obx(() {
+            if (controller.posts.isEmpty) {
+              return const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(40),
+                  child: Text("No posts yet", style: TextStyle(color: Colors.white54)),
+                ),
+              );
+            }
+            return ListView.builder(
+              padding: const EdgeInsets.only(top: 8),
+              itemCount: controller.posts.length,
+              itemBuilder: (context, index) {
+                final post = controller.posts[index];
+                return _VideoPostCard(
+                  name: post.user?.fullname ?? "KingdomShift User",
+                  handle: "@${post.user?.username ?? 'user'}",
+                  role: "",
+                  time: post.createdAt ?? "",
+                  text: post.description ?? "",
+                  hashtag: "",
+                  likes: "${post.likes ?? 0}",
+                  comments: "${post.comments ?? 0}",
+                  shares: "${post.shares ?? 0}",
+                  saves: "${post.saves ?? 0}",
+                );
+              },
+            );
+          }),
+        ),
       ])),
     );
   }
+
 
   Widget _buildHeader() {
     return Padding(
