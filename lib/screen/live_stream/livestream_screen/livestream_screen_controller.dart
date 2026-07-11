@@ -42,6 +42,7 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 import 'package:zego_express_engine/zego_express_engine.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
+import 'package:shortzz/screen/brain_battle_screen/brain_battle_game_controller.dart';
 import '../../../common/service/utils/params.dart';
 import '../../../common/service/utils/web_service.dart';
 import '../../../utilities/const_res.dart';
@@ -653,6 +654,16 @@ class LivestreamScreenController extends BaseController {
     int? battleDuration,
     int watchingCount = 0,
     FieldValue? coHostId,
+    bool? brainBattleActive,
+    String? brainBattleCategory,
+    String? brainBattleQuestionText,
+    String? brainBattleOptionA,
+    String? brainBattleOptionB,
+    String? brainBattleOptionC,
+    String? brainBattleOptionD,
+    int? brainBattleHostScore,
+    int? brainBattleTimeRemaining,
+    int? brainBattleQuestionStartedAt,
   }) async {
     bool isExist = (await liveStreamDocRef.get()).exists;
     if (!isExist) return;
@@ -666,7 +677,17 @@ class LivestreamScreenController extends BaseController {
       if (battleCreatedAt != null) FirebaseConst.battleCreatedAt: battleCreatedAt,
       if (battleDuration != null) FirebaseConst.battleDuration: battleDuration,
       if (watchingCount != 0) FirebaseConst.watchingCount: FieldValue.increment(watchingCount),
-      if (coHostId != null) FirebaseConst.coHostIds: coHostId
+      if (coHostId != null) FirebaseConst.coHostIds: coHostId,
+      if (brainBattleActive != null) FirebaseConst.brainBattleActive: brainBattleActive,
+      if (brainBattleCategory != null) FirebaseConst.brainBattleCategory: brainBattleCategory,
+      if (brainBattleQuestionText != null) FirebaseConst.brainBattleQuestionText: brainBattleQuestionText,
+      if (brainBattleOptionA != null) FirebaseConst.brainBattleOptionA: brainBattleOptionA,
+      if (brainBattleOptionB != null) FirebaseConst.brainBattleOptionB: brainBattleOptionB,
+      if (brainBattleOptionC != null) FirebaseConst.brainBattleOptionC: brainBattleOptionC,
+      if (brainBattleOptionD != null) FirebaseConst.brainBattleOptionD: brainBattleOptionD,
+      if (brainBattleHostScore != null) FirebaseConst.brainBattleHostScore: brainBattleHostScore,
+      if (brainBattleTimeRemaining != null) FirebaseConst.brainBattleTimeRemaining: brainBattleTimeRemaining,
+      if (brainBattleQuestionStartedAt != null) FirebaseConst.brainBattleQuestionStartedAt: brainBattleQuestionStartedAt,
     });
   }
 
@@ -1448,6 +1469,82 @@ class LivestreamScreenController extends BaseController {
     isViewVisible.value = !isViewVisible.value;
   }
 
+  List<BrainBattleQuestion> _liveBrainBattleQuestions = [];
+  int _liveBrainBattleIndex = 0;
+  Timer? _brainBattleQuestionTimer;
+  static const int brainBattleQuestionSeconds = 10;
+  RxInt brainBattleHostScoreLocal = 0.obs;
+  Future<void> startLiveBrainBattle(String category) async {
+    if (!isHost) return;
+    try {
+      final response = await supabase.Supabase.instance.client
+          .from('brain_battle_questions')
+          .select()
+          .eq('category', category)
+          .limit(50);
+      final list = (response as List)
+          .map((e) => BrainBattleQuestion.fromJson(e))
+          .toList()
+        ..shuffle();
+      _liveBrainBattleQuestions = list;
+      _liveBrainBattleIndex = 0;
+      brainBattleHostScoreLocal.value = 0;
+      if (_liveBrainBattleQuestions.isEmpty) {
+        showSnackBar('No questions found for this category yet.');
+        return;
+      }
+      await updateLiveStreamData(
+        brainBattleActive: true,
+        brainBattleCategory: category,
+        brainBattleHostScore: 0,
+      );
+      _pushCurrentBrainBattleQuestion();
+    } catch (e) {
+      showSnackBar('Failed to start Brain Battle: $e');
+    }
+  }
+  void _pushCurrentBrainBattleQuestion() {
+    if (_liveBrainBattleIndex >= _liveBrainBattleQuestions.length) {
+      stopLiveBrainBattle();
+      return;
+    }
+    final q = _liveBrainBattleQuestions[_liveBrainBattleIndex];
+    updateLiveStreamData(
+      brainBattleQuestionText: q.question,
+      brainBattleOptionA: q.optionA,
+      brainBattleOptionB: q.optionB,
+      brainBattleOptionC: q.optionC,
+      brainBattleOptionD: q.optionD,
+      brainBattleQuestionStartedAt: DateTime.now().millisecondsSinceEpoch,
+    );
+    _startBrainBattleQuestionTimer();
+  }
+  void _startBrainBattleQuestionTimer() {
+    _brainBattleQuestionTimer?.cancel();
+    _brainBattleQuestionTimer = Timer(const Duration(seconds: brainBattleQuestionSeconds), () {
+      _advanceLiveBrainBattleQuestion();
+    });
+  }
+  void selectLiveBrainBattleAnswer(String letter) {
+    if (!isHost) return;
+    if (_liveBrainBattleIndex >= _liveBrainBattleQuestions.length) return;
+    final q = _liveBrainBattleQuestions[_liveBrainBattleIndex];
+    if (letter == q.correctAnswer) {
+      brainBattleHostScoreLocal.value += 100;
+      updateLiveStreamData(brainBattleHostScore: brainBattleHostScoreLocal.value);
+    }
+    _advanceLiveBrainBattleQuestion();
+  }
+  void _advanceLiveBrainBattleQuestion() {
+    _brainBattleQuestionTimer?.cancel();
+    _liveBrainBattleIndex++;
+    _pushCurrentBrainBattleQuestion();
+  }
+  void stopLiveBrainBattle() {
+    if (!isHost) return;
+    _brainBattleQuestionTimer?.cancel();
+    updateLiveStreamData(brainBattleActive: false);
+  }
   void startBattle() {
     // Determine battle mode based on number of active participants
     // (1 Host + N Co-hosts)

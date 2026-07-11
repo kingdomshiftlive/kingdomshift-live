@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:shortzz/common/widget/kingdom_reveal/kingdom_reveal_overlay.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -168,6 +169,16 @@ class DashboardScreenController extends BaseController
     if (selectedPageIndex.value == index) return;
     HapticFeedback.lightImpact();
     onBottomIndexChanged?.call(index);
+    // The Home tab (index 0) is kept alive in the background by the
+    // IndexedStack, so its Kingdom Reveal overlay never naturally disposes
+    // when switching tabs. Since the overlay is inserted at the root level
+    // (paints above everything), it must be explicitly paused/resumed here
+    // or it bleeds through onto every other tab.
+    if (index != 0) {
+      KingdomRevealOverlay.pauseForModal();
+    } else {
+      KingdomRevealOverlay.resumeAfterModal();
+    }
     selectedPageIndex.value = index;
     animationController
       ..reset()

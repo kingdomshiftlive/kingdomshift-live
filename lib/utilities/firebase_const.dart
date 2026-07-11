@@ -38,6 +38,16 @@ class FirebaseConst {
   static const String battleDuration = 'battle_duration';
   static const String battleType = 'battle_type';
   static const String battleMode = 'battle_mode';
+  static const String brainBattleActive = 'brain_battle_active';
+  static const String brainBattleCategory = 'brain_battle_category';
+  static const String brainBattleQuestionText = 'brain_battle_question_text';
+  static const String brainBattleOptionA = 'brain_battle_option_a';
+  static const String brainBattleOptionB = 'brain_battle_option_b';
+  static const String brainBattleOptionC = 'brain_battle_option_c';
+  static const String brainBattleOptionD = 'brain_battle_option_d';
+  static const String brainBattleHostScore = 'brain_battle_host_score';
+  static const String brainBattleTimeRemaining = 'brain_battle_time_remaining';
+  static const String brainBattleQuestionStartedAt = 'brain_battle_question_started_at';
   static const String coHostIds = 'co-host_ids';
   static const String joinStreamTime = 'join_stream_time';
   static const String likeCount = 'like_count';

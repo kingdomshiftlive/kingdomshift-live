@@ -28,6 +28,16 @@ class Livestream {
   int? battleCreatedAt;
   int? isDummyLive;
   String? dummyUserLink;
+  bool brainBattleActive = false;
+  String? brainBattleCategory;
+  String? brainBattleQuestionText;
+  String? brainBattleOptionA;
+  String? brainBattleOptionB;
+  String? brainBattleOptionC;
+  String? brainBattleOptionD;
+  int? brainBattleHostScore;
+  int? brainBattleTimeRemaining;
+  int? brainBattleQuestionStartedAt;
 
   Livestream(
       {this.watchingCount,
@@ -68,6 +78,16 @@ class Livestream {
     isDummyLive = json['is_dummy_live'];
     dummyUserLink = json['dummy_user_link'];
     battleDuration = json['battle_duration'];
+    brainBattleActive = json['brain_battle_active'] ?? false;
+    brainBattleCategory = json['brain_battle_category'];
+    brainBattleQuestionText = json['brain_battle_question_text'];
+    brainBattleOptionA = json['brain_battle_option_a'];
+    brainBattleOptionB = json['brain_battle_option_b'];
+    brainBattleOptionC = json['brain_battle_option_c'];
+    brainBattleOptionD = json['brain_battle_option_d'];
+    brainBattleHostScore = json['brain_battle_host_score'];
+    brainBattleTimeRemaining = json['brain_battle_time_remaining'];
+    brainBattleQuestionStartedAt = json['brain_battle_question_started_at'];
   }
 
   Map<String, dynamic> toJson() {
@@ -88,6 +108,16 @@ class Livestream {
     data['created_at'] = createdAt;
     data['battle_created_at'] = battleCreatedAt;
     data['is_dummy_live'] = isDummyLive;
+    data['brain_battle_active'] = brainBattleActive;
+    data['brain_battle_category'] = brainBattleCategory;
+    data['brain_battle_question_text'] = brainBattleQuestionText;
+    data['brain_battle_option_a'] = brainBattleOptionA;
+    data['brain_battle_option_b'] = brainBattleOptionB;
+    data['brain_battle_option_c'] = brainBattleOptionC;
+    data['brain_battle_option_d'] = brainBattleOptionD;
+    data['brain_battle_host_score'] = brainBattleHostScore;
+    data['brain_battle_time_remaining'] = brainBattleTimeRemaining;
+    data['brain_battle_question_started_at'] = brainBattleQuestionStartedAt;
     data['dummy_user_link'] = dummyUserLink;
     data['battle_duration'] = battleDuration;
     return data;

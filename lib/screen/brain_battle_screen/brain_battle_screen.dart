@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
+import 'package:shortzz/screen/brain_battle_screen/brain_battle_game_screen.dart';
+import 'package:shortzz/screen/brain_battle_screen/brain_battle_game_controller.dart';
 
 class BrainBattleScreen extends StatefulWidget {
   const BrainBattleScreen({super.key});
@@ -20,13 +24,45 @@ class _BrainBattleScreenState extends State<BrainBattleScreen> {
     {'icon': '🌍', 'label': 'Culture'},
   ];
 
-  final List<Map<String, String>> leaderboard = [
-    {'rank': '1', 'name': 'KingdomProphet', 'score': '9,840', 'emoji': '👑'},
-    {'rank': '2', 'name': 'FaithWarrior', 'score': '8,720', 'emoji': '🥈'},
-    {'rank': '3', 'name': 'WealthShifter', 'score': '7,650', 'emoji': '🥉'},
-    {'rank': '4', 'name': 'GraceRunner', 'score': '6,200', 'emoji': '4️⃣'},
-    {'rank': '5', 'name': 'BlessedBuilder', 'score': '5,890', 'emoji': '5️⃣'},
-  ];
+  List<Map<String, dynamic>> realLeaderboard = [];
+  bool isLeaderboardLoading = true;
+
+  static const _rankEmojis = ['👑', '🥈', '🥉', '4️⃣', '5️⃣'];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchLeaderboard();
+  }
+
+  Future<void> _fetchLeaderboard() async {
+    setState(() => isLeaderboardLoading = true);
+    try {
+      final response = await supabase.Supabase.instance.client
+          .from('brain_battle_scores')
+          .select('username, score')
+          .order('score', ascending: false)
+          .limit(5);
+      setState(() {
+        realLeaderboard = List<Map<String, dynamic>>.from(response as List);
+        isLeaderboardLoading = false;
+      });
+    } catch (e) {
+      setState(() => isLeaderboardLoading = false);
+    }
+  }
+
+  void _startBattle(BrainBattleMode mode) {
+    final category = categories[_selectedCategory]['label']!;
+    Get.to(() => BrainBattleGameScreen(category: category, mode: mode))
+        ?.then((_) => _fetchLeaderboard());
+  }
+
+  void _comingSoon(String feature) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('$feature is coming in a future update!')),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +128,7 @@ class _BrainBattleScreenState extends State<BrainBattleScreen> {
         Row(children: [
           Expanded(
               child:
-                  _primaryBtn('Start Battle', const Color(0xFF7B2FF7), () {})),
+                  _primaryBtn('Start Battle', const Color(0xFF7B2FF7), () => _startBattle(BrainBattleMode.speedRound))),
           const SizedBox(width: 12),
           Expanded(
               child: _primaryBtn(
@@ -217,7 +253,17 @@ class _BrainBattleScreenState extends State<BrainBattleScreen> {
           itemBuilder: (_, i) {
             final m = modes[i];
             return GestureDetector(
-              onTap: () {},
+              onTap: () {
+                if (i == 0) {
+                  _comingSoon('1v1 Battle');
+                } else if (i == 1) {
+                  _comingSoon('Tournament');
+                } else if (i == 2) {
+                  _startBattle(BrainBattleMode.speedRound);
+                } else {
+                  _startBattle(BrainBattleMode.study);
+                }
+              },
               child: Container(
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
@@ -260,20 +306,38 @@ class _BrainBattleScreenState extends State<BrainBattleScreen> {
                   fontSize: 16,
                   fontWeight: FontWeight.bold)),
           TextButton(
-              onPressed: () {},
-              child: const Text('View All',
+              onPressed: _fetchLeaderboard,
+              child: const Text('Refresh',
                   style: TextStyle(color: Color(0xFFFFB800)))),
         ]),
-        ...leaderboard.map((p) => ListTile(
+        if (isLeaderboardLoading)
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 16),
+            child: Center(
+                child: CircularProgressIndicator(color: Color(0xFF7B2FF7))),
+          )
+        else if (realLeaderboard.isEmpty)
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 16),
+            child: Text('No scores yet - be the first champion!',
+                style: TextStyle(color: Colors.white54)),
+          )
+        else
+          ...realLeaderboard.asMap().entries.map((entry) {
+            final i = entry.key;
+            final p = entry.value;
+            return ListTile(
               contentPadding: EdgeInsets.zero,
-              leading: Text(p['emoji']!, style: const TextStyle(fontSize: 24)),
-              title: Text(p['name']!,
+              leading: Text(i < _rankEmojis.length ? _rankEmojis[i] : '${i + 1}',
+                  style: const TextStyle(fontSize: 24)),
+              title: Text(p['username']?.toString() ?? 'Player',
                   style: const TextStyle(
                       color: Colors.white, fontWeight: FontWeight.bold)),
               trailing: Text('${p['score']} pts',
                   style: const TextStyle(
                       color: Color(0xFFFFB800), fontWeight: FontWeight.bold)),
-            )),
+            );
+          }),
       ]),
     );
   }
@@ -303,7 +367,7 @@ class _BrainBattleScreenState extends State<BrainBattleScreen> {
           Text('Practice daily to stay sharp and rise on the leaderboard.',
               style: TextStyle(color: Colors.white54, fontSize: 12)),
         ])),
-        _primaryBtn('Start', const Color(0xFF00C6FF), () {}),
+        _primaryBtn('Start', const Color(0xFF00C6FF), () => _startBattle(BrainBattleMode.study)),
       ]),
     );
   }

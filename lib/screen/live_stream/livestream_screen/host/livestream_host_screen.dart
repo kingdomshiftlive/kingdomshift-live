@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shortzz/screen/live_stream/livestream_screen/widget/brain_battle_live_overlay.dart';
 import 'package:get/get.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:shortzz/model/livestream/livestream.dart';
@@ -140,6 +141,7 @@ class LivestreamHostScreen extends StatelessWidget {
                 return const SizedBox.shrink();
               }
             }),
+            BrainBattleLiveOverlay(controller: controller),
           ],
         ),
       ),
