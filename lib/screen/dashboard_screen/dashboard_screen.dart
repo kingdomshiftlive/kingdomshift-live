@@ -9,8 +9,8 @@ import 'package:shortzz/common/service/subscription/subscription_manager.dart';
 import 'package:shortzz/common/widget/banner_ads_custom.dart';
 import 'package:shortzz/model/user_model/user_model.dart';
 import 'package:shortzz/screen/dashboard_screen/dashboard_screen_controller.dart';
+import 'package:shortzz/screen/cast_ai_screen/cast_ai_screen.dart';
 import 'package:shortzz/screen/explore_screen/explore_screen.dart';
-import 'package:shortzz/screen/feed_screen/feed_screen.dart';
 import 'package:shortzz/screen/home_screen/home_screen.dart';
 import 'package:shortzz/screen/live_stream/live_dashboard_screen.dart';
 import 'package:shortzz/screen/message_screen/message_screen.dart';
@@ -63,9 +63,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 children: [
                   // 0 - Home
                   IndexedStackChild(child: const HomeScreen(), preload: true),
-                  // 1 - Feed
+                  // 1 - Cast AI
                   IndexedStackChild(
-                      child: FeedScreen(myUser: widget.myUser), preload: true),
+                      child: const CastAiScreen(), preload: false),
                   // 2 - Live
                   IndexedStackChild(
                       child: LiveDashboardScreen(), preload: false),
@@ -138,8 +138,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               children: [
                 _navItem(context, controller, 0, Icons.home_rounded, 'Home',
                     isPostUploading),
-                _navItem(context, controller, 1, Icons.dynamic_feed_rounded,
-                    'Feed', isPostUploading),
+                _navItem(context, controller, 1, Icons.smart_display_rounded,
+                    'Cast AI', isPostUploading),
                 _navItem(context, controller, -1, Icons.add_circle_rounded,
                     'Create', isPostUploading,
                     isCreate: true),
