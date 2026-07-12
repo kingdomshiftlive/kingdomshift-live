@@ -19,6 +19,7 @@ class CastAiScreen extends StatelessWidget {
               controller.state.value == CastAiState.error;
           if (isScrollableState) {
             return SingleChildScrollView(
+              padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
               child: Column(children: [
                 _buildHeader(),
                 _buildBody(context, controller),
