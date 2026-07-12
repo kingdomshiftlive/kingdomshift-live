@@ -33,7 +33,9 @@ class LiveStreamSearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(LiveStreamSearchScreenController());
-    return Stack(
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Stack(
       children: [
         const LiveStreamBlurBackgroundImage(),
         Column(
@@ -77,10 +79,11 @@ class LiveStreamSearchScreen extends StatelessWidget {
                 ),
               ),
             ),
-            LiveStreamListView(controller: controller),
+            Expanded(child: LiveStreamListView(controller: controller)),
           ],
         ),
       ],
+      ),
     );
   }
 }
