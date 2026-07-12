@@ -141,7 +141,7 @@ class LivestreamHostScreen extends StatelessWidget {
                 return const SizedBox.shrink();
               }
             }),
-            BrainBattleLiveOverlay(controller: controller),
+            Positioned.fill(child: BrainBattleLiveOverlay(controller: controller)),
           ],
         ),
       ),

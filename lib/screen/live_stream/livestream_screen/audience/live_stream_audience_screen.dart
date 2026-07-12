@@ -52,7 +52,7 @@ class LiveStreamAudienceScreen extends StatelessWidget {
                   return LivestreamVideoPlayer(controller: controller.videoPlayerController);
               }
             }),
-            BrainBattleLiveOverlay(controller: controller),
+            Positioned.fill(child: BrainBattleLiveOverlay(controller: controller)),
 
             KeyboardAvoider(
               child: Column(
