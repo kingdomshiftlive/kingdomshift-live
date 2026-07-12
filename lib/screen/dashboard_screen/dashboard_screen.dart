@@ -65,7 +65,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   IndexedStackChild(child: const HomeScreen(), preload: true),
                   // 1 - Cast AI
                   IndexedStackChild(
-                      child: const CastAiScreen(), preload: false),
+                      child: const KingdomShiftTwinScreen(), preload: false),
                   // 2 - Live
                   IndexedStackChild(
                       child: LiveDashboardScreen(), preload: false),
@@ -139,7 +139,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 _navItem(context, controller, 0, Icons.home_rounded, 'Home',
                     isPostUploading),
                 _navItem(context, controller, 1, Icons.smart_display_rounded,
-                    'Cast AI', isPostUploading),
+                    'Twin', isPostUploading),
                 _navItem(context, controller, -1, Icons.add_circle_rounded,
                     'Create', isPostUploading,
                     isCreate: true),

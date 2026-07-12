@@ -3,20 +3,20 @@ import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
 import 'package:shortzz/screen/cast_ai_screen/cast_ai_controller.dart';
 
-class CastAiScreen extends StatelessWidget {
-  const CastAiScreen({super.key});
+class KingdomShiftTwinScreen extends StatelessWidget {
+  const KingdomShiftTwinScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(CastAiController());
+    final controller = Get.put(KingdomShiftTwinController());
 
     return Scaffold(
       backgroundColor: const Color(0xFF0A0A0F),
       resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: Obx(() {
-          final isScrollableState = controller.state.value == CastAiState.idle ||
-              controller.state.value == CastAiState.error;
+          final isScrollableState = controller.state.value == KingdomShiftTwinState.idle ||
+              controller.state.value == KingdomShiftTwinState.error;
           if (isScrollableState) {
             return SingleChildScrollView(
               padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
@@ -59,9 +59,9 @@ class CastAiScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Cast AI',
+              Text('KingdomShiftTwin',
                   style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-              Text('Type it. Cast it. No camera needed.',
+              Text('Type it. Twin it. No camera needed.',
                   style: TextStyle(color: Colors.white54, fontSize: 12)),
             ],
           ),
@@ -70,20 +70,20 @@ class CastAiScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBody(BuildContext context, CastAiController controller) {
+  Widget _buildBody(BuildContext context, KingdomShiftTwinController controller) {
     switch (controller.state.value) {
-      case CastAiState.idle:
-      case CastAiState.error:
+      case KingdomShiftTwinState.idle:
+      case KingdomShiftTwinState.error:
         return _buildInputView(context, controller);
-      case CastAiState.generating:
-      case CastAiState.polling:
+      case KingdomShiftTwinState.generating:
+      case KingdomShiftTwinState.polling:
         return _buildLoadingView(controller);
-      case CastAiState.ready:
+      case KingdomShiftTwinState.ready:
         return _buildResultView(controller);
     }
   }
 
-  Widget _buildInputView(BuildContext context, CastAiController controller) {
+  Widget _buildInputView(BuildContext context, KingdomShiftTwinController controller) {
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -139,7 +139,7 @@ class CastAiScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildAvatarPicker(CastAiController controller) {
+  Widget _buildAvatarPicker(KingdomShiftTwinController controller) {
     return SizedBox(
       height: 76,
       child: Obx(() => ListView.builder(
@@ -191,7 +191,7 @@ class CastAiScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBackgroundPicker(CastAiController controller) {
+  Widget _buildBackgroundPicker(KingdomShiftTwinController controller) {
     return Obx(() {
       if (controller.backgroundImageUrl.value.isNotEmpty) {
         return Row(children: [
@@ -234,7 +234,7 @@ class CastAiScreen extends StatelessWidget {
     });
   }
 
-  Widget _buildLoadingView(CastAiController controller) {
+  Widget _buildLoadingView(KingdomShiftTwinController controller) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -242,7 +242,7 @@ class CastAiScreen extends StatelessWidget {
           const CircularProgressIndicator(color: Color(0xFFFF006E)),
           const SizedBox(height: 20),
           Text(
-            controller.state.value == CastAiState.generating
+            controller.state.value == KingdomShiftTwinState.generating
                 ? 'Starting generation...'
                 : 'Creating your video...\nThis usually takes 1-3 minutes',
             style: const TextStyle(color: Colors.white70, fontSize: 14),
@@ -253,7 +253,7 @@ class CastAiScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildResultView(CastAiController controller) {
+  Widget _buildResultView(KingdomShiftTwinController controller) {
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Column(

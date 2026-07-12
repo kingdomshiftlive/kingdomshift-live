@@ -17,11 +17,11 @@ import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 const _edgeFunctionUrl = 'https://cotcogrkmtgibbpwhxrg.supabase.co/functions/v1/smart-endpoint';
 const _supabasePublishableKey = 'sb_publishable_FxXXeD03pQNBCb7fl5OGkQ_JUmKRsJ9';
 
-enum CastAiState { idle, generating, polling, ready, error }
+enum KingdomShiftTwinState { idle, generating, polling, ready, error }
 
-class CastAiController extends BaseController {
+class KingdomShiftTwinController extends BaseController {
   final scriptController = TextEditingController();
-  final Rx<CastAiState> state = CastAiState.idle.obs;
+  final Rx<KingdomShiftTwinState> state = KingdomShiftTwinState.idle.obs;
   final RxString errorText = ''.obs;
   final RxInt remainingToday = 3.obs;
   final RxString videoUrl = ''.obs;
@@ -80,7 +80,7 @@ class CastAiController extends BaseController {
     isUploadingAvatar.value = true;
     try {
       final file = File(picked.path);
-      final fileName = '$userId/cast_ai_avatar_${DateTime.now().millisecondsSinceEpoch}.jpg';
+      final fileName = '$userId/kingdomshift_twin_avatar_${DateTime.now().millisecondsSinceEpoch}.jpg';
 
       await supabase.Supabase.instance.client.storage.from('thumbnails').upload(
           fileName, file,
@@ -134,7 +134,7 @@ class CastAiController extends BaseController {
     isUploadingBackground.value = true;
     try {
       final file = File(picked.path);
-      final fileName = '$userId/cast_ai_bg_${DateTime.now().millisecondsSinceEpoch}.jpg';
+      final fileName = '$userId/kingdomshift_twin_bg_${DateTime.now().millisecondsSinceEpoch}.jpg';
 
       await supabase.Supabase.instance.client.storage.from('thumbnails').upload(
           fileName, file,
@@ -163,13 +163,13 @@ class CastAiController extends BaseController {
 
     final userId = firebase_auth.FirebaseAuth.instance.currentUser?.uid;
     if (userId == null) {
-      errorText.value = 'Please sign in to use Cast AI.';
+      errorText.value = 'Please sign in to use KingdomShiftTwin.';
       return;
     }
 
     errorText.value = '';
     videoUrl.value = '';
-    state.value = CastAiState.generating;
+    state.value = KingdomShiftTwinState.generating;
 
     try {
       final response = await http.post(
@@ -193,18 +193,18 @@ class CastAiController extends BaseController {
       if (response.statusCode == 200) {
         _jobId = data['jobId'];
         remainingToday.value = data['remainingToday'] ?? 0;
-        state.value = CastAiState.polling;
+        state.value = KingdomShiftTwinState.polling;
         _startPolling();
       } else if (response.statusCode == 429) {
         errorText.value = data['error'] ?? 'Daily limit reached. Try again tomorrow.';
-        state.value = CastAiState.error;
+        state.value = KingdomShiftTwinState.error;
       } else {
         errorText.value = data['error'] ?? 'Something went wrong. Please try again.';
-        state.value = CastAiState.error;
+        state.value = KingdomShiftTwinState.error;
       }
     } catch (e) {
       errorText.value = 'Connection error. Please check your internet and try again.';
-      state.value = CastAiState.error;
+      state.value = KingdomShiftTwinState.error;
     }
   }
 
@@ -232,11 +232,11 @@ class CastAiController extends BaseController {
       if (status == 'completed') {
         _pollTimer?.cancel();
         videoUrl.value = data['video_url'] ?? '';
-        state.value = CastAiState.ready;
+        state.value = KingdomShiftTwinState.ready;
       } else if (status == 'failed') {
         _pollTimer?.cancel();
         errorText.value = data['error_message'] ?? 'Video generation failed.';
-        state.value = CastAiState.error;
+        state.value = KingdomShiftTwinState.error;
       }
       // else still processing, keep polling
     } catch (e) {
@@ -251,7 +251,7 @@ class CastAiController extends BaseController {
     errorText.value = '';
     scriptController.clear();
     backgroundImageUrl.value = '';
-    state.value = CastAiState.idle;
+    state.value = KingdomShiftTwinState.idle;
   }
 
   Future<void> useInPost() async {
@@ -260,7 +260,7 @@ class CastAiController extends BaseController {
     try {
       final response = await http.get(Uri.parse(videoUrl.value));
       final dir = await getTemporaryDirectory();
-      final path = '${dir.path}/cast_ai_${DateTime.now().millisecondsSinceEpoch}.mp4';
+      final path = '${dir.path}/kingdomshift_twin_${DateTime.now().millisecondsSinceEpoch}.mp4';
       final file = File(path);
       await file.writeAsBytes(response.bodyBytes);
 
