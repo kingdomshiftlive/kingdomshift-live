@@ -31,6 +31,8 @@ class CastAiController extends BaseController {
   final RxList<Map<String, dynamic>> avatars = <Map<String, dynamic>>[].obs;
   final RxString selectedAvatarId = ''.obs;
   final RxBool isUploadingAvatar = false.obs;
+  final RxString backgroundImageUrl = ''.obs;
+  final RxBool isUploadingBackground = false.obs;
 
   @override
   void onInit() {
@@ -122,6 +124,36 @@ class CastAiController extends BaseController {
     selectedAvatarId.value = heygenAvatarId;
   }
 
+  Future<void> uploadBackgroundImage() async {
+    final userId = firebase_auth.FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) return;
+
+    final XFile? picked = await MediaPickerHelper.shared.pickImage(source: ImageSource.gallery);
+    if (picked == null) return;
+
+    isUploadingBackground.value = true;
+    try {
+      final file = File(picked.path);
+      final fileName = '$userId/cast_ai_bg_${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+      await supabase.Supabase.instance.client.storage.from('thumbnails').upload(
+          fileName, file,
+          fileOptions: const supabase.FileOptions(upsert: true));
+
+      backgroundImageUrl.value = supabase.Supabase.instance.client.storage
+          .from('thumbnails')
+          .getPublicUrl(fileName);
+    } catch (e) {
+      showSnackBar('Failed to upload image: $e');
+    } finally {
+      isUploadingBackground.value = false;
+    }
+  }
+
+  void clearBackgroundImage() {
+    backgroundImageUrl.value = '';
+  }
+
   Future<void> generate() async {
     final script = scriptController.text.trim();
     if (script.isEmpty) {
@@ -152,6 +184,7 @@ class CastAiController extends BaseController {
           'userId': userId,
           'script': script,
           if (selectedAvatarId.value.isNotEmpty) 'avatarId': selectedAvatarId.value,
+          if (backgroundImageUrl.value.isNotEmpty) 'backgroundImageUrl': backgroundImageUrl.value,
         }),
       );
 
@@ -217,6 +250,7 @@ class CastAiController extends BaseController {
     videoUrl.value = '';
     errorText.value = '';
     scriptController.clear();
+    backgroundImageUrl.value = '';
     state.value = CastAiState.idle;
   }
 

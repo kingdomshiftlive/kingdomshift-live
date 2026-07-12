@@ -95,6 +95,8 @@ class CastAiScreen extends StatelessWidget {
           const SizedBox(height: 16),
           _buildAvatarPicker(controller),
           const SizedBox(height: 16),
+          _buildBackgroundPicker(controller),
+          const SizedBox(height: 16),
           Container(
             decoration: BoxDecoration(
               color: const Color(0xFF12121E),
@@ -187,6 +189,49 @@ class CastAiScreen extends StatelessWidget {
         },
       )),
     );
+  }
+
+  Widget _buildBackgroundPicker(CastAiController controller) {
+    return Obx(() {
+      if (controller.backgroundImageUrl.value.isNotEmpty) {
+        return Row(children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Image.network(controller.backgroundImageUrl.value,
+                width: 50, height: 50, fit: BoxFit.cover),
+          ),
+          const SizedBox(width: 10),
+          const Expanded(
+              child: Text('Background image added',
+                  style: TextStyle(color: Colors.white70, fontSize: 12))),
+          IconButton(
+            icon: const Icon(Icons.close, color: Colors.white54, size: 18),
+            onPressed: controller.clearBackgroundImage,
+          ),
+        ]);
+      }
+      return GestureDetector(
+        onTap: controller.isUploadingBackground.value ? null : controller.uploadBackgroundImage,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+          decoration: BoxDecoration(
+            color: const Color(0xFF12121E),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: Colors.white12),
+          ),
+          child: Row(children: [
+            controller.isUploadingBackground.value
+                ? const SizedBox(
+                    width: 16, height: 16,
+                    child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white54))
+                : const Icon(Icons.image_outlined, color: Colors.white54, size: 18),
+            const SizedBox(width: 8),
+            const Text('Add a product or background image (optional)',
+                style: TextStyle(color: Colors.white54, fontSize: 12)),
+          ]),
+        ),
+      );
+    });
   }
 
   Widget _buildLoadingView(CastAiController controller) {
