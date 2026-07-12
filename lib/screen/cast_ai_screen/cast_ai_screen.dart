@@ -70,7 +70,7 @@ class CastAiScreen extends StatelessWidget {
   }
 
   Widget _buildInputView(BuildContext context, CastAiController controller) {
-    return Padding(
+    return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
