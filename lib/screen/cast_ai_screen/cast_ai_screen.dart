@@ -12,11 +12,24 @@ class CastAiScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: const Color(0xFF0A0A0F),
+      resizeToAvoidBottomInset: true,
       body: SafeArea(
-        child: Column(children: [
-          _buildHeader(),
-          Expanded(child: Obx(() => _buildBody(context, controller))),
-        ]),
+        child: Obx(() {
+          final isScrollableState = controller.state.value == CastAiState.idle ||
+              controller.state.value == CastAiState.error;
+          if (isScrollableState) {
+            return SingleChildScrollView(
+              child: Column(children: [
+                _buildHeader(),
+                _buildBody(context, controller),
+              ]),
+            );
+          }
+          return Column(children: [
+            _buildHeader(),
+            Expanded(child: _buildBody(context, controller)),
+          ]);
+        }),
       ),
     );
   }
@@ -70,7 +83,7 @@ class CastAiScreen extends StatelessWidget {
   }
 
   Widget _buildInputView(BuildContext context, CastAiController controller) {
-    return SingleChildScrollView(
+    return Padding(
       padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
