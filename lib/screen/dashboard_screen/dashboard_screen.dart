@@ -20,7 +20,6 @@ import 'package:shortzz/screen/kingdom_ai_screen/kingdom_ai_screen.dart';
 import 'package:shortzz/screen/brain_battle_screen/brain_battle_screen.dart';
 import 'package:shortzz/screen/camera_screen/camera_screen.dart';
 import 'package:shortzz/screen/wealth_shift_screen/wealth_shift_screen.dart';
-import 'package:shortzz/screen/ministries_screen/ministries_screen.dart';
 import 'package:shortzz/screen/shop_screen/shop_screen.dart';
 import 'package:shortzz/screen/podcast_screen/podcast_screen.dart';
 import 'package:shortzz/screen/groups_screen/groups_screen.dart';
@@ -96,15 +95,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   // 9 - WealthShift
                   IndexedStackChild(
                       child: const WealthShiftScreen(), preload: false),
-                  // 10 - Ministries
-                  IndexedStackChild(
-                      child: const MinistriesScreen(), preload: false),
-                  // 11 - Shop
+                  // 10 - Shop
                   IndexedStackChild(child: const ShopScreen(), preload: false),
-                  // 12 - Podcasts
+                  // 11 - Podcasts
                   IndexedStackChild(
                       child: const PodcastScreen(), preload: false),
-                  // 13 - Groups
+                  // 12 - Groups
                   IndexedStackChild(
                       child: const GroupsScreen(), preload: false),
                 ],
@@ -133,8 +129,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Top quick-access secondary nav (scrollable)
-            _buildSecondaryNav(controller),
+            // "More" button opens a grid menu of extra features
+            _buildMoreButton(context, controller),
             const SizedBox(height: 4),
             // Main bottom nav bar
             Row(
@@ -205,8 +201,36 @@ class _DashboardScreenState extends State<DashboardScreen> {
     });
   }
 
-  // Scrollable secondary nav for extra screens
-  Widget _buildSecondaryNav(DashboardScreenController controller) {
+  Widget _buildMoreButton(
+      BuildContext context, DashboardScreenController controller) {
+    return GestureDetector(
+      onTap: () => _showMoreMenu(context, controller),
+      child: Container(
+        height: 32,
+        margin: const EdgeInsets.symmetric(horizontal: 16),
+        decoration: BoxDecoration(
+          color: const Color(0xFF12121E),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.white12),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Icon(Icons.grid_view_rounded, size: 16, color: Color(0xFF14C9B8)),
+            SizedBox(width: 6),
+            Text('More',
+                style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showMoreMenu(
+      BuildContext context, DashboardScreenController controller) {
     final items = [
       {'index': 3, 'icon': Icons.explore_outlined, 'label': 'Explore'},
       {'index': 5, 'icon': Icons.notifications_outlined, 'label': 'Alerts'},
@@ -214,14 +238,109 @@ class _DashboardScreenState extends State<DashboardScreen> {
       {'index': 8, 'icon': Icons.psychology_outlined, 'label': 'Brain Battle'},
       {'index': 9, 'icon': Icons.trending_up_rounded, 'label': 'WealthShift'},
       {'index': 2, 'icon': Icons.radio_button_checked, 'label': 'Live'},
-      {'index': 10, 'icon': Icons.church_rounded, 'label': 'Ministries'},
-      {'index': 13, 'icon': Icons.groups_rounded, 'label': 'Groups'},
+      {'index': 12, 'icon': Icons.groups_rounded, 'label': 'Groups'},
       {
-        'index': 11,
+        'index': 10,
         'icon': Icons.shopping_bag_outlined,
         'label': 'AuthorityShop'
       },
-      {'index': 12, 'icon': Icons.mic_none_rounded, 'label': 'Podcasts'},
+      {'index': 11, 'icon': Icons.mic_none_rounded, 'label': 'Podcasts'},
+    ];
+    Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
+        decoration: const BoxDecoration(
+          color: Color(0xFF12121E),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                width: 36,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: 16),
+                decoration: BoxDecoration(
+                  color: Colors.white24,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            const Text('More',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700)),
+            const SizedBox(height: 16),
+            GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: items.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 4,
+                mainAxisSpacing: 16,
+                crossAxisSpacing: 8,
+                childAspectRatio: 0.8,
+              ),
+              itemBuilder: (_, i) {
+                final item = items[i];
+                final idx = item['index'] as int;
+                return GestureDetector(
+                  onTap: () {
+                    controller.selectedPageIndex.value = idx;
+                    Get.back();
+                  },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 52,
+                        height: 52,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF1A1A2E),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Icon(item['icon'] as IconData,
+                            color: const Color(0xFF14C9B8), size: 24),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        item['label'] as String,
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                            color: Colors.white70, fontSize: 11),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+      isScrollControlled: true,
+    );
+  }
+
+  Widget _buildSecondaryNavUnused(DashboardScreenController controller) {
+    final items = [
+      {'index': 3, 'icon': Icons.explore_outlined, 'label': 'Explore'},
+      {'index': 5, 'icon': Icons.notifications_outlined, 'label': 'Alerts'},
+      {'index': 7, 'icon': Icons.auto_awesome, 'label': 'KingdomAI'},
+      {'index': 8, 'icon': Icons.psychology_outlined, 'label': 'Brain Battle'},
+      {'index': 9, 'icon': Icons.trending_up_rounded, 'label': 'WealthShift'},
+      {'index': 2, 'icon': Icons.radio_button_checked, 'label': 'Live'},
+      {'index': 12, 'icon': Icons.groups_rounded, 'label': 'Groups'},
+      {
+        'index': 10,
+        'icon': Icons.shopping_bag_outlined,
+        'label': 'AuthorityShop'
+      },
+      {'index': 11, 'icon': Icons.mic_none_rounded, 'label': 'Podcasts'},
     ];
 
     return Obx(() {

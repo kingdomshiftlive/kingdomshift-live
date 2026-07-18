@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:shortzz/model/user_model/user_model.dart';
+import 'package:shortzz/common/service/api/search_service.dart';
+import 'package:shortzz/screen/profile_screen/profile_screen.dart';
+import 'package:shortzz/screen/feed_screen/feed_screen.dart';
+import 'package:shortzz/common/manager/session_manager.dart';
+import 'package:shortzz/utilities/text_style_custom.dart';
+import 'package:shortzz/screen/auth_screen/login_screen.dart';
 import 'package:shortzz/screen/home_screen/home_screen_controller.dart';
 import 'package:shortzz/screen/dashboard_screen/dashboard_screen_controller.dart';
 import 'package:shortzz/screen/reels_screen/reels_screen.dart';
@@ -54,11 +61,12 @@ class _KSHomeOverlay extends StatefulWidget {
 
 class _KSHomeOverlayState extends State<_KSHomeOverlay> {
   int _selectedTab = 0;
+  final RxList<User> _suggestedUsers = <User>[].obs;
   final _tabs = [
-    'Creator Network',
+    'Kingdom Feed',
     'Following',
-    'Live Groups',
-    'Marketplace',
+    'Live',
+    'Shop',
   ];
 
   late final LiveStreamSearchScreenController _liveController;
@@ -66,6 +74,9 @@ class _KSHomeOverlayState extends State<_KSHomeOverlay> {
   @override
   void initState() {
     super.initState();
+    SearchService.instance.searchUsers().then((users) {
+      _suggestedUsers.assignAll(users);
+    });
     // Reuse the existing live search controller/data source rather than
     // creating a new one. Registers it once, globally, if not already present.
     if (Get.isRegistered<LiveStreamSearchScreenController>()) {
@@ -83,11 +94,43 @@ class _KSHomeOverlayState extends State<_KSHomeOverlay> {
       child: Column(mainAxisSize: MainAxisSize.min, children: [
         _buildHeader(),
         _buildTabBar(),
+        _buildJoinBanner(),
         _buildLiveCirclesRow(),
+        _buildSuggestedUsersRow(),
       ]),
     );
   }
 
+  // --- Guest sign-up banner, only shown when not logged in --------------
+  Widget _buildJoinBanner() {
+    if (SessionManager.instance.getUserID() != 0) return const SizedBox.shrink();
+    return GestureDetector(
+      onTap: () => Get.to(() => const LoginScreen()),
+      child: Container(
+        margin: const EdgeInsets.fromLTRB(10, 8, 10, 0),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: const Color(0xFF12161C),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: const Color(0xFFE8C15A).withValues(alpha: 0.4)),
+        ),
+        child: Row(
+          children: [
+            const Icon(Icons.workspace_premium_rounded,
+                size: 16, color: Color(0xFFE8C15A)),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                'Join the Kingdom — create your free account',
+                style: TextStyleCustom.outFitMedium500(
+                    color: const Color(0xFFE8C15A), fontSize: 12),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
   // --- 1. Compact corner logo -------------------------------------------
   Widget _buildHeader() {
     return Padding(
@@ -175,10 +218,10 @@ class _KSHomeOverlayState extends State<_KSHomeOverlay> {
               setState(() => _selectedTab = i);
               if (!Get.isRegistered<DashboardScreenController>()) return;
               final dash = Get.find<DashboardScreenController>();
-              if (i == 0) dash.onChanged(0); // Creator Network / Home
-              if (i == 1) dash.onChanged(1); // Following / Feed
-              if (i == 2) dash.onChanged(2); // Live Groups / Live
-              if (i == 3) dash.onChanged(11); // Marketplace / Shop
+              if (i == 0) dash.onChanged(0); // Kingdom Feed / Home
+              if (i == 1) Get.to(() => const FeedScreen()); // Following
+              if (i == 2) dash.onChanged(2); // Live / Live
+              if (i == 3) dash.onChanged(10); // Shop
             },
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
@@ -213,6 +256,71 @@ class _KSHomeOverlayState extends State<_KSHomeOverlay> {
     );
   }
 
+  // --- Suggested users to discover/follow ---------------------------------
+  Widget _buildSuggestedUsersRow() {
+    return Obx(() {
+      if (_suggestedUsers.isEmpty) return const SizedBox.shrink();
+      return Container(
+        margin: const EdgeInsets.only(top: 0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Text('Discover creators',
+                  style: TextStyleCustom.outFitMedium500(
+                      color: Colors.white70, fontSize: 13)),
+            ),
+            const SizedBox(height: 8),
+            SizedBox(
+              height: 86,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                itemCount: _suggestedUsers.length,
+                itemBuilder: (_, i) {
+                  final user = _suggestedUsers[i];
+                  return GestureDetector(
+                    onTap: () => Get.to(() => ProfileScreen(user: user)),
+                    child: Container(
+                      width: 64,
+                      margin: const EdgeInsets.only(right: 12),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CircleAvatar(
+                            radius: 28,
+                            backgroundColor: const Color(0xFF12161C),
+                            backgroundImage: (user.profilePhoto ?? '').isNotEmpty
+                                ? NetworkImage(user.profilePhoto!)
+                                : null,
+                            child: (user.profilePhoto ?? '').isEmpty
+                                ? const Icon(Icons.person,
+                                    color: Colors.white38, size: 24)
+                                : null,
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            (user.username?.isNotEmpty ?? false)
+                                ? user.username!
+                                : (user.fullname ?? ''),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyleCustom.outFitRegular400(
+                                color: Colors.white70, fontSize: 11),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      );
+    });
+  }
   // --- 3 & 4. Horizontal scrollable live status circles -------------------
   Widget _buildLiveCirclesRow() {
     return Obx(() {
