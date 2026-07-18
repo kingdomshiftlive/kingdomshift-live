@@ -101,9 +101,14 @@ class ProfileScreenController extends BlockUserController
 
   Future<void> fetchUserDetail() async {
     isLoading.value = true;
-    User? user = await UserService.instance
-        .fetchUserDetails(userId: userData.value?.id?.toInt());
-    profileController.updateUser(user);
+    final targetUid = userData.value?.firebaseUid;
+    final isMe = targetUid == null ||
+        targetUid == SessionManager.instance.getUser()?.firebaseUid;
+    User? user = isMe
+        ? await UserService.instance
+            .fetchUserDetails(userId: userData.value?.id?.toInt())
+        : await UserService.instance.fetchUserProfileByUid(targetUid);
+    if (isMe) profileController.updateUser(user);
     isLoading.value = false;
     if (user != null) {
       userData.value = user;

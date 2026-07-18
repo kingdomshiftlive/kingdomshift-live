@@ -159,6 +159,7 @@ class SearchService {
           id: item['id']?.toString().hashCode,
           fullname: item['full_name'] ?? '',
           username: item['username'] ?? '',
+          firebaseUid: item['id']?.toString(),
           profilePhoto: item['avatar_url'] ?? '',
           bio: item['bio'] ?? '',
           isVerify: 0,

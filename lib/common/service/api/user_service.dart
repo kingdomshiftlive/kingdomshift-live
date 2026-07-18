@@ -120,6 +120,39 @@ class UserService {
     }
   }
 
+  /// Fetches ANY user's public profile by their Firebase UID, without
+  /// touching the local session (unlike fetchUserDetails, which is only
+  /// safe for refreshing the CURRENTLY LOGGED IN user's own data).
+  Future<User?> fetchUserProfileByUid(String targetUid) async {
+    try {
+      final profile = await supabase.Supabase.instance.client
+          .from('app_profiles')
+          .select()
+          .eq('id', targetUid)
+          .maybeSingle();
+
+      if (profile == null) return null;
+
+      return User(
+        id: 100,
+        identity: profile['email'] ?? '',
+        fullname: profile['full_name'] ?? '',
+        username: profile['username'] ?? '',
+        firebaseUid: targetUid,
+        profilePhoto: profile['avatar_url'] ?? '',
+        isVerify: profile['is_verify'] ?? 0,
+        followerCount: profile['follower_count'] ?? 0,
+        followingCount: profile['following_count'] ?? 0,
+        totalPostLikesCount: 0,
+        isFreez: profile['is_freez'] ?? 0,
+        isModerator: profile['is_moderator'] ?? 0,
+        bio: profile['bio'] ?? '',
+        newRegister: false,
+      );
+    } catch (e) {
+      return null;
+    }
+  }
   Future<User?> fetchUserDetails({int? userId, Function()? onError}) async {
     try {
       final firebaseUser = firebase_auth.FirebaseAuth.instance.currentUser;
