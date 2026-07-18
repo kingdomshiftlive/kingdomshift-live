@@ -14,7 +14,8 @@ import 'package:shortzz/utilities/theme_res.dart';
 class ProfilePageView extends StatelessWidget {
   final ProfileScreenController controller;
 
-  const ProfilePageView({super.key, required this.controller});
+  final bool isMe;
+  const ProfilePageView({super.key, required this.controller, this.isMe = false});
 
   @override
   Widget build(BuildContext context) {
@@ -90,6 +91,17 @@ class ProfilePageView extends StatelessWidget {
                                                   isModerator: true))
                                   ],
                             isPinShow: true),
+                        if (isMe)
+                          PodcastListView(
+                              podcasts: controller.liveRecordings,
+                              isLoading: controller.isLiveRecordingLoading,
+                              onFetchMoreData:
+                                  controller.fetchLiveRecordingsList,
+                              menus: const [],
+                              isPinShow: false,
+                              emptyTitle: 'No Live Replays Yet',
+                              emptyDescription:
+                                  'Your saved live stream recordings will show up here.'),
                       ],
                     );
     }));

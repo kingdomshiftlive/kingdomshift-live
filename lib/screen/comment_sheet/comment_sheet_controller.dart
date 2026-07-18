@@ -103,6 +103,7 @@ class CommentSheetController extends BaseController {
             controller.postData.update((val) => val?.comments = p0.comments);
           }
           break;
+        case PostType.liveRecording:
         case PostType.none:
           break;
       }

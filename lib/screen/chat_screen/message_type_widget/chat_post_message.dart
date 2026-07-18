@@ -43,6 +43,7 @@ class ChatPostMessage extends StatelessWidget {
         return ChatPostImageMessage(post: post, controller: controller);
       case PostType.text:
         return ChatPostTextMessage(post: post, controller: controller);
+      case PostType.liveRecording:
       case PostType.none:
         return const SizedBox();
     }

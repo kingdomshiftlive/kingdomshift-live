@@ -880,6 +880,7 @@ class ChatScreenController extends BlockUserController
       case PostType.text:
         Get.to(() => SinglePostScreen(post: post, isFromNotification: false));
         break;
+      case PostType.liveRecording:
       case PostType.none:
         break;
     }
@@ -903,6 +904,7 @@ class ChatScreenController extends BlockUserController
         Get.find<ReelController>(tag: _post.id.toString())
             .updateReelData(reel: _post);
         break;
+      case PostType.liveRecording:
       case PostType.none:
         break;
     }

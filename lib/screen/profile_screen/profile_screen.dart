@@ -29,8 +29,9 @@ class ProfileScreen extends StatelessWidget {
       tag: '${profileUser?.id ?? SessionManager.instance.getUserID()}',
     );
 
+    final bool isMe = profileUser?.id == SessionManager.instance.getUserID();
     return DefaultTabController(
-      length: 3,
+      length: isMe ? 4 : 3,
       child: Scaffold(
         backgroundColor: const Color(0xFF08141F),
         body: SafeArea(
@@ -67,8 +68,8 @@ class ProfileScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       ProfileUserHeader(controller: controller),
-                      ProfileTabs(controller: controller),
-                      ProfilePageView(controller: controller),
+                      ProfileTabs(controller: controller, isMe: isMe),
+                      ProfilePageView(controller: controller, isMe: isMe),
                     ],
                   ),
                 ),

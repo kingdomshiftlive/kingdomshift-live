@@ -40,6 +40,8 @@ import 'package:shortzz/utilities/firebase_const.dart';
 import 'package:video_player/video_player.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 import 'package:zego_express_engine/zego_express_engine.dart';
+import 'package:shortzz/common/service/frame_recorder_service.dart';
+import 'package:flutter/rendering.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 import 'package:shortzz/screen/brain_battle_screen/brain_battle_game_controller.dart';
@@ -371,34 +373,42 @@ class LivestreamScreenController extends BaseController {
   }
   String? _recordingFilePath;
   bool _isRecording = false;
+  final GlobalKey recordingBoundaryKey = GlobalKey();
+  FrameRecorderService? _frameRecorderService;
   Future<void> _startLocalRecording(String streamId) async {
     if (_isRecording) return;
     try {
-      final dir = await getTemporaryDirectory();
-      final path =
-          '${dir.path}/live_${streamId}_${DateTime.now().millisecondsSinceEpoch}.mp4';
-      _recordingFilePath = path;
-      final config = ZegoDataRecordConfig(path, ZegoDataRecordType.AudioAndVideo);
-      await ZegoExpressEngine.instance
-          .startRecordingCapturedData(config, channel: ZegoPublishChannel.Main);
-      _isRecording = true;
-      print('MY LOCAL RECORDING STARTED: $path');
+      _frameRecorderService = FrameRecorderService(recordingBoundaryKey);
+      final started = await _frameRecorderService!.start();
+      if (started) {
+        _isRecording = true;
+        print('MY FRAME RECORDING STARTED');
+      } else {
+        _frameRecorderService = null;
+        print('MY FRAME RECORDING FAILED TO START');
+      }
     } catch (e) {
-      print('MY LOCAL RECORDING START ERROR: $e');
-      _recordingFilePath = null;
+      print('MY FRAME RECORDING START ERROR: $e');
+      _frameRecorderService = null;
     }
   }
   Future<void> _stopLocalRecording() async {
     if (!_isRecording) return;
     try {
-      await ZegoExpressEngine.instance
-          .stopRecordingCapturedData(channel: ZegoPublishChannel.Main);
-      Loggers.info('Local recording stop requested');
+      final result = await _frameRecorderService?.stop();
+      Loggers.info('Frame recording stopped: ${result?.videoPath}');
+      if (result != null) {
+        await _uploadRecordingToSupabase(result.videoPath,
+            thumbnailPath: result.thumbnailPath);
+      }
     } catch (e) {
-      Loggers.error('Failed to stop local recording: $e');
+      Loggers.error('Failed to stop frame recording: $e');
+    } finally {
+      _frameRecorderService = null;
+      _isRecording = false;
     }
   }
-  Future<void> _uploadRecordingToSupabase(String filePath) async {
+  Future<void> _uploadRecordingToSupabase(String filePath, {String? thumbnailPath}) async {
     try {
       final firebaseUser = firebase_auth.FirebaseAuth.instance.currentUser;
       if (firebaseUser == null) return;
@@ -415,6 +425,26 @@ class LivestreamScreenController extends BaseController {
       final videoUrl = supabase.Supabase.instance.client.storage
           .from('videos')
           .getPublicUrl(fileName);
+      String? thumbUrl;
+      if (thumbnailPath != null) {
+        try {
+          final thumbFile = File(thumbnailPath);
+          if (await thumbFile.exists()) {
+            final thumbName =
+                '${firebaseUser.uid}/thumb_${DateTime.now().millisecondsSinceEpoch}.png';
+            await supabase.Supabase.instance.client.storage
+                .from('thumbnails')
+                .upload(thumbName, thumbFile,
+                    fileOptions: const supabase.FileOptions(upsert: true));
+            thumbUrl = supabase.Supabase.instance.client.storage
+                .from('thumbnails')
+                .getPublicUrl(thumbName);
+            await thumbFile.delete();
+          }
+        } catch (e) {
+          Loggers.error('Failed to upload thumbnail: $e');
+        }
+      }
       final isPodcastStream = liveData.value.isPodcastMode;
       await supabase.Supabase.instance.client.from('videos').insert({
         'creator_id': firebaseUser.uid,
@@ -422,13 +452,16 @@ class LivestreamScreenController extends BaseController {
             'Live Recording - ${DateTime.now().toIso8601String().split('T').first}',
         'description': 'Saved from a live stream',
         'video_url': videoUrl,
-        'thumbnail_url': '',
+        'thumbnail_url': thumbUrl ?? '',
         'category': 'Faith',
         'status': 'published',
         'content_type': isPodcastStream ? 'podcast' : 'live_recording',
         'visibility': isPodcastStream ? 'public' : 'private',
       });
       print('MY UPLOAD SUCCESS: Live recording uploaded and saved as podcast episode');
+      if (!isPodcastStream) {
+        showSnackBar('Recording saved! Find it in your Profile under Live Replays.');
+      }
       await file.delete();
     } catch (e) {
       print('MY UPLOAD ERROR: Failed to upload live recording: $e');

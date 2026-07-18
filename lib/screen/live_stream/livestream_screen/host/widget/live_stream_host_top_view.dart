@@ -15,6 +15,7 @@ import 'package:shortzz/utilities/color_res.dart';
 import 'package:shortzz/utilities/text_style_custom.dart';
 import 'package:shortzz/utilities/theme_res.dart';
 import 'package:shortzz/common/manager/branch_io_manager.dart';
+import 'package:shortzz/screen/shop_screen/manage_live_products_sheet.dart';
 
 class LiveStreamHostTopView extends StatelessWidget {
   final LivestreamScreenController controller;
@@ -118,6 +119,33 @@ class LiveStreamHostTopView extends StatelessWidget {
                                   ),
                                 ),
                               ),
+                            InkWell(
+                              onTap: () {
+                                HapticManager.shared.light();
+                                showManageLiveProductsSheet(
+                                  liveStreamId: stream.roomID ?? '',
+                                );
+                              },
+                              child: Container(
+                                height: 30,
+                                width: 30,
+                                alignment: Alignment.center,
+                                decoration: ShapeDecoration(
+                                  shape: SmoothRectangleBorder(
+                                    borderRadius: SmoothBorderRadius(cornerRadius: 30),
+                                    side: BorderSide(
+                                      color: whitePure(context).withValues(alpha: .3),
+                                    ),
+                                  ),
+                                  color: blackPure(context).withValues(alpha: .1),
+                                ),
+                                child: Icon(
+                                  Icons.storefront_rounded,
+                                  size: 16,
+                                  color: whitePure(context),
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                         // Row 2: Start Battle (right-aligned, only when visible)

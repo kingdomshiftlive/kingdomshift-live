@@ -12,6 +12,7 @@ import 'package:shortzz/screen/live_stream/livestream_screen/view/livestream_vie
 import 'package:shortzz/screen/live_stream/livestream_screen/widget/battle_start_countdown_overlay.dart';
 import 'package:shortzz/screen/live_stream/livestream_screen/widget/live_stream_background_blur_image.dart';
 import 'package:shortzz/utilities/theme_res.dart';
+import 'package:shortzz/screen/shop_screen/live_shop_overlay.dart';
 
 class LiveStreamAudienceScreen extends StatelessWidget {
   final Livestream livestream;
@@ -53,6 +54,17 @@ class LiveStreamAudienceScreen extends StatelessWidget {
               }
             }),
             Positioned.fill(child: BrainBattleLiveOverlay(controller: controller)),
+
+            Obx(() {
+              final roomId = controller.liveData.value.roomID;
+              if (roomId == null || roomId.isEmpty) return const SizedBox.shrink();
+              return Positioned(
+                bottom: 90,
+                left: 0,
+                right: 0,
+                child: LiveShopOverlay(liveStreamId: roomId),
+              );
+            }),
 
             KeyboardAvoider(
               child: Column(

@@ -23,6 +23,7 @@ import 'package:shortzz/screen/wealth_shift_screen/wealth_shift_screen.dart';
 import 'package:shortzz/screen/ministries_screen/ministries_screen.dart';
 import 'package:shortzz/screen/shop_screen/shop_screen.dart';
 import 'package:shortzz/screen/podcast_screen/podcast_screen.dart';
+import 'package:shortzz/screen/groups_screen/groups_screen.dart';
 import 'package:shortzz/utilities/style_res.dart';
 import 'package:shortzz/utilities/text_style_custom.dart';
 
@@ -103,6 +104,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   // 12 - Podcasts
                   IndexedStackChild(
                       child: const PodcastScreen(), preload: false),
+                  // 13 - Groups
+                  IndexedStackChild(
+                      child: const GroupsScreen(), preload: false),
                 ],
               ),
             ),
@@ -210,7 +214,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       {'index': 8, 'icon': Icons.psychology_outlined, 'label': 'Brain Battle'},
       {'index': 9, 'icon': Icons.trending_up_rounded, 'label': 'WealthShift'},
       {'index': 2, 'icon': Icons.radio_button_checked, 'label': 'Live'},
-      {'index': 10, 'icon': Icons.groups_rounded, 'label': 'Groups'},
+      {'index': 10, 'icon': Icons.church_rounded, 'label': 'Ministries'},
+      {'index': 13, 'icon': Icons.groups_rounded, 'label': 'Groups'},
       {
         'index': 11,
         'icon': Icons.shopping_bag_outlined,

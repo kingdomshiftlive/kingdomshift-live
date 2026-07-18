@@ -24,7 +24,9 @@ class LivestreamHostScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(LivestreamScreenController(livestream.obs, isHost, hostPreview: hostPreview));
 
-    return Scaffold(
+    return RepaintBoundary(
+      key: controller.recordingBoundaryKey,
+      child: Scaffold(
       backgroundColor: blackPure(context),
       resizeToAvoidBottomInset: false,
       body: PopScope(
@@ -145,6 +147,7 @@ class LivestreamHostScreen extends StatelessWidget {
           ],
         ),
       ),
+    ),
     );
   }
 }

@@ -149,6 +149,8 @@ dependencies:
       ref: master
   chewie: ^1.13.0
   flutter_svg: ^2.2.3
+  ffmpeg_kit_flutter_new: ^4.5.1
+  record: ^7.1.1
 
 
 dev_dependencies:

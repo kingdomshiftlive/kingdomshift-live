@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:shortzz/screen/home_screen/home_screen_controller.dart';
 import 'package:shortzz/screen/reels_screen/reels_screen_controller.dart';
 import 'package:shortzz/common/controller/ads_controller.dart';
@@ -42,9 +43,11 @@ class ProfileScreenController extends BlockUserController
   RxList<Post> reels = <Post>[].obs;
   RxList<Post> posts = <Post>[].obs;
   RxList<Post> podcasts = <Post>[].obs;
+  RxList<Post> liveRecordings = <Post>[].obs;
   RxBool isReelLoading = false.obs;
   RxBool isPostLoading = false.obs;
   RxBool isPodcastLoading = false.obs;
+  RxBool isLiveRecordingLoading = false.obs;
   final PageController pageController = PageController();
   RxBool isUserNotFound = false.obs;
   Setting? settingData = SessionManager.instance.getSettings();
@@ -88,6 +91,7 @@ class ProfileScreenController extends BlockUserController
       fetchReel(),
       fetchPost(),
       fetchPodcast(),
+      fetchLiveRecordingsList(),
     });
   }
 
@@ -193,10 +197,32 @@ class ProfileScreenController extends BlockUserController
       isPodcastLoading.value = false;
     }
   }
+  Future<void> fetchLiveRecordingsList({bool isEmpty = false}) async {
+    if (isLiveRecordingLoading.value) return;
+    isLiveRecordingLoading.value = true;
+    try {
+      final userId = userData.value?.firebaseUid ??
+          firebase_auth.FirebaseAuth.instance.currentUser?.uid;
+      if (userId == null) return;
+      final result = await PostService.instance.fetchLiveRecordings(userId);
+      if (isEmpty) liveRecordings.clear();
+      for (var post in result) {
+        if (liveRecordings.firstWhereOrNull((element) => element.id == post.id) ==
+            null) {
+          liveRecordings.add(post);
+        }
+      }
+    } catch (e) {
+      Loggers.error('Fetch Live Recordings Error : $e');
+    } finally {
+      isLiveRecordingLoading.value = false;
+    }
+  }
 
   Future<void> onRefresh() async {
     Future.wait([
       fetchUserDetail(),
+      fetchLiveRecordingsList(isEmpty: true),
       fetchPost(isEmpty: true),
       fetchReel(isEmpty: true),
       fetchPodcast(isEmpty: true)

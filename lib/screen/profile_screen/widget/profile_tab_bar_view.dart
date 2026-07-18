@@ -8,7 +8,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 class ProfileTabs extends StatelessWidget {
   final ProfileScreenController controller;
 
-  const ProfileTabs({super.key, required this.controller});
+  final bool isMe;
+  const ProfileTabs({super.key, required this.controller, this.isMe = false});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,8 @@ class ProfileTabs extends StatelessWidget {
                 duration: const Duration(milliseconds: 300),
                 child: Container(
                   height: 1,
-                  width: Get.width / 3 - 60,
+                  width: (MediaQuery.of(context).size.width / (isMe ? 4 : 3) - 40)
+                    .clamp(20.0, double.infinity),
                   color: themeAccentSolid(context),
                   margin: const EdgeInsets.symmetric(horizontal: 20),
                 ),
@@ -43,7 +45,19 @@ class ProfileTabs extends StatelessWidget {
               });
             },
             indicatorColor: Colors.transparent,
-            tabs: List.generate(3, (index) {
+            tabs: List.generate(isMe ? 4 : 3, (index) {
+              if (isMe && index == 3) {
+                return Obx(() {
+                  final color = controller.selectedTabIndex.value == index
+                      ? themeAccentSolid(context)
+                      : disableGrey(context);
+                  return Container(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    child: Icon(Icons.video_camera_back_rounded,
+                        size: 26, color: color),
+                  );
+                });
+              }
               final icon = index == 0
                   ? AssetRes.icReel
                   : index == 1
@@ -62,7 +76,7 @@ class ProfileTabs extends StatelessWidget {
                         colorFilter: ColorFilter.mode(color, BlendMode.srcIn)),
                   );
                 }
-                return Image.asset(icon, height: 50, width: 35, color: color);
+                return Image.asset(icon, height: 32, width: 24, color: color);
               });
             })),
         Container(height: .5, color: textLightGrey(context)),

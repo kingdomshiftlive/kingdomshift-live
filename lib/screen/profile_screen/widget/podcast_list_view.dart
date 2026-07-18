@@ -25,6 +25,8 @@ class PodcastListView extends StatelessWidget {
   final Function(dynamic)? onBackResponse;
   final bool shrinkWrap;
   final Widget? widget;
+  final String? emptyTitle;
+  final String? emptyDescription;
 
   const PodcastListView({
     super.key,
@@ -38,6 +40,8 @@ class PodcastListView extends StatelessWidget {
     this.shrinkWrap = false,
     this.onBackResponse,
     this.widget,
+    this.emptyTitle,
+    this.emptyDescription,
   });
 
   @override
@@ -48,8 +52,8 @@ class PodcastListView extends StatelessWidget {
         () => isLoading.value && podcasts.isEmpty
             ? const LoaderWidget()
             : NoDataView(
-                title: LKey.noUserPodcastsTitle.tr,
-                description: LKey.noUserPodcastsDescription.tr,
+                title: emptyTitle ?? LKey.noUserPodcastsTitle.tr,
+                description: emptyDescription ?? LKey.noUserPodcastsDescription.tr,
                 showShow: !isLoading.value && podcasts.isEmpty,
                 child: ListView.separated(
                   primary: !shrinkWrap,

@@ -46,6 +46,7 @@ class ExploreScreenController extends BaseController {
         break;
       case PostType.text:
         break;
+      case PostType.liveRecording:
       case PostType.none:
         Loggers.error('Post Type none');
         break;
