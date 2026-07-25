@@ -31,6 +31,7 @@ class KingdomShiftTwinController extends BaseController {
   final RxList<Map<String, dynamic>> avatars = <Map<String, dynamic>>[].obs;
   final RxString selectedAvatarId = ''.obs;
   final RxBool isUploadingAvatar = false.obs;
+  final RxBool hasConsent = false.obs;
   final RxString backgroundImageUrl = ''.obs;
   final RxBool isUploadingBackground = false.obs;
 
@@ -158,6 +159,11 @@ class KingdomShiftTwinController extends BaseController {
     final script = scriptController.text.trim();
     if (script.isEmpty) {
       errorText.value = 'Type something for your avatar to say first.';
+      return;
+    }
+    if (!hasConsent.value) {
+      errorText.value =
+          'Please confirm you have the right to use this photo before generating.';
       return;
     }
 

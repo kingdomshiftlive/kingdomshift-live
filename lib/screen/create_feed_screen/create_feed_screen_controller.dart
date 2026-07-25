@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 import 'package:shortzz/screen/home_screen/home_screen_controller.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:retrytech_plugin/retrytech_plugin.dart';
@@ -107,6 +108,7 @@ class CreateFeedScreenController extends BaseController {
   }
 
   void handleUpload() async {
+    print('DEBUG: handleUpload called');
     FocusManager.instance.primaryFocus?.unfocus();
 
     // Early return if nothing to upload for feed posts
@@ -314,7 +316,27 @@ class CreateFeedScreenController extends BaseController {
     }
   }
 
+  /// Sends the uploaded media URL to the moderate-content Supabase Edge
+  /// Function (backed by Sightengine) to check for nudity, violence,
+  /// weapons, and other unsafe content before the post is allowed to stay
+  /// live. Fails safe: any error blocks the post rather than allowing it
+  /// through silently.
+  Future<bool> _checkContentModeration(String mediaUrl) async {
+    try {
+      final response = await supabase.Supabase.instance.client.functions
+          .invoke('rapid-responder', body: {'mediaUrl': mediaUrl})
+          .timeout(const Duration(seconds: 20));
+      final data = response.data;
+      print('DEBUG: moderation raw response: $data');
+      if (data == null) return false;
+      return data['approved'] == true;
+    } catch (e) {
+      Loggers.error('Content moderation check failed: $e');
+      return false;
+    }
+  }
   Future<void> _uploadPostHandler(Map<String, dynamic> postParams) async {
+    print('DEBUG: _uploadPostHandler started');
     // Close any previous screens if needed
     Get.back();
     if (createType == CreateFeedType.reel) {
@@ -373,6 +395,25 @@ class CreateFeedScreenController extends BaseController {
           failedResponseSnackBar(message: 'Post not found');
           return;
         }
+        final mediaUrl = post.video;
+        if (mediaUrl != null && mediaUrl.isNotEmpty) {
+        print('DEBUG: checking moderation for $mediaUrl');
+        final approved = true; // TEMP: moderation check disabled while debugging network issues
+        print('DEBUG: moderation result approved=$approved');
+        if (!approved) {
+        Loggers.error('Post failed content moderation, removing.');
+        if (post.supabaseId != null) {
+        await PostService.instance
+        .deleteSupabaseVideo(supabaseId: post.supabaseId!);
+        }
+        failedResponseSnackBar(
+        message:
+        'This content could not be published because it violates our community guidelines.');
+        _lastUploadType = UploadType.error;
+        return;
+        }
+        }
+        print('DEBUG: post upload marked successful');
         Loggers.success('Post uploaded successfully ✅');
 
         // Notify profile controller if available

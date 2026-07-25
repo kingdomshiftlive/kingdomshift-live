@@ -121,19 +121,41 @@ class KingdomShiftTwinScreen extends StatelessWidget {
                 style: const TextStyle(color: Colors.redAccent, fontSize: 13),
                 textAlign: TextAlign.center),
           ],
-          const SizedBox(height: 20),
-          SizedBox(
-            height: 50,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFFF006E),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-              ),
-              onPressed: controller.generate,
-              child: const Text('Generate Video',
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15)),
-            ),
-          ),
+          const SizedBox(height: 16),
+          Obx(() => Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Checkbox(
+                    value: controller.hasConsent.value,
+                    onChanged: (v) => controller.hasConsent.value = v ?? false,
+                    activeColor: const Color(0xFF14C9B8),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 12),
+                      child: Text(
+                        'This is my own photo, or I have explicit permission from the person pictured to create this AI-generated video.',
+                        style: TextStyle(color: Colors.white70, fontSize: 12),
+                      ),
+                    ),
+                  ),
+                ],
+              )),
+          const SizedBox(height: 12),
+          Obx(() => SizedBox(
+                height: 50,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: controller.hasConsent.value
+                        ? const Color(0xFFFF006E)
+                        : Colors.white24,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                  ),
+                  onPressed: controller.hasConsent.value ? controller.generate : null,
+                  child: const Text('Generate Video',
+                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15)),
+                ),
+              )),
         ],
       ),
     );
