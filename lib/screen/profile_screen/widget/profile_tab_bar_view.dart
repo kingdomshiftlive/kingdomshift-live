@@ -26,7 +26,7 @@ class ProfileTabs extends StatelessWidget {
                 duration: const Duration(milliseconds: 300),
                 child: Container(
                   height: 1,
-                  width: (MediaQuery.of(context).size.width / (isMe ? 4 : 3) - 40)
+                  width: (MediaQuery.of(context).size.width / (isMe ? 5 : 3) - 40)
                     .clamp(20.0, double.infinity),
                   color: themeAccentSolid(context),
                   margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -45,7 +45,7 @@ class ProfileTabs extends StatelessWidget {
               });
             },
             indicatorColor: Colors.transparent,
-            tabs: List.generate(isMe ? 4 : 3, (index) {
+            tabs: List.generate(isMe ? 5 : 3, (index) {
               if (isMe && index == 3) {
                 return Obx(() {
                   final color = controller.selectedTabIndex.value == index
@@ -54,6 +54,18 @@ class ProfileTabs extends StatelessWidget {
                   return Container(
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     child: Icon(Icons.video_camera_back_rounded,
+                        size: 26, color: color),
+                  );
+                });
+              }
+              if (isMe && index == 4) {
+                return Obx(() {
+                  final color = controller.selectedTabIndex.value == index
+                      ? themeAccentSolid(context)
+                      : disableGrey(context);
+                  return Container(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    child: Icon(Icons.videocam_rounded,
                         size: 26, color: color),
                   );
                 });

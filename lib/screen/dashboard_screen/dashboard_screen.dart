@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:shortzz/common/widget/kingdom_reveal/kingdom_reveal_overlay.dart';
 import 'package:get/get.dart';
+import 'package:shortzz/screen/dual_camera_screen/dual_camera_screen.dart';
 import 'package:proste_indexed_stack/proste_indexed_stack.dart';
 import 'package:shortzz/common/service/subscription/subscription_manager.dart';
 import 'package:shortzz/common/widget/banner_ads_custom.dart';
@@ -143,6 +144,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 _navItem(context, controller, -1, Icons.add_circle_rounded,
                     'Create', isPostUploading,
                     isCreate: true),
+                _navItem(context, controller, -2, Icons.videocam_rounded,
+                    'Kingdom Dual', isPostUploading,
+                    isDualCamera: true),
                 _navItem(context, controller, 4,
                     Icons.chat_bubble_outline_rounded, 'Inbox', isPostUploading,
                     badgeIndex: 4),
@@ -405,6 +409,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     bool isPostUploading, {
     bool isLive = false,
     bool isCreate = false,
+    bool isDualCamera = false,
     int? badgeIndex,
   }) {
     return Obx(() {
@@ -418,6 +423,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
               Get.to(() => const CameraScreen(cameraType: CameraScreenType.post))?.then((_) {
                 KingdomRevealOverlay.resumeAfterModal();
               });
+              return;
+            }
+            if (isDualCamera) {
+              Get.to(() => const DualCameraScreen());
               return;
             }
             controller.onChanged(index);

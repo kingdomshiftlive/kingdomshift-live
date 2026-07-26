@@ -31,7 +31,7 @@ class ProfileScreen extends StatelessWidget {
 
     final bool isMe = profileUser?.id == SessionManager.instance.getUserID();
     return DefaultTabController(
-      length: isMe ? 4 : 3,
+      length: isMe ? 5 : 3,
       child: Scaffold(
         backgroundColor: const Color(0xFF08141F),
         body: SafeArea(

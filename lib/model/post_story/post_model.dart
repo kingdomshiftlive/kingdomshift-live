@@ -319,9 +319,12 @@ class Post {
   UrlMetadata? get metaData {
     if (metadata == null || metadata?.isEmpty == true) {
       return null;
-    } else {
+    }
+    try {
       Map<String, dynamic>? valueMap = jsonDecode(metadata ?? '');
       if (valueMap != null) return UrlMetadata.fromJson(valueMap);
+    } catch (e) {
+      return null;
     }
     return null;
   }

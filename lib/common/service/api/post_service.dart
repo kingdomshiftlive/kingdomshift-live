@@ -343,6 +343,53 @@ class PostService {
       return [];
     }
   }
+  Future<List<Post>> fetchKingdomDualVideos(String userId) async {
+    try {
+      final response = await supabase.Supabase.instance.client
+          .from('videos')
+          .select('*, app_profiles(id, full_name, username, avatar_url)')
+          .eq('content_type', 'kingdom_dual')
+          .eq('creator_id', userId)
+          .order('created_at', ascending: false)
+          .limit(AppRes.paginationLimit);
+      final responseList = response as List;
+      List<Post> videos = [];
+      for (final item in responseList) {
+        final social = await getSupabaseVideoSocialState(item['id'].toString());
+        videos.add(Post(
+          id: item['id'].hashCode,
+          supabaseId: item['id']?.toString(),
+          userId: item['creator_id']?.toString().hashCode,
+          metadata: item['category'] ?? '',
+          description: item['title'] ?? '',
+          video: item['video_url'] ?? '',
+          thumbnail: item['thumbnail_url'] ?? '',
+          likes: social['likes'] ?? item['likes_count'] ?? 0,
+          saves: social['saves'] ?? 0,
+          isLiked: social['isLiked'] ?? false,
+          isSaved: social['isSaved'] ?? false,
+          comments: item['comments_count'] ?? 0,
+          views: item['views_count'] ?? 0,
+          shares: item['shares_count'] ?? 0,
+          postType: PostType.liveRecording,
+          durationSeconds: item['duration_seconds'],
+          createdAt: item['created_at'] ?? '',
+          user: item['app_profiles'] != null
+              ? User(
+                  id: item['creator_id']?.toString().hashCode,
+                  fullname: item['app_profiles']['full_name'] ?? '',
+                  username: item['app_profiles']['username'] ?? '',
+                  profilePhoto: item['app_profiles']['avatar_url'] ?? '',
+                )
+              : null,
+        ));
+      }
+      return videos;
+    } catch (e) {
+      print('FETCH KINGDOM DUAL VIDEOS ERROR: $e');
+      return [];
+    }
+  }
 
   Future<PostByIdModel> fetchPostById(
       {required int postId, int? commentId, int? replyId}) async {

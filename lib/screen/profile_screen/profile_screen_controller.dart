@@ -44,10 +44,12 @@ class ProfileScreenController extends BlockUserController
   RxList<Post> posts = <Post>[].obs;
   RxList<Post> podcasts = <Post>[].obs;
   RxList<Post> liveRecordings = <Post>[].obs;
+  RxList<Post> kingdomDualVideos = <Post>[].obs;
   RxBool isReelLoading = false.obs;
   RxBool isPostLoading = false.obs;
   RxBool isPodcastLoading = false.obs;
   RxBool isLiveRecordingLoading = false.obs;
+  RxBool isKingdomDualLoading = false.obs;
   final PageController pageController = PageController();
   RxBool isUserNotFound = false.obs;
   Setting? settingData = SessionManager.instance.getSettings();
@@ -92,6 +94,7 @@ class ProfileScreenController extends BlockUserController
       fetchPost(),
       fetchPodcast(),
       fetchLiveRecordingsList(),
+      fetchKingdomDualList(),
     });
   }
 
@@ -221,6 +224,27 @@ class ProfileScreenController extends BlockUserController
       Loggers.error('Fetch Live Recordings Error : $e');
     } finally {
       isLiveRecordingLoading.value = false;
+    }
+  }
+  Future<void> fetchKingdomDualList({bool isEmpty = false}) async {
+    if (isKingdomDualLoading.value) return;
+    isKingdomDualLoading.value = true;
+    try {
+      final userId = userData.value?.firebaseUid ??
+          firebase_auth.FirebaseAuth.instance.currentUser?.uid;
+      if (userId == null) return;
+      final result = await PostService.instance.fetchKingdomDualVideos(userId);
+      if (isEmpty) kingdomDualVideos.clear();
+      for (var post in result) {
+        if (kingdomDualVideos.firstWhereOrNull((element) => element.id == post.id) ==
+            null) {
+          kingdomDualVideos.add(post);
+        }
+      }
+    } catch (e) {
+      Loggers.error('Fetch Kingdom Dual Error : $e');
+    } finally {
+      isKingdomDualLoading.value = false;
     }
   }
 

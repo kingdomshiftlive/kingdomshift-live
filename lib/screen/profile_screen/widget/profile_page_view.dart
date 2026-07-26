@@ -102,6 +102,17 @@ class ProfilePageView extends StatelessWidget {
                               emptyTitle: 'No Live Replays Yet',
                               emptyDescription:
                                   'Your saved live stream recordings will show up here.'),
+                        if (isMe)
+                          PodcastListView(
+                              podcasts: controller.kingdomDualVideos,
+                              isLoading: controller.isKingdomDualLoading,
+                              onFetchMoreData:
+                                  controller.fetchKingdomDualList,
+                              menus: const [],
+                              isPinShow: false,
+                              emptyTitle: 'No Kingdom Dual Videos Yet',
+                              emptyDescription:
+                                  'Videos you record with Kingdom Dual will show up here.'),
                       ],
                     );
     }));
