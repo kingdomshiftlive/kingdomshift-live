@@ -330,6 +330,7 @@ class ChatScreenController extends BlockUserController
           msgCount: 1,
           lastMsg: receiverLastMessage,
           userId: myUser?.id,
+          firebaseUid: myUser?.firebaseUid,
           isDeleted: false,
           deletedId: 0,
           iBlocked: false,

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:shortzz/common/widget/kingdom_reveal/kingdom_reveal_overlay.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -219,10 +220,12 @@ class DashboardScreenController extends BaseController
   }
 
   Future<void> _initCallInvitationService() async {
+    await Future.delayed(const Duration(seconds: 3));
     try {
       final currentUser = SessionManager.instance.getUser();
-      final userId = currentUser?.firebaseUid;
-      if (userId == null) return;
+      final firebaseUid = firebase_auth.FirebaseAuth.instance.currentUser?.uid;
+      if (firebaseUid == null || firebaseUid.isEmpty) return;
+      final userId = firebaseUid;
       final userName = (currentUser?.username?.isNotEmpty ?? false)
           ? currentUser!.username!
           : (currentUser?.fullname ?? 'User');
@@ -235,8 +238,12 @@ class DashboardScreenController extends BaseController
         userName: userName,
         plugins: [ZegoUIKitSignalingPlugin()],
       );
+      Get.snackbar('Call service', 'Started OK, ID: $userId',
+          duration: const Duration(seconds: 8));
     } catch (e) {
       Loggers.error('Call invitation service init failed: $e');
+      Get.snackbar('Call service', 'FAILED: $e',
+          duration: const Duration(seconds: 15));
     }
   }
   Future<void> _createZegoEngine() async {

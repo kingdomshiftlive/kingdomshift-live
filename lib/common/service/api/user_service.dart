@@ -134,7 +134,7 @@ class UserService {
       if (profile == null) return null;
 
       return User(
-        id: 100,
+        id: targetUid.hashCode,
         identity: profile['email'] ?? '',
         fullname: profile['full_name'] ?? '',
         username: profile['username'] ?? '',
@@ -165,9 +165,9 @@ class UserService {
           .maybeSingle();
 
       if (profile == null) return null;
-
       final appUser = User(
-        id: 100,
+        id: firebaseUser.uid.hashCode,
+        firebaseUid: firebaseUser.uid,
         identity: profile['email'] ?? '',
         fullname: profile['full_name'] ?? '',
         username: profile['username'] ?? '',

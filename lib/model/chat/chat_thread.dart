@@ -5,6 +5,7 @@ import 'package:shortzz/model/livestream/app_user.dart';
 
 class ChatThread {
   int? userId;
+  String? firebaseUid;
   String? id;
   int? msgCount;
   ChatType? chatType;
@@ -18,6 +19,7 @@ class ChatThread {
 
   ChatThread({
     this.userId,
+    this.firebaseUid,
     this.id,
     this.msgCount,
     this.chatType,
@@ -32,6 +34,7 @@ class ChatThread {
 
   ChatThread.fromJson(Map<String, dynamic> json) {
     userId = json['user_id'];
+    firebaseUid = json['firebase_uid'];
     id = json['id'];
     msgCount = json['msg_count'];
     chatType = ChatType.fromString(json['chat_type']);
@@ -48,6 +51,7 @@ class ChatThread {
     final Map<String, dynamic> data = <String, dynamic>{};
 
     data['user_id'] = userId;
+    data['firebase_uid'] = firebaseUid;
     data['id'] = id;
     data['msg_count'] = msgCount;
     data['chat_type'] = chatType?.value;
@@ -66,16 +70,15 @@ class ChatThread {
     AppUser? appUser = controller.users
         .firstWhereOrNull((element) => element.userId == userId);
     if (appUser == null) {
-      UserService.instance
-          .fetchUserDetails(
-              userId: userId, onError: () => controller.deleteUser(userId))
-          .then((value) {
-        if (value == null) {
-          controller.deleteUser(userId);
-        } else {
-          controller.addUser(value);
-        }
-      });
+      if (firebaseUid != null && firebaseUid!.isNotEmpty) {
+        UserService.instance.fetchUserProfileByUid(firebaseUid!).then((value) {
+          if (value == null) {
+            controller.deleteUser(userId);
+          } else {
+            controller.addUser(value);
+          }
+        });
+      }
       return null;
     } else {
       return appUser;

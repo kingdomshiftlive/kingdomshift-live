@@ -10,7 +10,8 @@ extension UserExtension on User {
         userId: id,
         profile: profilePhoto,
         fullname: fullname,
-        isVerify: isVerify);
+        isVerify: isVerify,
+        firebaseUid: firebaseUid);
   }
 
   Livestream livestream({

@@ -5,6 +5,7 @@ import 'package:shortzz/common/extensions/list_extension.dart';
 import 'package:shortzz/common/extensions/user_extension.dart';
 import 'package:shortzz/common/manager/session_manager.dart';
 import 'package:shortzz/common/service/api/user_service.dart';
+import 'package:shortzz/common/service/api/search_service.dart';
 import 'package:shortzz/common/widget/custom_image.dart';
 import 'package:shortzz/model/chat/chat_thread.dart';
 import 'package:shortzz/model/user_model/user_model.dart';
@@ -24,8 +25,8 @@ class _NewMessageSheetState extends State<NewMessageSheet> {
 
   Future<void> _search(String keyword) async {
     setState(() => _isLoading = true);
-    final results = await UserService.instance
-        .searchUsers(keyWord: keyword, limit: 20);
+    final results = await SearchService.instance
+        .searchUsers(keyword: keyword);
     setState(() {
       _results = results;
       _isLoading = false;
@@ -47,7 +48,8 @@ class _NewMessageSheetState extends State<NewMessageSheet> {
             : ChatType.request,
         conversationId: [SessionManager.instance.getUserID(), user.id]
             .conversationId,
-        userId: user.id);
+        userId: user.id,
+        firebaseUid: user.firebaseUid);
     conversation.chatUser = user.appUser;
     Get.back();
     Get.to(() => ChatScreen(conversationUser: conversation, user: user));

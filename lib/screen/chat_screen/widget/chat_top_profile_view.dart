@@ -88,13 +88,13 @@ class ChatTopProfileView extends StatelessWidget {
                   ),
                 ),
               ),
-              if (chatUser?.userId != null) ...[
+              if (chatUser?.firebaseUid != null) ...[
                 ZegoSendCallInvitationButton(
                   isVideoCall: false,
                   resourceID: "kingdomshift_call",
                   invitees: [
                     ZegoUIKitUser(
-                      id: chatUser!.userId.toString(),
+                      id: chatUser!.firebaseUid!,
                       name: chatUser.fullname ?? chatUser.username ?? 'User',
                     ),
                   ],
@@ -103,13 +103,17 @@ class ChatTopProfileView extends StatelessWidget {
                   ),
                   iconSize: const Size(36, 36),
                   buttonSize: const Size(36, 36),
+                  onPressed: (code, message, errorInvitees) {
+                    Get.snackbar('Voice call', 'code=$code msg=$message err=$errorInvitees',
+                        duration: const Duration(seconds: 10));
+                  },
                 ),
                 ZegoSendCallInvitationButton(
                   isVideoCall: true,
                   resourceID: "kingdomshift_call",
                   invitees: [
                     ZegoUIKitUser(
-                      id: chatUser!.userId.toString(),
+                      id: chatUser!.firebaseUid!,
                       name: chatUser.fullname ?? chatUser.username ?? 'User',
                     ),
                   ],
@@ -118,6 +122,10 @@ class ChatTopProfileView extends StatelessWidget {
                   ),
                   iconSize: const Size(36, 36),
                   buttonSize: const Size(36, 36),
+                  onPressed: (code, message, errorInvitees) {
+                    Get.snackbar('Video call', 'code=$code msg=$message err=$errorInvitees',
+                        duration: const Duration(seconds: 10));
+                  },
                 ),
               ],
               CustomPopupMenuButton(

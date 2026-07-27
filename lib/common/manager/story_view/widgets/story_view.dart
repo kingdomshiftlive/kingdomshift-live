@@ -986,7 +986,8 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
             user?.isFollowing ?? false ? ChatType.approved : ChatType.request,
         conversationId:
             [SessionManager.instance.getUserID(), user?.id].conversationId,
-        userId: user?.id);
+        userId: user?.id,
+        firebaseUid: user?.firebaseUid);
     conversation.chatUser = user?.appUser;
 
     var chattingController = Get.put(ChatScreenController(conversation.obs),

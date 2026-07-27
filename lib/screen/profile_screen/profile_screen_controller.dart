@@ -479,7 +479,8 @@ class ProfileScreenController extends BlockUserController
             SessionManager.instance.getUserID(),
             userData.value?.id
           ].conversationId,
-          userId: userData.value?.id);
+          userId: userData.value?.id,
+          firebaseUid: userData.value?.firebaseUid);
       conversation.chatUser = userData.value?.appUser;
       Get.to(() =>
           ChatScreen(conversationUser: conversation, user: userData.value));
