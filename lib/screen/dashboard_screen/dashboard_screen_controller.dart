@@ -6,6 +6,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
+import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 import 'package:shortzz/common/controller/ads_controller.dart';
 import 'package:shortzz/common/controller/base_controller.dart';
 import 'package:shortzz/common/controller/firebase_firestore_controller.dart';
@@ -83,6 +85,7 @@ class DashboardScreenController extends BaseController
 
     // Run below in parallel
     _createZegoEngine();
+    _initCallInvitationService();
     _fetchLanguageFromUser();
     _fetchUnReadCount();
     startCacheCleanupScheduler();
@@ -215,6 +218,27 @@ class DashboardScreenController extends BaseController
     });
   }
 
+  Future<void> _initCallInvitationService() async {
+    try {
+      final currentUser = SessionManager.instance.getUser();
+      final userId = currentUser?.firebaseUid;
+      if (userId == null) return;
+      final userName = (currentUser?.username?.isNotEmpty ?? false)
+          ? currentUser!.username!
+          : (currentUser?.fullname ?? 'User');
+      ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(Get.key);
+      await ZegoUIKitPrebuiltCallInvitationService().init(
+        appID: 1974018811,
+        appSign:
+            'b8fcc1eede562f781a1310a6c1fc38696d43f8c854a3f9534c509eb7fba4fa9b',
+        userID: userId,
+        userName: userName,
+        plugins: [ZegoUIKitSignalingPlugin()],
+      );
+    } catch (e) {
+      Loggers.error('Call invitation service init failed: $e');
+    }
+  }
   Future<void> _createZegoEngine() async {
     Setting? appSetting = SessionManager.instance.getSettings();
     int appId = 1974018811;

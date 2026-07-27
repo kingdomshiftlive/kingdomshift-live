@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
+import 'package:zego_uikit/zego_uikit.dart';
 import 'package:get/get.dart';
 import 'package:shortzz/common/extensions/string_extension.dart';
 import 'package:shortzz/common/service/navigation/navigate_with_controller.dart';
@@ -86,6 +88,38 @@ class ChatTopProfileView extends StatelessWidget {
                   ),
                 ),
               ),
+              if (chatUser?.userId != null) ...[
+                ZegoSendCallInvitationButton(
+                  isVideoCall: false,
+                  resourceID: "kingdomshift_call",
+                  invitees: [
+                    ZegoUIKitUser(
+                      id: chatUser!.userId.toString(),
+                      name: chatUser.fullname ?? chatUser.username ?? 'User',
+                    ),
+                  ],
+                  icon: ButtonIcon(
+                    icon: Icon(Icons.call, color: whitePure(context), size: 20),
+                  ),
+                  iconSize: const Size(36, 36),
+                  buttonSize: const Size(36, 36),
+                ),
+                ZegoSendCallInvitationButton(
+                  isVideoCall: true,
+                  resourceID: "kingdomshift_call",
+                  invitees: [
+                    ZegoUIKitUser(
+                      id: chatUser!.userId.toString(),
+                      name: chatUser.fullname ?? chatUser.username ?? 'User',
+                    ),
+                  ],
+                  icon: ButtonIcon(
+                    icon: Icon(Icons.videocam, color: whitePure(context), size: 20),
+                  ),
+                  iconSize: const Size(36, 36),
+                  buttonSize: const Size(36, 36),
+                ),
+              ],
               CustomPopupMenuButton(
                   items: [
                     MenuItem(
