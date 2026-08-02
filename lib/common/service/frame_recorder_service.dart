@@ -29,6 +29,7 @@ class FrameRecorderService {
   String? _audioPath;
   int _frameIndex = 0;
   bool _isRecording = false;
+  DateTime? _recordingStartTime;
 
   /// Frames captured per second. Kept modest since capturing + encoding a
   /// PNG every tick has a real CPU cost on top of the live broadcast itself.
@@ -58,6 +59,7 @@ class FrameRecorderService {
       }
 
       _isRecording = true;
+      _recordingStartTime = DateTime.now();
       _frameTimer = Timer.periodic(
         Duration(milliseconds: (1000 / _fps).round()),
         (_) => _captureFrame(),
@@ -150,9 +152,33 @@ class FrameRecorderService {
     // ignore: avoid_print
     print('[FrameRecorder] DIAG: recordedAudioPath=$recordedAudioPath exists=${recordedAudioPath != null && await File(recordedAudioPath).exists()} size=$audioFileSize');
 
+    // Treat a suspiciously small/empty audio file as invalid — a broken
+    // audio track (e.g. the recorder failing to finalize on stop) can
+    // make FFmpeg reject the whole command rather than just skip it.
     final hasAudio = audioFileSize > 1000;
     // ignore: avoid_print
     print('[FrameRecorder] DIAG: hasAudio decision=$hasAudio (threshold 1000 bytes)');
+
+    // The frame timer targets $_fps, but each capture is async and can
+    // fall behind under device load — meaning fewer real frames land per
+    // real second than assumed. Encoding at a fixed $_fps regardless
+    // compresses the real recording into a shorter video, which plays
+    // back sped up. Instead, measure actual elapsed wall-clock time and
+    // derive the true average framerate so output duration matches
+    // real recording duration.
+    final elapsedSeconds = _recordingStartTime == null
+        ? null
+        : DateTime.now().difference(_recordingStartTime!).inMilliseconds / 1000.0;
+    double actualFps = _fps.toDouble();
+    if (elapsedSeconds != null && elapsedSeconds > 0) {
+      actualFps = _frameIndex / elapsedSeconds;
+      // Clamp to a sane range — very low/high values usually mean a
+      // measurement glitch rather than a real capture rate.
+      if (actualFps < 1) actualFps = 1;
+      if (actualFps > _fps) actualFps = _fps.toDouble();
+    }
+    // ignore: avoid_print
+    print('[FrameRecorder] DIAG: elapsedSeconds=$elapsedSeconds frameIndex=$_frameIndex actualFps=$actualFps (target was $_fps)');
 
     // libx264 (and yuv420p) require even width AND height. The RepaintBoundary
     // capture can produce an odd dimension (e.g. 384x735) depending on the
@@ -161,16 +187,17 @@ class FrameRecorderService {
     const scaleFilter = 'scale=trunc(iw/2)*2:trunc(ih/2)*2';
 
     final command = hasAudio
-        ? '-y -framerate $_fps -i "$framePattern" -i "$recordedAudioPath" '
+        ? '-y -framerate $actualFps -i "$framePattern" -i "$recordedAudioPath" '
             '-vf "$scaleFilter" '
             '-c:v libx264 -pix_fmt yuv420p -c:a aac -shortest "$outputPath"'
-        : '-y -framerate $_fps -i "$framePattern" '
+        : '-y -framerate $actualFps -i "$framePattern" '
             '-vf "$scaleFilter" '
             '-c:v libx264 -pix_fmt yuv420p "$outputPath"';
 
+    // Verify inputs actually exist right before running FFmpeg.
     final frameZero = File('${_frameDir!.path}/frame_000000.png');
     // ignore: avoid_print
-    print('[FrameRecorder] DIAG: frame_000000.png exists=${await frameZero.exists()}');
+    print('[FrameRecorder] DIAG: frame_000000.png exists=${await frameZero.exists()}, frameDir listing=${await _frameDir!.list().map((f) => f.path.split('/').last).toList()}');
     if (hasAudio) {
       // ignore: avoid_print
       print('[FrameRecorder] DIAG: audio file exists=${await File(recordedAudioPath!).exists()}, size=${await File(recordedAudioPath).length()}');
@@ -183,16 +210,22 @@ class FrameRecorderService {
     final returnCode = await session.getReturnCode();
     final state = await session.getState();
     final failStack = await session.getFailStackTrace();
+    // Small delay in case logs are still flushing asynchronously.
     await Future.delayed(const Duration(milliseconds: 300));
-
+    final logs = await session.getAllLogsAsString();
+    final logCount = (await session.getLogs()).length;
+    // ignore: avoid_print
+    print('[FrameRecorder] DIAG: FFmpeg returnCode=$returnCode state=$state logCount=$logCount');
+    // ignore: avoid_print
+    print('[FrameRecorder] DIAG: FFmpeg failStackTrace=$failStack');
+    // ignore: avoid_print
     final individualLogs = await session.getLogs();
     // ignore: avoid_print
-    print('[FrameRecorder] DIAG: returnCode=$returnCode state=$state logCount=${individualLogs.length} failStack=$failStack');
+    print('[FrameRecorder] DIAG: printing ${individualLogs.length} individual log lines below:');
     for (var i = 0; i < individualLogs.length; i++) {
       // ignore: avoid_print
       print('[FrameRecorder] LOG[$i]: ${individualLogs[i].getMessage()}');
     }
-
     final outputFile = File(outputPath);
     // ignore: avoid_print
     print('[FrameRecorder] DIAG: output exists=${await outputFile.exists()} size=${await outputFile.exists() ? await outputFile.length() : 0}');
@@ -222,5 +255,6 @@ class FrameRecorderService {
       } catch (_) {}
     }
     _frameDir = null;
+    _recordingStartTime = null;
   }
 }
