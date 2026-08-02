@@ -1,0 +1,86 @@
+From 66d7e34b2b9e5956bc44fa4613c587aa1553df8d Mon Sep 17 00:00:00 2001
+From: "Claude (KingdomShift build)" <claude@kingdomshift.live>
+Date: Sun, 2 Aug 2026 20:24:24 +0000
+Subject: [PATCH] Add diagnostic logging to frame_recorder_service to find
+ recording failure cause
+
+---
+ .../service/frame_recorder_service.dart       | 33 ++++++++++++++++---
+ 1 file changed, 29 insertions(+), 4 deletions(-)
+
+diff --git a/lib/common/service/frame_recorder_service.dart b/lib/common/service/frame_recorder_service.dart
+index ce042a7..142fa91 100644
+--- a/lib/common/service/frame_recorder_service.dart
++++ b/lib/common/service/frame_recorder_service.dart
+@@ -75,17 +75,28 @@ class FrameRecorderService {
+     try {
+       final boundary = boundaryKey.currentContext?.findRenderObject()
+           as RenderRepaintBoundary?;
+-      if (boundary == null) return;
++      if (boundary == null) {
++        // ignore: avoid_print
++        print('[FrameRecorder] DIAG: boundary is null at frame $_frameIndex');
++        return;
++      }
+       final image = await boundary.toImage(pixelRatio: 1.0);
+       final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+       image.dispose();
+-      if (byteData == null) return;
++      if (byteData == null) {
++        // ignore: avoid_print
++        print('[FrameRecorder] DIAG: byteData null at frame $_frameIndex');
++        return;
++      }
+       final file = File(
+           '${_frameDir!.path}/frame_${_frameIndex.toString().padLeft(6, '0')}.png');
+       await file.writeAsBytes(byteData.buffer.asUint8List());
++      // ignore: avoid_print
++      print('[FrameRecorder] DIAG: wrote frame $_frameIndex (${byteData.lengthInBytes} bytes)');
+       _frameIndex++;
+-    } catch (e) {
+-      // Skip this frame rather than crash the whole recording.
++    } catch (e, st) {
++      // ignore: avoid_print
++      print('[FrameRecorder] DIAG: captureFrame EXCEPTION at frame $_frameIndex: $e\n$st');
+     } finally {
+       _capturing = false;
+     }
+@@ -107,6 +118,8 @@ class FrameRecorderService {
+     }
+ 
+     if (_frameDir == null || _frameIndex < 2) {
++      // ignore: avoid_print
++      print('[FrameRecorder] DIAG: aborting — frameDir=$_frameDir frameIndex=$_frameIndex');
+       await _cleanup(recordedAudioPath);
+       return null;
+     }
+@@ -139,14 +152,26 @@ class FrameRecorderService {
+         : '-y -framerate $_fps -i "$framePattern" '
+             '-c:v libx264 -pix_fmt yuv420p "$outputPath"';
+ 
++    // ignore: avoid_print
++    print('[FrameRecorder] DIAG: frameIndex=$_frameIndex hasAudio=$hasAudio command=$command');
++
+     final session = await FFmpegKit.execute(command);
+     final returnCode = await session.getReturnCode();
++    final logs = await session.getAllLogsAsString();
++    // ignore: avoid_print
++    print('[FrameRecorder] DIAG: FFmpeg returnCode=$returnCode');
++    // ignore: avoid_print
++    print('[FrameRecorder] DIAG: FFmpeg logs:\n$logs');
+ 
+     await _cleanup(recordedAudioPath);
+ 
+     if (returnCode != null && ReturnCode.isSuccess(returnCode)) {
++      // ignore: avoid_print
++      print('[FrameRecorder] DIAG: SUCCESS, output at $outputPath');
+       return RecordingResult(videoPath: outputPath, thumbnailPath: thumbnailPath);
+     }
++    // ignore: avoid_print
++    print('[FrameRecorder] DIAG: FAILURE, returning null');
+     return null;
+   }
+ 
+-- 
+2.43.0
+
