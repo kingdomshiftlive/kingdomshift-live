@@ -202,10 +202,33 @@ class _KingdomResponseScreenState extends State<KingdomResponseScreen> {
       _saveMessage = null;
     });
     try {
+      final hasAccess = await Gal.hasAccess();
+      if (!hasAccess) {
+        final granted = await Gal.requestAccess();
+        if (!granted) {
+          const msg =
+              'Permission denied. Enable Photos/Videos access for this app in phone Settings to save.';
+          if (mounted) {
+            setState(() => _saveMessage = msg);
+            ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text(msg), duration: Duration(seconds: 4)));
+          }
+          return;
+        }
+      }
       await Gal.putVideo(_resultVideoPath!);
-      if (mounted) setState(() => _saveMessage = 'Saved to your gallery');
+      if (mounted) {
+        setState(() => _saveMessage = 'Saved to your gallery ✓');
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Saved to your gallery ✓')));
+      }
     } catch (e) {
-      if (mounted) setState(() => _saveMessage = 'Could not save: $e');
+      final msg = 'Could not save: $e';
+      if (mounted) {
+        setState(() => _saveMessage = msg);
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(msg), duration: const Duration(seconds: 4)));
+      }
     } finally {
       if (mounted) setState(() => _isSaving = false);
     }
