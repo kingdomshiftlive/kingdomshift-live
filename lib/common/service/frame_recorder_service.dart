@@ -154,10 +154,18 @@ class FrameRecorderService {
     // ignore: avoid_print
     print('[FrameRecorder] DIAG: hasAudio decision=$hasAudio (threshold 1000 bytes)');
 
+    // libx264 (and yuv420p) require even width AND height. The RepaintBoundary
+    // capture can produce an odd dimension (e.g. 384x735) depending on the
+    // device's logical pixel size, which makes the encoder refuse to start.
+    // This filter rounds both dimensions down to the nearest even number.
+    const scaleFilter = 'scale=trunc(iw/2)*2:trunc(ih/2)*2';
+
     final command = hasAudio
         ? '-y -framerate $_fps -i "$framePattern" -i "$recordedAudioPath" '
+            '-vf "$scaleFilter" '
             '-c:v libx264 -pix_fmt yuv420p -c:a aac -shortest "$outputPath"'
         : '-y -framerate $_fps -i "$framePattern" '
+            '-vf "$scaleFilter" '
             '-c:v libx264 -pix_fmt yuv420p "$outputPath"';
 
     final frameZero = File('${_frameDir!.path}/frame_000000.png');
