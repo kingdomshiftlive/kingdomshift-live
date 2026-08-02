@@ -3,6 +3,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shortzz/common/controller/base_controller.dart';
 import 'package:shortzz/common/manager/logger.dart';
 import 'package:shortzz/common/manager/session_manager.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 import 'package:shortzz/common/service/api/api_service.dart';
 import 'package:shortzz/common/service/utils/params.dart';
 import 'package:shortzz/common/service/utils/web_service.dart';
@@ -23,7 +24,6 @@ import 'package:shortzz/model/post_story/user_post_model.dart';
 import 'package:shortzz/model/user_model/user_model.dart';
 import 'package:shortzz/utilities/app_res.dart';
 import 'package:shortzz/screen/comment_sheet/helper/comment_helper.dart';
-import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 
 enum PostType {
   reel,
@@ -706,18 +706,20 @@ class PostService {
         fromJson: StatusModel.fromJson);
   }
 
-  Future<StatusModel> deleteComment({int? commentId}) async {
-    return await ApiService.instance.call(
-        url: WebService.post.deleteComment,
-        param: {Params.commentId: commentId},
-        fromJson: StatusModel.fromJson);
+  Future<bool?> deleteComment({String? commentId}) async {
+    if (commentId == null) return null;
+    try {
+      final result = await supabase.Supabase.instance.client
+          .rpc('delete_video_comment', params: {'p_comment_id': commentId});
+      return result == true;
+    } catch (e) {
+      Loggers.error('deleteComment error: $e');
+      return null;
+    }
   }
 
-  Future<StatusModel> deleteCommentReply({int? replyId}) async {
-    return await ApiService.instance.call(
-        url: WebService.post.deleteCommentReply,
-        param: {Params.replyId: replyId},
-        fromJson: StatusModel.fromJson);
+  Future<bool?> deleteCommentReply({String? replyId}) async {
+    return deleteComment(commentId: replyId);
   }
 
 
@@ -759,11 +761,15 @@ class PostService {
         fromJson: StatusModel.fromJson);
   }
 
-  Future<StatusModel> likeComment({int? commentId}) async {
-    return await ApiService.instance.call(
-        url: WebService.post.likeComment,
-        param: {Params.commentId: commentId},
-        fromJson: StatusModel.fromJson);
+  Future<bool?> toggleCommentLike({required String commentId}) async {
+    try {
+      final result = await supabase.Supabase.instance.client
+          .rpc('toggle_comment_like', params: {'p_comment_id': commentId});
+      return result == true;
+    } catch (e) {
+      Loggers.error('toggleCommentLike error: $e');
+      return null;
+    }
   }
 
 
@@ -821,11 +827,16 @@ class PostService {
     }
   }
 
-  Future<StatusModel> disLikeComment({int? commentId}) async {
-    return await ApiService.instance.call(
-        url: WebService.post.disLikeComment,
-        param: {Params.commentId: commentId},
-        fromJson: StatusModel.fromJson);
+
+  Future<bool?> toggleVideoLike({required String videoId}) async {
+    try {
+      final result = await supabase.Supabase.instance.client
+          .rpc('toggle_video_like', params: {'p_video_id': videoId});
+      return result == true;
+    } catch (e) {
+      Loggers.error('toggleVideoLike error: $e');
+      return null;
+    }
   }
 
   Future<StatusModel> likePost({required int postId}) async {
@@ -869,6 +880,17 @@ class PostService {
         param: {Params.postId: postId},
         fromJson: StatusModel.fromJson);
   }
+  Future<bool?> toggleVideoSave({required String videoId}) async {
+    try {
+      final result = await supabase.Supabase.instance.client
+          .rpc("toggle_video_save", params: {"p_video_id": videoId});
+      return result == true;
+    } catch (e) {
+      Loggers.error("toggleVideoSave error: $e");
+      return null;
+    }
+  }
+
 
   Future<StatusModel> savePost({required int postId}) async {
     return await ApiService.instance.call(
@@ -885,16 +907,19 @@ class PostService {
   }
 
   Future<CommentData?> fetchPostComments(
-      {required int postId, int? lastItemId}) async {
-    FetchCommentModel model = await ApiService.instance.call(
-        url: WebService.post.fetchPostComments,
-        param: {
-          Params.postId: postId,
-          Params.limit: AppRes.paginationLimit,
-          Params.lastItemId: lastItemId
-        },
-        fromJson: FetchCommentModel.fromJson);
-    return model.data;
+      {required int postId, String? videoSupabaseId, int? lastItemId}) async {
+    if (videoSupabaseId == null) return null;
+    try {
+      final result = await supabase.Supabase.instance.client
+          .rpc('get_video_comments', params: {'p_video_id': videoSupabaseId});
+      final list = (result as List)
+          .map((e) => Comment.fromJson(e as Map<String, dynamic>))
+          .toList();
+      return CommentData(comments: list, pinnedComments: []);
+    } catch (e) {
+      Loggers.error('fetchPostComments error: $e');
+      return null;
+    }
   }
 
   Future<List<Comment>> fetchPostCommentReplies(
@@ -912,20 +937,25 @@ class PostService {
 
   Future<Comment?> addComment(
       {required int postId,
+      String? videoSupabaseId,
+      String? parentCommentId,
       int? type,
       required String comment,
       String? mentionUserIds}) async {
-    AddCommentModel model = await ApiService.instance.call(
-        url: WebService.post.addPostComment,
-        param: {
-          Params.postId: postId,
-          Params.type: type,
-          Params.comment: comment,
-          Params.mentionedUserIds: mentionUserIds
-        },
-        fromJson: AddCommentModel.fromJson);
-    if (model.status == false) BaseController.share.showSnackBar(model.message);
-    return model.data;
+    if (videoSupabaseId == null) return null;
+    try {
+      final result = await supabase.Supabase.instance.client.rpc(
+          'add_video_comment',
+          params: {
+            'p_video_id': videoSupabaseId,
+            'p_content': comment,
+            'p_parent_comment_id': parentCommentId,
+          });
+      return Comment.fromJson(result);
+    } catch (e) {
+      Loggers.error('addComment error: $e');
+      return null;
+    }
   }
 
   Future<Comment?> replyToComment(

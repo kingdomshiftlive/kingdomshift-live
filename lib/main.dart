@@ -31,7 +31,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     anonKey:
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNvdGNvZ3JrbXRnaWJicHdoeHJnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwMjA4MzEsImV4cCI6MjA5NTU5NjgzMX0.MtO1vEYaUoUX1Yj4JdDjF8E5kkAhcuPYC4nnJ0m9Ql0',
   );
-  if (Platform.isIOS) {
+  if (Platform.isIOS || message.data['type'] == 'call') {
     FirebaseNotificationManager.instance.showNotification(message);
   }
 }

@@ -16,6 +16,8 @@ import 'package:shortzz/screen/chat_screen/chat_screen_controller.dart';
 import 'package:shortzz/utilities/asset_res.dart';
 import 'package:shortzz/utilities/text_style_custom.dart';
 import 'package:shortzz/utilities/theme_res.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
+import 'package:shortzz/common/manager/session_manager.dart';
 
 class ChatTopProfileView extends StatelessWidget {
   final ChatScreenController controller;
@@ -106,6 +108,17 @@ class ChatTopProfileView extends StatelessWidget {
                   onPressed: (code, message, errorInvitees) {
                     Get.snackbar('Voice call', 'code=$code msg=$message err=$errorInvitees',
                         duration: const Duration(seconds: 10));
+                    print('CALLPUSH: attempting voice call push, recipient=${chatUser!.firebaseUid}, caller=${SessionManager.instance.getUser()?.firebaseUid}');
+                    supabase.Supabase.instance.client.functions.invoke('send-call-push', body: {
+                      'recipient_id': chatUser!.firebaseUid,
+                      'caller_id': SessionManager.instance.getUser()?.firebaseUid,
+                      'caller_name': SessionManager.instance.getUser()?.fullname ?? SessionManager.instance.getUser()?.username ?? 'Someone',
+                      'is_video': false,
+                    }).then((res) {
+                      print('CALLPUSH: success status=${res.status} data=${res.data}');
+                    }).catchError((e) {
+                      print('CALLPUSH: ERROR $e');
+                    });
                   },
                 ),
                 ZegoSendCallInvitationButton(
@@ -125,6 +138,12 @@ class ChatTopProfileView extends StatelessWidget {
                   onPressed: (code, message, errorInvitees) {
                     Get.snackbar('Video call', 'code=$code msg=$message err=$errorInvitees',
                         duration: const Duration(seconds: 10));
+                    supabase.Supabase.instance.client.functions.invoke('send-call-push', body: {
+                      'recipient_id': chatUser!.firebaseUid,
+                      'caller_id': SessionManager.instance.getUser()?.firebaseUid,
+                      'caller_name': SessionManager.instance.getUser()?.fullname ?? SessionManager.instance.getUser()?.username ?? 'Someone',
+                      'is_video': true,
+                    });
                   },
                 ),
               ],

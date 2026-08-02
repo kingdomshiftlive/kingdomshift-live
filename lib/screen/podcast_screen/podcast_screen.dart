@@ -20,7 +20,6 @@ class PodcastScreen extends StatelessWidget {
           _buildHeader(controller),
           _buildFeatured(controller),
           _buildCategories(controller),
-          _buildLiveRow(),
           Expanded(child: _buildEpisodeList(controller)),
         ]),
       ),

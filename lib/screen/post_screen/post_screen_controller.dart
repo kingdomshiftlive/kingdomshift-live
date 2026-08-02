@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:shortzz/screen/home_screen/home_screen_controller.dart';
 import 'package:shortzz/screen/reels_screen/reels_screen_controller.dart';
 import 'package:shortzz/common/controller/base_controller.dart';
-import 'package:shortzz/common/extensions/common_extension.dart';
 import 'package:shortzz/common/functions/debounce_action.dart';
 import 'package:shortzz/common/manager/branch_io_manager.dart';
 import 'package:shortzz/common/manager/firebase_notification_manager.dart';
@@ -64,25 +63,25 @@ class PostScreenController extends BaseController {
   }
 
   Future<void> _likePostApi(Post? post) async {
-    StatusModel model =
-        await PostService.instance.likePost(postId: post?.id ?? -1);
-
-    if (model.status == true) {
-      if (post?.user?.notifyPostLike == 1 && myUser?.id != post?.userId) {
-        print(post?.user?.toJson());
+    if (post?.supabaseId == null) return;
+    final liked = await PostService.instance
+        .toggleVideoLike(videoId: post!.supabaseId!);
+    if (liked == true) {
+      if (post.user?.notifyPostLike == 1 && myUser?.id != post.userId) {
         FirebaseNotificationManager.instance.sendLocalisationNotification(
             LKey.activityLikedPost,
             type: NotificationType.post,
-            body: NotificationInfo(id: post?.id),
-            deviceType: post?.user?.device ?? 0,
-            deviceToken: post?.user?.deviceToken ?? '',
-            languageCode: post?.user?.appLanguage);
+            body: NotificationInfo(id: post.id),
+            deviceType: post.user?.device ?? 0,
+            deviceToken: post.user?.deviceToken ?? '',
+            languageCode: post.user?.appLanguage);
       }
     }
   }
 
   Future<void> _disLikePostApi(Post? post) async {
-    await PostService.instance.disLikePost(postId: post?.id?.convertInt ?? -1);
+    if (post?.supabaseId == null) return;
+    await PostService.instance.toggleVideoLike(videoId: post!.supabaseId!);
   }
 
   void onComment(
@@ -122,11 +121,13 @@ class PostScreenController extends BaseController {
   }
 
   Future<void> _savePostApi(Post? post) async {
-    await PostService.instance.savePost(postId: post?.id?.convertInt ?? -1);
+    if (post?.supabaseId == null) return;
+    await PostService.instance.toggleVideoSave(videoId: post!.supabaseId!);
   }
 
   Future<void> _unSavePostApi(Post? post) async {
-    await PostService.instance.unSavePost(postId: post?.id?.convertInt ?? -1);
+    if (post?.supabaseId == null) return;
+    await PostService.instance.toggleVideoSave(videoId: post!.supabaseId!);
   }
 
   void handlePinUnpinPost(int isPinned) {

@@ -1,0 +1,602 @@
+--------- beginning of main
+07-14 13:49:13.033  2223  2223 I CNSS    : cnss_open_log_file: directory /data/vendor/log/wifi/ created
+07-14 13:49:13.396  2966  5321 D BSOHChargingDataCollector:  BSOH Sys-servce ... 
+07-14 13:49:13.401  2966  5321 D BSOHChargingDataCollector: performBatteryWork++
+07-14 13:49:13.401  2966  5321 D BSOHChargingDataCollector: performBatteryWork battery com.android.server.bsoh.device.PrimeBattery@8f65284
+07-14 13:49:13.402  2966  5321 D BSOHChargingDataCollector: primeBatt readVoltage from sysFsBattVolt,  path : /sys/class/power_supply/battery/batt_voltage_now
+07-14 13:49:13.415  2966  5321 D BSOHChargingDataCollector: 0 	 BattData addData data : BattData { voltage:3.736, current:0.514062, soc:0.18, temperature:33.0, status:2, timestamp:1784072953415, voltage_chg:null}
+07-14 13:49:13.415  2966  5321 D BSOHChargingDataCollector: performBatteryWork--
+--------- beginning of system
+07-14 13:49:14.285  1156  1156 D io_stats: !@   8,0 r 107048671 2129503190 w 19103897 353909020 d 2869650 483564924 f 482694 2337404 iot 32962936 0 th 0 0 0 pt 0 inp 0 0 256982.633
+07-14 13:49:14.286  1156  1156 D io_stats: !@ Read_top(KB): chbox:googleapp(25188) 2692 ocessService0:1(3205) 1144 kworker/u16:3(9113) 44
+07-14 13:49:14.286  1156  1156 D io_stats: !@ Write_top(KB): kworker/u16:5(9563) 4492 vendor.samsung.(1814) 8
+07-14 13:49:14.396  2966  5321 D BSOHChargingDataCollector:  BSOH Sys-servce ... 
+07-14 13:49:14.396  2966  5321 D BSOHChargingDataCollector: performBatteryWork++
+07-14 13:49:14.396  2966  5321 D BSOHChargingDataCollector: performBatteryWork battery com.android.server.bsoh.device.PrimeBattery@8f65284
+07-14 13:49:14.397  2966  5321 D BSOHChargingDataCollector: primeBatt readVoltage from sysFsBattVolt,  path : /sys/class/power_supply/battery/batt_voltage_now
+07-14 13:49:14.411  2966  5321 D BSOHChargingDataCollector: 0 	 BattData addData data : BattData { voltage:3.735, current:0.471093, soc:0.18, temperature:33.0, status:2, timestamp:1784072954410, voltage_chg:null}
+07-14 13:49:14.411  2966  5321 D BSOHChargingDataCollector: performBatteryWork--
+07-14 13:49:15.088  1812 10868 I QC2Comp : [avcD_3595] Stats: Pending(0) i/p-done(0) Works: Q: 143/Done 144|Work-Rate: Q(0.0/s Avg=0.2/s) Done(0.000/s Avg=0.177/s)| Stream: 25.00fps 75.9Kbps
+07-14 13:49:15.089  1812 10868 I QC2Comp : [avcD_3595] Mem-usage:  [In-1D: 10 bufs 80.000 MB] [1D-6033: 15 bufs 0.234 MB] [2D-6034: 23 bufs 1.438 MB] | Total: 81.672 MB
+07-14 13:49:15.234  4375  5682 I EPDG-1 [WifiProfiler]: handleWifiRssiIntent, rssi=-60
+07-14 13:49:15.234  4375  5682 I EPDG-1 [WifiProfiler]: isProfiling, hash=257678396, started=true
+07-14 13:49:15.235  4375  5682 I EPDG-1 [LogMetrics]: set, type=WIFI_RSSI_LAST, value=-60
+07-14 13:49:15.235  4375  5682 I EPDG-1 [WifiProfiler]: isProfiling, hash=257678396, started=true
+07-14 13:49:15.235  4375  5682 I EPDG-1 [WifiProfiler]: Rssi : -60 highrange : -75 lowrange : -80 mIsRssiInHystersis : false
+07-14 13:49:15.235  4375  5682 I EPDG-1 [Subscription]: isEpdgAvailable, IwlanPsState=2/2
+07-14 13:49:15.235  4375  5682 I EPDG-1 [WifiProfiler]: isL2WHandoverProfilingRunning: returning: false
+07-14 13:49:15.235  4375  5682 I EPDG-1 [WifiProfiler]: No need to send L2WHandoverProfiling runnable
+07-14 13:49:15.235  4375  5682 I EPDG-1 [WifiProfiler]: getHandoverThresholdMet: value is: false
+07-14 13:49:15.398  2966  5321 D BSOHChargingDataCollector:  BSOH Sys-servce ... 
+07-14 13:49:15.398  2966  5321 D BSOHChargingDataCollector: performBatteryWork++
+07-14 13:49:15.398  2966  5321 D BSOHChargingDataCollector: performBatteryWork battery com.android.server.bsoh.device.PrimeBattery@8f65284
+07-14 13:49:15.399  2966  5321 D BSOHChargingDataCollector: primeBatt readVoltage from sysFsBattVolt,  path : /sys/class/power_supply/battery/batt_voltage_now
+07-14 13:49:15.413  2966  5321 D BSOHChargingDataCollector: 0 	 BattData addData data : BattData { voltage:3.737, current:0.501562, soc:0.18, temperature:33.0, status:2, timestamp:1784072955412, voltage_chg:null}
+07-14 13:49:15.413  2966  5321 D BSOHChargingDataCollector: performBatteryWork--
+07-14 13:49:15.518  2966  3380 D MARsPolicyManager: triggerAction called!
+07-14 13:49:15.518  2966  3380 I NSLocationMonitor: getGPSUsingApps() called
+07-14 13:49:15.519  5221 24048 I NSLocationManager_FLP: getGPSUsingApps, No change
+07-14 13:49:15.660  1812 10919 I QC2Comp : [avcD_3596] Stats: Pending(4) i/p-done(0) Works: Q: 26/Done 23|Work-Rate: Q(0.0/s Avg=0.0/s) Done(0.000/s Avg=0.028/s)| Stream: 25.00fps 192.7Kbps
+07-14 13:49:15.660  1812 10919 I QC2Comp : [avcD_3596] Mem-usage:  [In-1D: 5 bufs 40.000 MB] [1D-6035: 14 bufs 0.219 MB] [2D-6036: 20 bufs 1.875 MB] | Total: 42.094 MB
+07-14 13:49:16.287  1156  1156 D io_stats: !@   8,0 r 107048671 2129503190 w 19103913 353911916 d 2869650 483564924 f 482694 2337404 iot 32962960 0 th 0 0 0 pt 0 inp 0 0 256984.634
+07-14 13:49:16.399  2966  5321 D BSOHChargingDataCollector:  BSOH Sys-servce ... 
+07-14 13:49:16.399  2966  5321 D BSOHChargingDataCollector: performBatteryWork++
+07-14 13:49:16.399  2966  5321 D BSOHChargingDataCollector: performBatteryWork battery com.android.server.bsoh.device.PrimeBattery@8f65284
+07-14 13:49:16.400  2966  5321 D BSOHChargingDataCollector: primeBatt readVoltage from sysFsBattVolt,  path : /sys/class/power_supply/battery/batt_voltage_now
+07-14 13:49:16.414  2966  5321 D BSOHChargingDataCollector: 0 	 BattData addData data : BattData { voltage:3.736, current:0.485156, soc:0.18, temperature:33.0, status:2, timestamp:1784072956414, voltage_chg:null}
+07-14 13:49:16.414  2966  5321 D BSOHChargingDataCollector: performBatteryWork--
+07-14 13:49:17.400  2966  5321 D BSOHChargingDataCollector:  BSOH Sys-servce ... 
+07-14 13:49:17.401  2966  5321 D BSOHChargingDataCollector: performBatteryWork++
+07-14 13:49:17.401  2966  5321 D BSOHChargingDataCollector: performBatteryWork battery com.android.server.bsoh.device.PrimeBattery@8f65284
+07-14 13:49:17.401  2966  5321 D BSOHChargingDataCollector: primeBatt readVoltage from sysFsBattVolt,  path : /sys/class/power_supply/battery/batt_voltage_now
+07-14 13:49:17.415  2966  5321 D BSOHChargingDataCollector: 0 	 BattData addData data : BattData { voltage:3.729, current:0.389062, soc:0.18, temperature:33.0, status:2, timestamp:1784072957415, voltage_chg:null}
+07-14 13:49:17.416  2966  5321 D BSOHChargingDataCollector: performBatteryWork--
+07-14 13:49:18.023 25520 18674 I FusedLocation: (REDACTED) location delivery to %s blocked - too close
+07-14 13:49:18.026 25520 18674 I FusedLocation: (REDACTED) location delivery to %s blocked - too fast
+07-14 13:49:18.026 25520 18674 I FusedLocation: (REDACTED) location delivery to %s blocked - too close
+07-14 13:49:18.027 25520 18674 I FusedLocation: (REDACTED) location delivery to %s blocked - too close
+07-14 13:49:18.035 25520 25623 W PersonalSafety: Reject: No sufficient displacement. [CONTEXT service_id=310 ]
+07-14 13:49:18.037  4179  4338 D AppOpsPrivacyItemMonitor: showLocationSystemApps  AppOpItem(Op code=1, UID=10275, AttributionTag=com.google.android.gms.personalsafety, Package name=com.google.android.gms, Paused=false)
+07-14 13:49:18.049  2966  7380 D ActivityManager: Received BROADCAST intent 0x88ed322 Key{broadcastIntent pkg=com.samsung.android.mcfds intent=act=com.samsung.android.ce.sensor.location.PASSIVE_INTENT xflg=0x4 pkg=com.samsung.android.mcfds flags=0x2000000 u=0} requestCode=20247613 sent=0 from uid 1000
+07-14 13:49:18.055  2966  4403 D SLocation: PositionManager - Passive handleLocationChanged [F, A : 100.00, T : 1784072958007, ET : 341467261, h : 28/21]
+07-14 13:49:18.055  2966  4403 D SLocation: PositionManager - receive fused location
+07-14 13:49:18.055  2966  4403 W SLocation: GeopointGeofenceManger - refresh wifi to receive loc
+07-14 13:49:18.056 12575 12684 I Rubin   : [111] Z5.a.onLocationChanged(SourceFile:63) : Passive location updated
+07-14 13:49:18.056  2966  4403 D SLocation: GeopointGeofenceManger - Location reported : fix method = 14 / 100.0
+07-14 13:49:18.056  2966  4403 D SLocation: LocationBuffer - receivedLocation - op[interval(min 60000, max 300000), waitTime 36000000, numOfUpdates 20, minDistance 200.0]dist : 0.0 diffTime : 240110 accept time condition
+07-14 13:49:18.056  2966  4403 D SLocation: LocationBuffer - input buffer, size : 3
+07-14 13:49:18.056  2966  4403 D SLocation: BatchManager - received batch location buffered = true
+07-14 13:49:18.056  2966  4403 D SLocation: ARDistanceLibManager - request distance diff to AR Distance Library
+07-14 13:49:18.057  2966  4403 D SLocation: SLocationCoreSem - send to coreSem, packet length : 1 / [34]
+07-14 13:49:18.057  2966  4403 D SemContextLocationCoreAttribute: setAttribute() mode : 0 action : 23
+07-14 13:49:18.057  2966  4403 D SemContextService: lock : changeParameters
+07-14 13:49:18.057  2966  4403 D SemContext.CaeProvider.LocationCoreImpl: setAttribute() mode : 0 action : 23
+07-14 13:49:18.057  4179  4179 W View    : requestLayout() improperly called by android.widget.FrameLayout{4b5bfa1 V.E...... ......I. 0,0-1080,2316 #14} during layout: running second layout pass
+07-14 13:49:18.057  4179  4179 W View    : requestLayout() improperly called by com.android.systemui.qs.QSTouchAwareFrameLayout{94bd5c6 V.E...... ......I. 0,162-1080,2316 #7e0a0a4c com.android.systemui:id/qs_frame} during layout: running second layout pass
+07-14 13:49:18.058  2966  4403 W CAE     : setCAProperty(ContextAwareService.java:509) - [setProperty 01] Mutex is locked for SLOCATION_RUNNER
+07-14 13:49:18.059 12575 12685 I Rubin   : [112] com.samsung.android.rubin.inferenceengine.contextanalytics.engine.loggers.LocationLogger.flush(SourceFile:5) : flush
+07-14 13:49:18.059  2966  4403 I CAE     : setPropertyValue(SLocationRunner.java:116) - SLocationRunner setProperty header : 34, len : 1
+07-14 13:49:18.059  2966  3890 D SensorService: setSContextDataLocked ints length 2 , byte length 4
+07-14 13:49:18.059  2966  3890 D SensorService: setSContextDataLocked 223717c1
+07-14 13:49:18.063  1743  1743 I sensors-hal: inject_sensor_data:413, handle 1501 send inject
+07-14 13:49:18.063  1743  1743 I sensors-hal: sendContextData:286, sensor hal 4, (0xc1, 0x17, 0x37, 0x22)
+07-14 13:49:18.063  1743  1743 E sensors-hal: sendContextData:133, slocationcore h 193 m 23 s 55
+07-14 13:49:18.063  1743  1743 I sensors-hal: sendUserData:119, slocationcore sendUserData
+07-14 13:49:18.063  1743  1743 E sensors-hal: create_send_context_data:64, slocationcore create_send_context_data
+07-14 13:49:18.064  1743  1743 I sensors-hal: send_context_data:707, slocationcore, 4986366670857974562, 1320970896291267344, msgid:700, 1
+07-14 13:49:18.064  1743  1743 I sensors-hal: send_sync_sensor_request:521, send sync request
+07-14 13:49:18.064  1743  1743 I sensors-hal: send_sync_sensor_request:531, send_sync_sensor_request before send_request for slocationcore with SUID low=4986366670857974562 high=1320970896291267344
+07-14 13:49:18.064  1743  1743 I sensors-hal: send_request:330, send_request start this=0xb4000073fe85ba00x 
+07-14 13:49:18.064  1743  1743 I sensors-hal: send_request:415, send_request completed, this=0xb4000073fe85ba00x
+07-14 13:49:18.064  1743  1743 I sensors-hal: send_sync_sensor_request:552, wait for notification of response
+07-14 13:49:18.065  1810  1810 E ANDR-PERF-MPCTL: ANDR-PERF-MPCTL: internal_perf_lock_acq_verification() 385: Perflock Submit request limit reached.
+07-14 13:49:18.065  1743  3886 I sensors-hal: ssc_conn_resp_cb:947, resp_value = 0 for slocationcore 
+07-14 13:49:18.065  1743  3886 I sensors-hal: handle_resp_cb:517, handle_resp_cb Ended this=0xb4000073fe85ba00x
+07-14 13:49:18.065  1743  1743 I sensors-hal: send_sync_sensor_request:558, takes 1 ms to receive the response with 0
+07-14 13:49:18.065  1743  3886 I sensors-hal: ssc_conn_event_cb:907, event[0] sensor:slocationcore  Wakeup, msg_id=1025, ts=6556265994160
+07-14 13:49:18.065  1743  3886 E sensors-hal: handle_sns_client_event:78, slocationcore_event: msgid:1025
+07-14 13:49:18.066  1743  3886 I sensors-hal: ssc_conn_event_cb:907, event[0] sensor:slocationcore  Wakeup, msg_id=1025, ts=6556265994600
+07-14 13:49:18.066  1743  3886 E sensors-hal: handle_sns_client_event:78, slocationcore_event: msgid:1025
+07-14 13:49:18.066  2966  4403 W CAE     : setCAProperty(ContextAwareService.java:515) - [setProperty 02] Mutex is unlocked for SLOCATION_RUNNER
+07-14 13:49:18.066  2966  4403 D SemContextService: unlock : changeParameters
+07-14 13:49:18.067  2966  4403 D SemContextManager:   .changeParameters : listener = X.k@e621f6, service=SLocation Core
+07-14 13:49:18.067  2966  4403 D SLocation: SLocationCoreSem - send to coreSem, packet length : 23 / [2, 11, 187, 176, 188, 163, 136, 15, 140, 0, 0, 0, 100, 2, 0, 0, 1, 159, 99, 8, 240, 55, 0]
+07-14 13:49:18.067  2966  4403 D SemContextLocationCoreAttribute: setAttribute() mode : 0 action : 23
+07-14 13:49:18.067  2966  4403 D SemContextService: lock : changeParameters
+07-14 13:49:18.067  2966  4403 D SemContext.CaeProvider.LocationCoreImpl: setAttribute() mode : 0 action : 23
+07-14 13:49:18.067  2966  4403 W CAE     : setCAProperty(ContextAwareService.java:509) - [setProperty 01] Mutex is locked for SLOCATION_RUNNER
+07-14 13:49:18.067  2966  4403 I CAE     : setPropertyValue(SLocationRunner.java:116) - SLocationRunner setProperty header : 2, len : 23
+07-14 13:49:18.067  4179  4179 D LightBarController: SKIP updateStatus (white icon) dreaming:true, keyguardVisible:true, goingToSleep:false
+07-14 13:49:18.068  4179  4179 D AiAgentEffect: onPrivacyItemsChanged privacyItems.size = 1
+07-14 13:49:18.068  4179  4179 D AiAgentEffect: onPrivacyItemsChanged privacyItems isEmpty or found item is null
+07-14 13:49:18.069  4179  4179 D SecKeyguardClockRepositoryImpl: setClockSize LARGE
+07-14 13:49:18.070  4179  4179 I SecKeyguardClockPositionAlgorithm: prepareClockContainerHeightChanging:
+07-14 13:49:18.070  4179  4179 I FaceWidget_updatePosition: updatePosition: faceWidgetPosition = Point(0, 239)
+07-14 13:49:18.070  4179  4179 D FaceWidgetPagesController: refreshViews() reason = CLOCK_POSITION_CHANGED, force = false
+07-14 13:49:18.070  2966  3890 D SensorService: setSContextDataLocked ints length 3 , byte length 5
+07-14 13:49:18.070  2966  3890 D SensorService: setSContextDataLocked 31170ec1
+07-14 13:49:18.071  1743  1743 I sensors-hal: inject_sensor_data:413, handle 1501 send inject
+07-14 13:49:18.071  1743  1743 I sensors-hal: sendContextData:286, sensor hal 5, (0xc1, 0xe, 0x17, 0x31)
+07-14 13:49:18.071  1743  1743 I sensors-hal: sendContextData:230, activities 5 c1, 1
+07-14 13:49:18.071  1743  1743 I sensors-hal: sendUserData:251, Activities cmd 0xc1 0xe
+07-14 13:49:18.071  1743  1743 I sensors-hal: sendUserData:265, Activities system time h 23 m 49 s 18
+07-14 13:49:18.071  1743  1743 I sensors-hal: create_send_context_data:80, sending create_send_context_data
+07-14 13:49:18.071  1743  1743 I sensors-hal: send_context_data:707, activities, 4914309220830019584, 1320970896291267344, msgid:700, 1
+07-14 13:49:18.071  1743  1743 I sensors-hal: send_sync_sensor_request:521, send sync request
+07-14 13:49:18.071  1743  1743 I sensors-hal: send_sync_sensor_request:531, send_sync_sensor_request before send_request for activities with SUID low=4914309220830019584 high=1320970896291267344
+07-14 13:49:18.071  1743  1743 I sensors-hal: send_request:330, send_request start this=0xb4000073fe85ba00x 
+07-14 13:49:18.071  4179  4179 I PluginFaceWidgetManager: isEditMode = false
+07-14 13:49:18.071  4179  4179 I NowBarItemManager: getVisibleList isScreenTurnedOn = false / aodShowState false shouldControlScreenOff false isLockTypeNone false visibleList size = 0 / expandedItem null
+07-14 13:49:18.071  1743  1743 I sensors-hal: send_request:415, send_request completed, this=0xb4000073fe85ba00x
+07-14 13:49:18.071  1743  1743 I sensors-hal: send_sync_sensor_request:552, wait for notification of response
+07-14 13:49:18.071  4179  4179 D SecKeyguardClockRepositoryImpl: setClockSize LARGE
+07-14 13:49:18.071  4179  4179 I SecKeyguardClockPositionAlgorithm: prepareClockContainerHeightChanging:
+07-14 13:49:18.071  1791 20575 W SDM     : DisplayBase::CommitOrPrepare: Prepare failed: 3
+07-14 13:49:18.072  1791 20575 I SDM     : DisplayBase::CommitOrPrepare: Clearing fences on input layers on display 66-0
+07-14 13:49:18.072  1743  3886 I sensors-hal: ssc_conn_resp_cb:947, resp_value = 0 for activities 
+07-14 13:49:18.072  4179  4179 I FaceWidget_updatePosition: updatePosition: faceWidgetPosition = Point(0, 239)
+07-14 13:49:18.072  1743  3886 I sensors-hal: handle_resp_cb:517, handle_resp_cb Ended this=0xb4000073fe85ba00x
+07-14 13:49:18.072  4179  4179 D FaceWidgetPagesController: refreshViews() reason = CLOCK_POSITION_CHANGED, force = false
+07-14 13:49:18.072  1899  1899 E SurfaceFlinger: [StatusBar$_4179#92] Invalid device requested composition type change: Client (1) --> Device (2)
+07-14 13:49:18.072  1899  1899 E SurfaceFlinger: [NotificationShade$_4179#42951] Invalid device requested composition type change: Client (1) --> Device (2)
+07-14 13:49:18.072  4179  4179 I PluginFaceWidgetManager: isEditMode = false
+07-14 13:49:18.072  1899  1899 E SurfaceFlinger: trackPendingFrame: Invalid present fence
+07-14 13:49:18.072  4179  4179 I NowBarItemManager: getVisibleList isScreenTurnedOn = false / aodShowState false shouldControlScreenOff false isLockTypeNone false visibleList size = 0 / expandedItem null
+07-14 13:49:18.072  1743  1743 I sensors-hal: send_sync_sensor_request:558, takes 1 ms to receive the response with 0
+07-14 13:49:18.072  1743  1743 I sensors-hal: sendContextData:95, common_info 5
+07-14 13:49:18.072  4179  4179 D SecKeyguardClockRepositoryImpl: setClockSize LARGE
+07-14 13:49:18.072  1743  1743 I sensors-hal: sendUserData:118, CommonInfo 0xc1 0xe 0x17 0x31
+07-14 13:49:18.072  1743  1743 I sensors-hal: create_send_context_data:68, sending create_send_context_data
+07-14 13:49:18.072  1743  1743 I sensors-hal: send_context_data:707, common_info, 4914309147815575552, 1320970896291267344, msgid:700, 1
+07-14 13:49:18.072  1743  1743 I sensors-hal: send_sync_sensor_request:521, send sync request
+07-14 13:49:18.072  1743  1743 I sensors-hal: send_sync_sensor_request:531, send_sync_sensor_request before send_request for common_info with SUID low=4914309147815575552 high=1320970896291267344
+07-14 13:49:18.072  1743  1743 I sensors-hal: send_request:330, send_request start this=0xb4000073fe85ba00x 
+07-14 13:49:18.072  1743  1743 I sensors-hal: send_request:415, send_request completed, this=0xb4000073fe85ba00x
+07-14 13:49:18.072  1743  1743 I sensors-hal: send_sync_sensor_request:552, wait for notification of response
+07-14 13:49:18.072  1743  3886 I sensors-hal: ssc_conn_resp_cb:947, resp_value = 0 for common_info 
+07-14 13:49:18.072  4179  4179 I SecKeyguardClockPositionAlgorithm: prepareClockContainerHeightChanging:
+07-14 13:49:18.073  1743  3886 I sensors-hal: handle_resp_cb:517, handle_resp_cb Ended this=0xb4000073fe85ba00x
+07-14 13:49:18.073  1743  1743 I sensors-hal: send_sync_sensor_request:558, takes 0 ms to receive the response with 0
+07-14 13:49:18.073  4179  4179 I FaceWidget_updatePosition: updatePosition: faceWidgetPosition = Point(0, 239)
+07-14 13:49:18.073  4179  4179 D FaceWidgetPagesController: refreshViews() reason = CLOCK_POSITION_CHANGED, force = false
+07-14 13:49:18.073  4179  4179 I PluginFaceWidgetManager: isEditMode = false
+07-14 13:49:18.073  4179  4179 I NowBarItemManager: getVisibleList isScreenTurnedOn = false / aodShowState false shouldControlScreenOff false isLockTypeNone false visibleList size = 0 / expandedItem null
+07-14 13:49:18.073  4179  4179 D SecKeyguardClockRepositoryImpl: setClockSize LARGE
+07-14 13:49:18.073  2966  3884 D CAE     : onGetSensorHubData(SensorHubParserProvider.java:92) - onGetSensorHubData Event [event buffer len :38], AP_SLEEP
+07-14 13:49:18.074  2966  3884 I CAE     : parse(SensorHubParserProvider.java:188) - buffer size = 38
+07-14 13:49:18.074  4179  4179 I SecKeyguardClockPositionAlgorithm: prepareClockContainerHeightChanging:
+07-14 13:49:18.074  2966  3884 I CAE     : parse(SensorHubParserProvider.java:199) - 1, 1, 55, 0, 33, 33, 0, 0, 0, 0, 0, 0, 1, -97, 99, 2, -35, -128, 11, -69, -82, -64, -93, -120, 16, 0, 0, 0, 0, 3, 5, 24, -26, -80, 0, 0, 0, 0,
+07-14 13:49:18.074  2966  3884 I CAE     : parse(SLocationRunner.java:88) - SLocationRunner parse start : 3
+07-14 13:49:18.074  4179  4179 I FaceWidget_updatePosition: updatePosition: faceWidgetPosition = Point(0, 239)
+07-14 13:49:18.074  4179  4179 D FaceWidgetPagesController: refreshViews() reason = CLOCK_POSITION_CHANGED, force = false
+07-14 13:49:18.074  2966  3884 D CAE     : display(ContextProvider.java:375) - ================= SLOCATION_RUNNER =================
+07-14 13:49:18.074  2966  3884 I CAE     : display(ContextProvider.java:391) - ExtraDataArray=[1, 1, 55, 0, 33, 33, 0, 0, 0, 0, 0, 0, 1, -97, 99, 2, -35, -128, 11, -69, -82, -64, -93, -120, 16, 0, 0, 0, 0, 3, 5, 24, -26, -80, 0, 0, 0, 0]
+07-14 13:49:18.074  4179  4179 I PluginFaceWidgetManager: isEditMode = false
+07-14 13:49:18.074  4179  4179 I NowBarItemManager: getVisibleList isScreenTurnedOn = false / aodShowState false shouldControlScreenOff false isLockTypeNone false visibleList size = 0 / expandedItem null
+07-14 13:49:18.074  2966  3884 I CAE     : parse(SLocationRunner.java:96) - SLocationRunner parse end:38
+07-14 13:49:18.074  2966  3881 D SemContextService: Service.updateContext() : service = SLocation Core
+07-14 13:49:18.075  4179  4179 I FaceWidgetClockPage: updateClockRect: skip in screen off state
+07-14 13:49:18.075  2966  2966 D SemContextManager: onSemContextChanged() : event = SLocation Core
+07-14 13:49:18.075  2966  2966 D SLocation: SensorHubWrapper - SemContextChanged type = 47, packet received
+07-14 13:49:18.075  2966  3890 D SensorService: setSContextDataLocked ints length 8 , byte length 26
+07-14 13:49:18.075  2966  3890 D SensorService: setSContextDataLocked 23717c1
+07-14 13:49:18.075  1743  1743 I sensors-hal: inject_sensor_data:413, handle 1501 send inject
+07-14 13:49:18.075  1743  1743 I sensors-hal: sendContextData:286, sensor hal 26, (0xc1, 0x17, 0x37, 0x2)
+07-14 13:49:18.075  1743  1743 E sensors-hal: sendContextData:133, slocationcore h 193 m 23 s 55
+07-14 13:49:18.075  1743  1743 I sensors-hal: sendUserData:119, slocationcore sendUserData
+07-14 13:49:18.075  1743  1743 E sensors-hal: create_send_context_data:64, slocationcore create_send_context_data
+07-14 13:49:18.075  1743  1743 I sensors-hal: send_context_data:707, slocationcore, 4986366670857974562, 1320970896291267344, msgid:700, 1
+07-14 13:49:18.075  1743  1743 I sensors-hal: send_sync_sensor_request:521, send sync request
+07-14 13:49:18.075  1743  1743 I sensors-hal: send_sync_sensor_request:531, send_sync_sensor_request before send_request for slocationcore with SUID low=4986366670857974562 high=1320970896291267344
+07-14 13:49:18.075  1743  1743 I sensors-hal: send_request:330, send_request start this=0xb4000073fe85ba00x 
+07-14 13:49:18.075  1743  1743 I sensors-hal: send_request:415, send_request completed, this=0xb4000073fe85ba00x
+07-14 13:49:18.075  1743  1743 I sensors-hal: send_sync_sensor_request:552, wait for notification of response
+07-14 13:49:18.075  5221  5366 I GmsPassiveListener_FLP: onGmsLocationChanged, provider=fused / speed=0.0 / time=1784072958007 / elapsed=341467261924940
+07-14 13:49:18.076  1743  3886 I sensors-hal: ssc_conn_resp_cb:947, resp_value = 0 for slocationcore 
+07-14 13:49:18.076  1743  3886 I sensors-hal: handle_resp_cb:517, handle_resp_cb Ended this=0xb4000073fe85ba00x
+07-14 13:49:18.076  1743  3886 I sensors-hal: ssc_conn_event_cb:907, event[0] sensor:slocationcore  Wakeup, msg_id=1025, ts=6556266213246
+07-14 13:49:18.076  1743  3886 E sensors-hal: handle_sns_client_event:78, slocationcore_event: msgid:1025
+07-14 13:49:18.077  1743  1743 I sensors-hal: send_sync_sensor_request:558, takes 1 ms to receive the response with 0
+07-14 13:49:18.078 15845 15860 I [CE]_ContextEngineReceiver: onReceive - action: com.samsung.android.ce.sensor.location.PASSIVE_INTENT
+07-14 13:49:18.079  2966  3890 D SensorService: setSContextDataLocked ints length 3 , byte length 5
+07-14 13:49:18.079  2966  3890 D SensorService: setSContextDataLocked 31170ec1
+07-14 13:49:18.079  2966  4403 W CAE     : setCAProperty(ContextAwareService.java:515) - [setProperty 02] Mutex is unlocked for SLOCATION_RUNNER
+07-14 13:49:18.079  2966  4403 D SemContextService: unlock : changeParameters
+07-14 13:49:18.079  2966  4403 D SemContextManager:   .changeParameters : listener = X.k@e621f6, service=SLocation Core
+07-14 13:49:18.080  2966  4403 D SLocation: ReceiverPair - ignore direction of location due to wifi, id = 28, reason = 400
+07-14 13:49:18.080  2966  4403 D SLocation: ReceiverPair - ignore direction of location due to wifi, id = 36, reason = 400
+07-14 13:49:18.080 15845 15860 I [CE]_SLocationManager: onReceive - [Passive Location] 20247613
+07-14 13:49:18.081  2966  4403 D SLocation: GeofenceCoreManager - received Extra Data from core, len : 33
+07-14 13:49:18.081  2966  4403 D SLocation: ARDistanceGetARDistance - convertSensorHubTimeToElapsedTime 341069257
+07-14 13:49:18.081  2966  4403 D SLocation: CommonCoreManager - received Extra Data from core, len : 33
+07-14 13:49:18.081  2966  4403 W Settings: Setting airplane_mode_on has moved from android.provider.Settings.System to android.provider.Settings.Global, returning read-only value.
+07-14 13:49:18.083  2966  4403 E AppOps  : Bad call made by uid 1001. Package "com.android.phone" does not belong to uid 1000.
+07-14 13:49:18.083  2966  4403 E AppOps  : Cannot noteOperation: non-application UID 1000
+07-14 13:49:18.084  1743  1743 I sensors-hal: inject_sensor_data:413, handle 1501 send inject
+07-14 13:49:18.084  1743  1743 I sensors-hal: sendContextData:286, sensor hal 5, (0xc1, 0xe, 0x17, 0x31)
+07-14 13:49:18.084  1743  1743 I sensors-hal: sendContextData:230, activities 5 c1, 1
+07-14 13:49:18.084  1743  1743 I sensors-hal: sendUserData:251, Activities cmd 0xc1 0xe
+07-14 13:49:18.084  1743  1743 I sensors-hal: sendUserData:265, Activities system time h 23 m 49 s 18
+07-14 13:49:18.084  1743  1743 I sensors-hal: create_send_context_data:80, sending create_send_context_data
+07-14 13:49:18.084  1743  1743 I sensors-hal: send_context_data:707, activities, 4914309220830019584, 1320970896291267344, msgid:700, 1
+07-14 13:49:18.084  1743  1743 I sensors-hal: send_sync_sensor_request:521, send sync request
+07-14 13:49:18.084  1743  1743 I sensors-hal: send_sync_sensor_request:531, send_sync_sensor_request before send_request for activities with SUID low=4914309220830019584 high=1320970896291267344
+07-14 13:49:18.084  1743  1743 I sensors-hal: send_request:330, send_request start this=0xb4000073fe85ba00x 
+07-14 13:49:18.084  1743  1743 I sensors-hal: send_request:415, send_request completed, this=0xb4000073fe85ba00x
+07-14 13:49:18.084  1743  1743 I sensors-hal: send_sync_sensor_request:552, wait for notification of response
+07-14 13:49:18.085  1743  3886 I sensors-hal: ssc_conn_resp_cb:947, resp_value = 0 for activities 
+07-14 13:49:18.085  1743  3886 I sensors-hal: handle_resp_cb:517, handle_resp_cb Ended this=0xb4000073fe85ba00x
+07-14 13:49:18.085  1743  1743 I sensors-hal: send_sync_sensor_request:558, takes 0 ms to receive the response with 0
+07-14 13:49:18.085  1743  1743 I sensors-hal: sendContextData:95, common_info 5
+07-14 13:49:18.085  1743  1743 I sensors-hal: sendUserData:118, CommonInfo 0xc1 0xe 0x17 0x31
+07-14 13:49:18.085  1743  1743 I sensors-hal: create_send_context_data:68, sending create_send_context_data
+07-14 13:49:18.085  1743  1743 I sensors-hal: send_context_data:707, common_info, 4914309147815575552, 1320970896291267344, msgid:700, 1
+07-14 13:49:18.085  1743  1743 I sensors-hal: send_sync_sensor_request:521, send sync request
+07-14 13:49:18.085  1743  1743 I sensors-hal: send_sync_sensor_request:531, send_sync_sensor_request before send_request for common_info with SUID low=4914309147815575552 high=1320970896291267344
+07-14 13:49:18.085  1743  1743 I sensors-hal: send_request:330, send_request start this=0xb4000073fe85ba00x 
+07-14 13:49:18.085  1743  1743 I sensors-hal: send_request:415, send_request completed, this=0xb4000073fe85ba00x
+07-14 13:49:18.085  1743  1743 I sensors-hal: send_sync_sensor_request:552, wait for notification of response
+07-14 13:49:18.086  1743  3886 I sensors-hal: ssc_conn_resp_cb:947, resp_value = 0 for common_info 
+07-14 13:49:18.086  2966  4403 W Settings: Setting airplane_mode_on has moved from android.provider.Settings.System to android.provider.Settings.Global, returning read-only value.
+07-14 13:49:18.086  1743  3886 I sensors-hal: handle_resp_cb:517, handle_resp_cb Ended this=0xb4000073fe85ba00x
+07-14 13:49:18.086  1743  1743 I sensors-hal: send_sync_sensor_request:558, takes 0 ms to receive the response with 0
+07-14 13:49:18.086  2966  4403 W Settings: Setting airplane_mode_on has moved from android.provider.Settings.System to android.provider.Settings.Global, returning read-only value.
+07-14 13:49:18.086  2966  4403 D SLocation: FilteredLastLocation - notify all last locations, loc : 3
+07-14 13:49:18.087  2966  3884 D CAE     : onGetSensorHubData(SensorHubParserProvider.java:92) - onGetSensorHubData Event [event buffer len :10], AP_SLEEP
+07-14 13:49:18.087  2966  3884 I CAE     : parse(SensorHubParserProvider.java:188) - buffer size = 10
+07-14 13:49:18.087  2966  3884 I CAE     : parse(SensorHubParserProvider.java:199) - 1, 1, 55, 0, 5, 2, 34, 0, 0, 0,
+07-14 13:49:18.087  2966  3884 I CAE     : parse(SLocationRunner.java:88) - SLocationRunner parse start : 3
+07-14 13:49:18.087  2966  3884 D CAE     : display(ContextProvider.java:375) - ================= SLOCATION_RUNNER =================
+07-14 13:49:18.087  2966  3884 I CAE     : display(ContextProvider.java:391) - ExtraDataArray=[1, 1, 55, 0, 5, 2, 34, 0, 0, 0]
+07-14 13:49:18.087  2966  3884 I CAE     : parse(SLocationRunner.java:96) - SLocationRunner parse end:10
+07-14 13:49:18.087  2966  3881 D SemContextService: Service.updateContext() : service = SLocation Core
+07-14 13:49:18.088  2966  3890 D SensorService: setSContextDataLocked ints length 3 , byte length 5
+07-14 13:49:18.088  2966  2966 D SemContextManager: onSemContextChanged() : event = SLocation Core
+07-14 13:49:18.088  2966  3890 D SensorService: setSContextDataLocked 31170ec1
+07-14 13:49:18.088  2966  2966 D SLocation: SensorHubWrapper - SemContextChanged type = 47, packet received
+07-14 13:49:18.088  1743  1743 I sensors-hal: inject_sensor_data:413, handle 1501 send inject
+07-14 13:49:18.088  1743  1743 I sensors-hal: sendContextData:286, sensor hal 5, (0xc1, 0xe, 0x17, 0x31)
+07-14 13:49:18.088  1743  1743 I sensors-hal: sendContextData:230, activities 5 c1, 1
+07-14 13:49:18.088  2966  4403 D SLocation: GeofenceCoreManager - received Extra Data from core, len : 5
+07-14 13:49:18.088  1743  1743 I sensors-hal: sendUserData:251, Activities cmd 0xc1 0xe
+07-14 13:49:18.088  1743  1743 I sensors-hal: sendUserData:265, Activities system time h 23 m 49 s 18
+07-14 13:49:18.088  2966  4403 D SLocation: GeofenceCoreManager - handleCommandCallback - UNKNOWN_CALLBACK 34 SUCCESS
+07-14 13:49:18.088  1743  1743 I sensors-hal: create_send_context_data:80, sending create_send_context_data
+07-14 13:49:18.088  2966  4403 D SLocation: ARDistanceLibManager - command callback received - CURRENT_LOCATION_REQUEST_DISTANCE ERROR CODE : ERROR_NONE
+07-14 13:49:18.088  1743  1743 I sensors-hal: send_context_data:707, activities, 4914309220830019584, 1320970896291267344, msgid:700, 1
+07-14 13:49:18.088  1743  1743 I sensors-hal: send_sync_sensor_request:521, send sync request
+07-14 13:49:18.088  1743  1743 I sensors-hal: send_sync_sensor_request:531, send_sync_sensor_request before send_request for activities with SUID low=4914309220830019584 high=1320970896291267344
+07-14 13:49:18.088  1743  1743 I sensors-hal: send_request:330, send_request start this=0xb4000073fe85ba00x 
+07-14 13:49:18.088  2966  4403 D SLocation: CommonCoreManager - received Extra Data from core, len : 5
+07-14 13:49:18.088  1743  1743 I sensors-hal: send_request:415, send_request completed, this=0xb4000073fe85ba00x
+07-14 13:49:18.088  1743  1743 I sensors-hal: send_sync_sensor_request:552, wait for notification of response
+07-14 13:49:18.089  1743  3886 I sensors-hal: ssc_conn_resp_cb:947, resp_value = 0 for activities 
+07-14 13:49:18.089  1743  3886 I sensors-hal: handle_resp_cb:517, handle_resp_cb Ended this=0xb4000073fe85ba00x
+07-14 13:49:18.089  1743  1743 I sensors-hal: send_sync_sensor_request:558, takes 0 ms to receive the response with 0
+07-14 13:49:18.089  1743  1743 I sensors-hal: sendContextData:95, common_info 5
+07-14 13:49:18.089  1743  1743 I sensors-hal: sendUserData:118, CommonInfo 0xc1 0xe 0x17 0x31
+07-14 13:49:18.089  1743  1743 I sensors-hal: create_send_context_data:68, sending create_send_context_data
+07-14 13:49:18.089  1743  1743 I sensors-hal: send_context_data:707, common_info, 4914309147815575552, 1320970896291267344, msgid:700, 1
+07-14 13:49:18.089  1743  1743 I sensors-hal: send_sync_sensor_request:521, send sync request
+07-14 13:49:18.089  1743  1743 I sensors-hal: send_sync_sensor_request:531, send_sync_sensor_request before send_request for common_info with SUID low=4914309147815575552 high=1320970896291267344
+07-14 13:49:18.089  1743  1743 I sensors-hal: send_request:330, send_request start this=0xb4000073fe85ba00x 
+07-14 13:49:18.089  1743  1743 I sensors-hal: send_request:415, send_request completed, this=0xb4000073fe85ba00x
+07-14 13:49:18.089  1743  1743 I sensors-hal: send_sync_sensor_request:552, wait for notification of response
+07-14 13:49:18.089  1743  3886 I sensors-hal: ssc_conn_resp_cb:947, resp_value = 0 for common_info 
+07-14 13:49:18.089  1743  3886 I sensors-hal: handle_resp_cb:517, handle_resp_cb Ended this=0xb4000073fe85ba00x
+07-14 13:49:18.089  1743  1743 I sensors-hal: send_sync_sensor_request:558, takes 0 ms to receive the response with 0
+07-14 13:49:18.090  2966  7330 W ProcessStats: Tracking association SourceState{13ce513 com.kingdomshift.live/10831 Top #998878} whose proc state 1 is better than process ProcessState{f335c4c com.google.android.adservices.api/10320 pkg=com.google.android.adservices.api} proc state 2 (7 skipped)
+07-14 13:49:18.090  2966  3884 D CAE     : onGetSensorHubData(SensorHubParserProvider.java:92) - onGetSensorHubData Event [event buffer len :10], AP_SLEEP
+07-14 13:49:18.090  2966  3884 I CAE     : parse(SensorHubParserProvider.java:188) - buffer size = 10
+07-14 13:49:18.090  2966  3884 I CAE     : parse(SensorHubParserProvider.java:199) - 1, 1, 55, 0, 5, 2, 2, 0, 0, 0,
+07-14 13:49:18.090  2966  3884 I CAE     : parse(SLocationRunner.java:88) - SLocationRunner parse start : 3
+07-14 13:49:18.090  2966  3884 D CAE     : display(ContextProvider.java:375) - ================= SLOCATION_RUNNER =================
+07-14 13:49:18.091  2966  3884 I CAE     : display(ContextProvider.java:391) - ExtraDataArray=[1, 1, 55, 0, 5, 2, 2, 0, 0, 0]
+07-14 13:49:18.091  2966  7330 D ActivityManager: Received SERVICE intent 0xa4732df Key{startService pkg=com.google.android.gms/current_semantic_location intent=act=com.google.android.gms.semanticlocation.ACTION_LOCATION xflg=0x4 cmp=com.google.android.gms/.semanticlocation.service.SemanticLocationService flags=0x2000000 u=0} requestCode=0 from uid 10275
+07-14 13:49:18.091  2966  3884 I CAE     : parse(SLocationRunner.java:96) - SLocationRunner parse end:10
+07-14 13:49:18.091  2966  3881 D SemContextService: Service.updateContext() : service = SLocation Core
+07-14 13:49:18.091  2966  2966 D SemContextManager: onSemContextChanged() : event = SLocation Core
+07-14 13:49:18.091  2966  2966 D SLocation: SensorHubWrapper - SemContextChanged type = 47, packet received
+07-14 13:49:18.091  2966  4403 D SLocation: GeofenceCoreManager - received Extra Data from core, len : 5
+07-14 13:49:18.091  2966  4403 D SLocation: GeofenceCoreManager - handleCommandCallback - UNKNOWN_CALLBACK 2 SUCCESS
+07-14 13:49:18.091  2966  4403 D SLocation: CommonCoreManager - received Extra Data from core, len : 5
+07-14 13:49:18.091  2966  4403 D SLocation: CommonCoreManager - handleCommandCallback - FUNC_TYPE : SET_LOCATION  ERROR_CODE : ERROR_NONE
+07-14 13:49:18.098 15845 15860 I [CE]_PrimaryLocationManager: checkInStayDurationNow - In CSD now? Y / In ASD now? Y
+07-14 13:49:18.098 15845 15860 I [CE]_PrimaryLocationManager: onNewLocation - State: 0 / 0
+07-14 13:49:18.117 15845 15860 I [CE]_PrimaryAreaManager: onNewlocation - State: 0 / 0
+07-14 13:49:18.119 15845 15860 I [CE]_ActivityDataManagerImpl: loadState - StayInfo loaded
+07-14 13:49:18.134  4179  4338 D AppOpsPrivacyItemMonitor: showLocationSystemApps  AppOpItem(Op code=1, UID=10275, AttributionTag=com.google.android.gms.personalsafety, Package name=com.google.android.gms, Paused=false)false)
+07-14 13:49:18.135  4179  4338 D AppOpsPrivacyItemMonitor: showLocationSystemApps  AppOpItem(Op code=1, UID=5013, AttributionTag=null, Package name=com.sec.location.nsflp2, Paused=false)
+07-14 13:49:18.139  2966  3984 E AppOps  : Bad call made by uid 1001. Package "com.android.phone" does not belong to uid 10101.
+07-14 13:49:18.140  4179  4338 D AppOpsPrivacyItemMonitor: showLocationSystemApps  AppOpItem(Op code=1, UID=10114, AttributionTag=null, Package name=com.samsung.android.rubin.app, Paused=false)
+07-14 13:49:18.142  2966  3984 E AppOps  : Cannot noteOperation
+07-14 13:49:18.142  2966  3984 E AppOps  : java.lang.SecurityException: Specified package "com.android.phone" under uid 10101 but it is not
+07-14 13:49:18.142  2966  3984 E AppOps  : 	at com.android.server.appop.AppOpsService.verifyAndGetBypass(qb/110832274 dd5cbdf62120b6b22f0d65ddbeb6268f3e039baa5d24047f68eea34e1a8ea8ac:63)
+07-14 13:49:18.142  2966  3984 E AppOps  : 	at com.android.server.appop.AppOpsService.noteOperationUnchecked(qb/110832274 dd5cbdf62120b6b22f0d65ddbeb6268f3e039baa5d24047f68eea34e1a8ea8ac:68)
+07-14 13:49:18.142  2966  3984 E AppOps  : 	at com.android.server.appop.AppOpsService.-$$Nest$mnoteOperationImpl(qb/110832274 dd5cbdf62120b6b22f0d65ddbeb6268f3e039baa5d24047f68eea34e1a8ea8ac:89)
+07-14 13:49:18.142  2966  3984 E AppOps  : 	at com.android.server.appop.AppOpsService$CheckOpsDelegateDispatcher$$ExternalSyntheticLambda4.apply(qb/110832274 dd5cbdf62120b6b22f0d65ddbeb6268f3e039baa5d24047f68eea34e1a8ea8ac:65)
+07-14 13:49:18.142  2966  3984 E AppOps  : 	at com.android.server.policy.AppOpsPolicy.noteOperation(qb/110832274 dd5cbdf62120b6b22f0d65ddbeb6268f3e039baa5d24047f68eea34e1a8ea8ac:35)
+07-14 13:49:18.142  2966  3984 E AppOps  : 	at com.android.server.appop.AppOpsService$CheckOpsDelegateDispatcher.noteOperation(qb/110832274 dd5cbdf62120b6b22f0d65ddbeb6268f3e039baa5d24047f68eea34e1a8ea8ac:66)
+07-14 13:49:18.142  2966  3984 E AppOps  : 	at com.android.server.appop.AppOpsService.noteOperation(qb/110832274 dd5cbdf62120b6b22f0d65ddbeb6268f3e039baa5d24047f68eea34e1a8ea8ac:20)
+07-14 13:49:18.142  2966  3984 E AppOps  : 	at com.android.internal.app.IAppOpsService$Stub.onTransact(IAppOpsService.java:592)
+07-14 13:49:18.142  2966  3984 E AppOps  : 	at android.os.Binder.execTransactInternal(Binder.java:1514)
+07-14 13:49:18.142  2966  3984 E AppOps  : 	at android.os.Binder.execTransact(Binder.java:1454)
+07-14 13:49:18.149  4179  4338 D AppOpsPrivacyItemMonitor: showLocationSystemApps  AppOpItem(Op code=1, UID=10370, AttributionTag=null, Package name=com.doordash.driverapp, Paused=false)
+07-14 13:49:18.150  4179  4338 D AppOpsPrivacyItemMonitor: showLocationSystemApps  AppOpItem(Op code=1, UID=10101, AttributionTag=null, Package name=com.samsung.android.mcfds, Paused=false)
+07-14 13:49:18.154  4179  4179 D AiAgentEffect: onPrivacyItemsChanged privacyItems.size = 5
+07-14 13:49:18.154  4179  4179 D AiAgentEffect: onPrivacyItemsChanged privacyItems isEmpty or found item is null
+07-14 13:49:18.155  4179  4338 D AppOpsPrivacyItemMonitor: showLocationSystemApps  AppOpItem(Op code=1, UID=10275, AttributionTag=com.google.android.gms.personalsafety, Package name=com.google.android.gms, Paused=false)false)false)
+07-14 13:49:18.157  4179  4338 D AppOpsPrivacyItemMonitor: showLocationSystemApps  AppOpItem(Op code=1, UID=5013, AttributionTag=null, Package name=com.sec.location.nsflp2, Paused=false)false)
+07-14 13:49:18.158  4179  4338 D AppOpsPrivacyItemMonitor: showLocationSystemApps  AppOpItem(Op code=1, UID=10114, AttributionTag=null, Package name=com.samsung.android.rubin.app, Paused=false)false)
+07-14 13:49:18.165 15845 15860 I [CE]_ActivityDataManagerImpl: Scan receiver - Stay detected - start time : 1784058149767, end time : 1784072958120, timestamp : 1784072958120
+07-14 13:49:18.165  4179  4338 D AppOpsPrivacyItemMonitor: showLocationSystemApps  AppOpItem(Op code=1, UID=10370, AttributionTag=null, Package name=com.doordash.driverapp, Paused=false)false)
+07-14 13:49:18.166  4179  4338 D AppOpsPrivacyItemMonitor: showLocationSystemApps  AppOpItem(Op code=1, UID=10101, AttributionTag=null, Package name=com.samsung.android.mcfds, Paused=false)false)
+07-14 13:49:18.174  4179  4179 D AiAgentEffect: onPrivacyItemsChanged privacyItems.size = 5
+07-14 13:49:18.174  4179  4179 D AiAgentEffect: onPrivacyItemsChanged privacyItems isEmpty or found item is null
+07-14 13:49:18.175  4179  4338 D AppOpsPrivacyItemMonitor: showLocationSystemApps  AppOpItem(Op code=1, UID=10275, AttributionTag=com.google.android.gms.personalsafety, Package name=com.google.android.gms, Paused=false)false)false)false)
+07-14 13:49:18.177  4179  4338 D AppOpsPrivacyItemMonitor: showLocationSystemApps  AppOpItem(Op code=1, UID=5013, AttributionTag=null, Package name=com.sec.location.nsflp2, Paused=false)false)false)
+07-14 13:49:18.178  4179  4338 D AppOpsPrivacyItemMonitor: showLocationSystemApps  AppOpItem(Op code=1, UID=10114, AttributionTag=null, Package name=com.samsung.android.rubin.app, Paused=false)false)false)
+07-14 13:49:18.178 15845 15860 I [CE]_RealtimeMovingContextProvider: onReceive - Not started
+07-14 13:49:18.178  4179  4338 D AppOpsPrivacyItemMonitor: showLocationSystemApps  AppOpItem(Op code=1, UID=10370, AttributionTag=null, Package name=com.doordash.driverapp, Paused=false)false)false)
+07-14 13:49:18.179  4179  4338 D AppOpsPrivacyItemMonitor: showLocationSystemApps  AppOpItem(Op code=1, UID=10101, AttributionTag=null, Package name=com.samsung.android.mcfds, Paused=false)false)false)
+07-14 13:49:18.189  4179  4179 D AiAgentEffect: onPrivacyItemsChanged privacyItems.size = 5
+07-14 13:49:18.189  4179  4179 D AiAgentEffect: onPrivacyItemsChanged privacyItems isEmpty or found item is null
+07-14 13:49:18.190  4179  4338 D AppOpsPrivacyItemMonitor: showLocationSystemApps  AppOpItem(Op code=1, UID=10275, AttributionTag=com.google.android.gms.personalsafety, Package name=com.google.android.gms, Paused=false)false)false)false)false)
+07-14 13:49:18.190  4179  4338 D AppOpsPrivacyItemMonitor: showLocationSystemApps  AppOpItem(Op code=1, UID=5013, AttributionTag=null, Package name=com.sec.location.nsflp2, Paused=false)false)false)false)
+07-14 13:49:18.191  4179  4338 D AppOpsPrivacyItemMonitor: showLocationSystemApps  AppOpItem(Op code=1, UID=10114, AttributionTag=null, Package name=com.samsung.android.rubin.app, Paused=false)false)false)false)
+07-14 13:49:18.192  4179  4338 D AppOpsPrivacyItemMonitor: showLocationSystemApps  AppOpItem(Op code=1, UID=10370, AttributionTag=null, Package name=com.doordash.driverapp, Paused=false)false)false)false)
+07-14 13:49:18.194  4179  4338 D AppOpsPrivacyItemMonitor: showLocationSystemApps  AppOpItem(Op code=1, UID=10101, AttributionTag=null, Package name=com.samsung.android.mcfds, Paused=false)false)false)false)
+07-14 13:49:18.200 17432 17613 E AudioAttributes: Invalid stream type -1 for AudioAttributes
+07-14 13:49:18.201  4179  4179 D AiAgentEffect: onPrivacyItemsChanged privacyItems.size = 5
+07-14 13:49:18.201  4179  4179 D AiAgentEffect: onPrivacyItemsChanged privacyItems isEmpty or found item is null
+07-14 13:49:18.238 25520 14805 I TFLite-in-PlayServices: Created interpreter.
+07-14 13:49:18.252  4375  5682 I EPDG-1 [WifiProfiler]: handleWifiRssiIntent, rssi=-60
+07-14 13:49:18.253  4375  5682 I EPDG-1 [WifiProfiler]: isProfiling, hash=257678396, started=true
+07-14 13:49:18.257  4375  5682 I EPDG-1 [LogMetrics]: set, type=WIFI_RSSI_LAST, value=-60
+07-14 13:49:18.258  4375  5682 I EPDG-1 [WifiProfiler]: isProfiling, hash=257678396, started=true
+07-14 13:49:18.258  4375  5682 I EPDG-1 [WifiProfiler]: Rssi : -60 highrange : -75 lowrange : -80 mIsRssiInHystersis : false
+07-14 13:49:18.258  4375  5682 I EPDG-1 [Subscription]: isEpdgAvailable, IwlanPsState=2/2
+07-14 13:49:18.258  4375  5682 I EPDG-1 [WifiProfiler]: isL2WHandoverProfilingRunning: returning: false
+07-14 13:49:18.258  4375  5682 I EPDG-1 [WifiProfiler]: No need to send L2WHandoverProfiling runnable
+07-14 13:49:18.258  4375  5682 I EPDG-1 [WifiProfiler]: getHandoverThresholdMet: value is: false
+07-14 13:49:18.260 25520 14805 I TFLite-in-PlayServices: Created interpreter.
+07-14 13:49:18.279 25520 14805 I SemanticLocation: (REDACTED) [Inferrer] %s%s
+07-14 13:49:18.287  1156  1156 D io_stats: !@   8,0 r 107049667 2129517266 w 19103996 353912232 d 2869650 483564924 f 482697 2337413 iot 32963272 0 th 0 0 0 pt 0 inp 0 0 256986.635
+07-14 13:49:18.287  1156  1156 D io_stats: !@ Read_top(KB): .gms.persistent(25520) 8928 rdash.driverapp(17432) 2588 sung.android.ce(15845) 1256
+07-14 13:49:18.287  1156  1156 D io_stats: !@ Write_top(KB): kworker/u16:3(9113) 2896 f2fs_ckpt-254:6(1375) 64 droid.rubin.app(12575) 24
+07-14 13:49:18.354  2966  3812 D ActivityManager: freezing 2872 com.skms.android.agent:remote
+07-14 13:49:18.384 25520 14805 W SemanticLocation: [AddAdditionalPlaceDetailsUtil] Failed to fetch place info for fprint from place index. [CONTEXT service_id=173 ]
+07-14 13:49:18.401  2966  5321 D BSOHChargingDataCollector:  BSOH Sys-servce ... 
+07-14 13:49:18.401  2966  5321 D BSOHChargingDataCollector: performBatteryWork++
+07-14 13:49:18.401  2966  5321 D BSOHChargingDataCollector: performBatteryWork battery com.android.server.bsoh.device.PrimeBattery@8f65284
+07-14 13:49:18.401  2966  5321 D BSOHChargingDataCollector: primeBatt readVoltage from sysFsBattVolt,  path : /sys/class/power_supply/battery/batt_voltage_now
+07-14 13:49:18.413  2966  5321 D BSOHChargingDataCollector: 0 	 BattData addData data : BattData { voltage:3.707, current:0.050781, soc:0.18, temperature:33.0, status:2, timestamp:1784072958413, voltage_chg:null}
+07-14 13:49:18.413  2966  5321 D BSOHChargingDataCollector: performBatteryWork--
+07-14 13:49:18.470 25520 14805 I TFLite-in-PlayServices: Created interpreter.
+07-14 13:49:18.486 25520 14805 I TFLite-in-PlayServices: Created interpreter.
+07-14 13:49:18.501 25520 14805 I SemanticLocation: (REDACTED) [Inferrer] %s%s
+07-14 13:49:18.558  2966  4403 D SLocation: WifiBssidMonitor - requestRefresh
+07-14 13:49:18.559  2966  4403 W SLocation: WifiBssidMonitor - connected wifi : (08:33:ed:**:**:18/817)
+07-14 13:49:18.601 25520 14805 W SemanticLocation: [AddAdditionalPlaceDetailsUtil] Failed to fetch place info for fprint from place index. [CONTEXT service_id=173 ]
+07-14 13:49:18.601 25520 14805 W SemanticLocation: [AddAdditionalPlaceDetailsUtil] Failed to fetch place info for fprint from place index. [CONTEXT service_id=173 ]
+07-14 13:49:18.601 25520 14805 W SemanticLocation: [AddAdditionalPlaceDetailsUtil] Failed to fetch place info for fprint from place index. [CONTEXT service_id=173 ]
+07-14 13:49:19.106 25520 25520 D BoundBrokerSvc: onRebind: Intent { act=com.google.android.gms.libs.gmscorelogger.service.START dat=chimera-action:/... xflg=0x4 cmp=com.google.android.gms/.chimera.PersistentDirectBootAwareApiService }
+07-14 13:49:19.378  2216  2306 I shsusrd : shsusr_check_cpu_usage(): Output of /proc/2216/stat/ : 2216 (shsusrd0) S 1 2216 0 0 -1 1077936384 1548708 0 58537 0 6418 31095 0 0 20 0 11 0 817 2523824128 503 18446744073709551615 371749421056 371749679512 549108342256 0 0 0 0 0 1073794810 0 0 0 17 4 0 0 0 0 0 371749702592 371749703528 372163506176 549108344845 549108344888 549108344888 549108350941 0
+07-14 13:49:19.378  2216  2306 I shsusrd : 
+07-14 13:49:19.378  2216  2306 I shsusrd : shsusr_check_cpu_usage(): utime 6418 stime 31095 cpu_time_last 37513
+07-14 13:49:19.378  2216  2306 I shsusrd : shsusr_check_cpu_usage(): user time = 6418 | system time = 31095 | total = 37513 | cpu_time_delta = 0, clk_tck 100
+07-14 13:49:19.378  2216  2306 I shsusrd : shsusr_check_cpu_usage(): time_cur 1784072959 time_last 1784072949
+07-14 13:49:19.378  2216  2306 I shsusrd : shsusr_check_cpu_usage(): shsusrd is using 0 pct of CPU - time_delta 10
+07-14 13:49:19.378  2216  2306 I shsusrd : shsusr_check_cpu_usage(): shsusrd usage 0
+07-14 13:49:19.378  2216  2306 I shsusrd : shsusr_check_cpu_usage_combined(): time_delta for combined : 10 time_cur 1784072959 time_last_combined 1784072949
+07-14 13:49:19.379  2216  2306 I shsusrd : shsusr_check_cpu_usage_combined(): Output of /proc/2216/task/2216/stat: 2216 (shsusrd0) S 1 2216 0 0 -1 1077936384 1188 0 11 0 0 1 0 0 20 0 11 0 817 2523824128 503 18446744073709551615 371749421056 371749679512 549108342256 0 0 0 0 0 1073794810 1 0 0 17 4 0 0 0 0 0 371749702592 371749703528 372163506176 549108344845 549108344888 549108344888 549108350941 0
+07-14 13:49:19.379  2216  2306 I shsusrd : 
+07-14 13:49:19.379  2216  2306 I shsusrd : shsusr_check_cpu_usage_combined(): tid 2216 utime 0 stime 1 time_delta 10 clk_tck 100, usage 0
+07-14 13:49:19.379  2216  2306 I shsusrd : shsusr_check_cpu_usage_combined(): Output of /proc/2216/task/2303/stat: 2303 (shsusrd12) S 1 2216 0 0 -1 4194368 1416554 0 24548 0 4258 17854 0 0 20 0 11 0 832 2523824128 503 18446744073709551615 371749421056 371749679512 549108342256 0 0 0 0 0 1073794810 1 0 0 -1 0 0 0 0 0 0 371749702592 371749703528 372163506176 549108344845 549108344888 549108344888 549108350941 0
+07-14 13:49:19.379  2216  2306 I shsusrd : 
+07-14 13:49:19.379  2216  2306 I shsusrd : shsusr_check_cpu_usage_combined(): tid 2303 utime 4258 stime 17854 time_delta 10 clk_tck 100, usage 2200
+07-14 13:49:19.379  2216  2306 I shsusrd : shsusr_check_cpu_usage_combined(): Output of /proc/2216/task/2304/stat: 2304 (shsusrd2) S 1 2216 0 0 -1 4194368 2017 0 5000 0 9 621 0 0 20 0 11 0 832 2523824128 503 18446744073709551615 371749421056 371749679512 549108342256 0 0 0 0 0 1073794810 1 0 0 -1 1 0 0 0 0 0 371749702592 371749703528 372163506176 549108344845 549108344888 549108344888 549108350941 0
+07-14 13:49:19.379  2216  2306 I shsusrd : 
+07-14 13:49:19.379  2216  2306 I shsusrd : shsusr_check_cpu_usage_combined(): tid 2304 utime 9 stime 621 time_delta 10 clk_tck 100, usage 0
+07-14 13:49:19.379  2216  2306 I shsusrd : shsusr_check_cpu_usage_combined(): Output of /proc/2216/task/2305/stat: 2305 (shsusrd13) S 1 2216 0 0 -1 1077936192 402 0 1620 0 137 509 0 0 20 0 11 0 832 2523824128 503 18446744073709551615 371749421056 371749679512 549108342256 0 0 0 0 0 1073794810 1 0 0 -1 1 0 0 0 0 0 371749702592 371749703528 372163506176 549108344845 549108344888 549108344888 549108350941 0
+07-14 13:49:19.379  2216  2306 I shsusrd : 
+07-14 13:49:19.379  2216  2306 I shsusrd : shsusr_check_cpu_usage_combined(): tid 2305 utime 137 stime 509 time_delta 10 clk_tck 100, usage 0
+07-14 13:49:19.379  2216  2306 I shsusrd : shsusr_check_cpu_usage_combined(): Output of /proc/2216/task/2306/stat: 2306 (shsusrd42) R 1 2216 0 0 -1 4194368 4232 0 14898 0 1522 5883 0 0 20 0 11 0 832 2523824128 503 18446744073709551615 371749421056 371749679512 549108342256 0 0 0 0 0 1073794810 0 0 0 -1 2 0 0 0 0 0 371749702592 371749703528 372163506176 549108344845 549108344888 549108344888 549108350941 0
+07-14 13:49:19.379  2216  2306 I shsusrd : 
+07-14 13:49:19.379  2216  2306 I shsusrd : shsusr_check_cpu_usage_combined(): tid 2306 utime 1522 stime 5883 time_delta 10 clk_tck 100, usage 700
+07-14 13:49:19.379  2216  2306 I shsusrd : shsusr_check_cpu_usage_combined(): Output of /proc/2216/task/2307/stat: 2307 (shsusrd4) S 1 2216 0 0 -1 4194368 0 0 0 0 13 533 0 0 20 0 11 0 832 2523824128 503 18446744073709551615 371749421056 371749679512 549108342256 0 0 0 0 0 1073794810 1 0 0 -1 2 0 0 0 0 0 371749702592 371749703528 372163506176 549108344845 549108344888 549108344888 549108350941 0
+07-14 13:49:19.379  2216  2306 I shsusrd : 
+07-14 13:49:19.379  2216  2306 I shsusrd : shsusr_check_cpu_usage_combined(): tid 2307 utime 13 stime 533 time_delta 10 clk_tck 100, usage 0
+07-14 13:49:19.379  2216  2306 I shsusrd : shsusr_check_cpu_usage_combined(): Output of /proc/2216/task/2308/stat: 2308 (shsusrd14) S 1 2216 0 0 -1 4194368 911 0 2734 0 7 683 0 0 20 0 11 0 832 2523824128 503 18446744073709551615 371749421056 371749679512 549108342256 0 0 0 0 0 1073794810 1 0 0 -1 1 0 0 0 0 0 371749702592 371749703528 372163506176 549108344845 549108344888 549108344888 549108350941 0
+07-14 13:49:19.379  2216  2306 I shsusrd : 
+07-14 13:49:19.379  2216  2306 I shsusrd : shsusr_check_cpu_usage_combined(): tid 2308 utime 7 stime 683 time_delta 10 clk_tck 100, usage 0
+07-14 13:49:19.380  2216  2306 I shsusrd : shsusr_check_cpu_usage_combined(): Output of /proc/2216/task/6613/stat: 6613 (shsusrd14) S 1 2216 0 0 -1 4194368 0 0 157 0 7 586 0 0 20 0 11 0 2631 2523824128 503 18446744073709551615 371749421056 371749679512 549108342256 0 0 0 0 0 1073794810 1 0 0 -1 1 0 0 0 0 0 371749702592 371749703528 372163506176 549108344845 549108344888 549108344888 549108350941 0
+07-14 13:49:19.380  2216  2306 I shsusrd : 
+07-14 13:49:19.380  2216  2306 I shsusrd : shsusr_check_cpu_usage_combined(): tid 6613 utime 7 stime 586 time_delta 10 clk_tck 100, usage 0
+07-14 13:49:19.380  2216  2306 I shsusrd : shsusr_check_cpu_usage_combined(): Output of /proc/2216/task/6615/stat: 6615 (shsusrd7) S 1 2216 0 0 -1 4194368 2 0 188 0 6 585 0 0 20 0 11 0 2632 2523824128 503 18446744073709551615 371749421056 371749679512 549108342256 0 0 0 0 0 1073794810 1 0 0 -1 1 0 0 0 0 0 371749702592 371749703528 372163506176 549108344845 549108344888 549108344888 549108350941 0
+07-14 13:49:19.380  2216  2306 I shsusrd : 
+07-14 13:49:19.380  2216  2306 I shsusrd : shsusr_check_cpu_usage_combined(): tid 6615 utime 6 stime 585 time_delta 10 clk_tck 100, usage 0
+07-14 13:49:19.380  2216  2306 I shsusrd : shsusr_check_cpu_usage_combined(): Output of /proc/2216/task/6619/stat: 6619 (shsusrd5) S 1 2216 0 0 -1 4194368 2 0 157 0 6 572 0 0 20 0 11 0 2633 2523824128 503 18446744073709551615 371749421056 371749679512 549108342256 0 0 0 0 0 1073794810 1 0 0 -1 1 0 0 0 0 0 371749702592 371749703528 372163506176 549108344845 549108344888 549108344888 549108350941 0
+07-14 13:49:19.380  2216  2306 I shsusrd : 
+07-14 13:49:19.380  2216  2306 I shsusrd : shsusr_check_cpu_usage_combined(): tid 6619 utime 6 stime 572 time_delta 10 clk_tck 100, usage 0
+07-14 13:49:19.380  2216  2306 I shsusrd : shsusr_check_cpu_usage_combined(): Output of /proc/2216/task/6769/stat: 6769 (HwBinder:2216_1) S 1 2216 0 0 -1 1077936192 4 0 0 0 0 0 0 0 20 0 11 0 4511 2523824128 503 18446744073709551615 371749421056 371749679512 549108342256 0 0 0 0 0 1073794810 1 0 0 -1 5 0 0 0 0 0 371749702592 371749703528 372163506176 549108344845 549108344888 549108344888 549108350941 0
+07-14 13:49:19.380  2216  2306 I shsusrd : 
+07-14 13:49:19.380  2216  2306 I shsusrd : shsusr_check_cpu_usage_combined(): tid 6769 utime 0 stime 0 time_delta 10 clk_tck 100, usage 0
+07-14 13:49:19.380  2216  2306 I shsusrd : shsusr_check_cpu_usage_combined(): Combined CPU usage: total_utime 5965 total_stime 27827 total_cpu_time_seconds 0.00, clk_tck 100
+07-14 13:49:19.380  2216  2306 I shsusrd : shsusr_check_cpu_usage_combined(): Combined shsusrd usage 0
+07-14 13:49:19.380  2216  2306 I shsusrd : shsusr_check_cpu_usage_combined(): Combined shsusrd usage FINAL 0
+07-14 13:49:19.403  2966  5321 D BSOHChargingDataCollector:  BSOH Sys-servce ... 
+07-14 13:49:19.403  2966  5321 D BSOHChargingDataCollector: performBatteryWork++
+07-14 13:49:19.403  2966  5321 D BSOHChargingDataCollector: performBatteryWork battery com.android.server.bsoh.device.PrimeBattery@8f65284
+07-14 13:49:19.404  2966  5321 D BSOHChargingDataCollector: primeBatt readVoltage from sysFsBattVolt,  path : /sys/class/power_supply/battery/batt_voltage_now
+07-14 13:49:19.418  2966  5321 D BSOHChargingDataCollector: 0 	 BattData addData data : BattData { voltage:3.726, current:0.335937, soc:0.18, temperature:33.0, status:2, timestamp:1784072959418, voltage_chg:null}
+07-14 13:49:19.418  2966  5321 D BSOHChargingDataCollector: performBatteryWork--
+07-14 13:49:19.620  2966  4115 D NetdEventListenerService: DNS Requested by 172, 10370(com.doordash.driverapp), SUCCESS, 49ms
+07-14 13:49:20.089  1812 10868 I QC2Comp : [avcD_3595] Stats: Pending(0) i/p-done(0) Works: Q: 143/Done 144|Work-Rate: Q(0.0/s Avg=0.2/s) Done(0.000/s Avg=0.175/s)| Stream: 25.00fps 75.9Kbps
+07-14 13:49:20.089  1812 10868 I QC2Comp : [avcD_3595] Mem-usage:  [In-1D: 10 bufs 80.000 MB] [1D-6033: 15 bufs 0.234 MB] [2D-6034: 23 bufs 1.438 MB] | Total: 81.672 MB
+07-14 13:49:20.288  1156  1156 D io_stats: !@   8,0 r 107049722 2129518442 w 19104009 353912276 d 2869650 483564924 f 482697 2337415 iot 32963384 0 th 0 0 0 pt 0 inp 0 0 256988.636
+07-14 13:49:20.404  2966  5321 D BSOHChargingDataCollector:  BSOH Sys-servce ... 
+07-14 13:49:20.405  2966  5321 D BSOHChargingDataCollector: performBatteryWork++
+07-14 13:49:20.405  2966  5321 D BSOHChargingDataCollector: performBatteryWork battery com.android.server.bsoh.device.PrimeBattery@8f65284
+07-14 13:49:20.405  2966  5321 D BSOHChargingDataCollector: primeBatt readVoltage from sysFsBattVolt,  path : /sys/class/power_supply/battery/batt_voltage_now
+07-14 13:49:20.418  2966  5321 D BSOHChargingDataCollector: 0 	 BattData addData data : BattData { voltage:3.731, current:0.410156, soc:0.18, temperature:33.0, status:2, timestamp:1784072960418, voltage_chg:null}
+07-14 13:49:20.419  2966  5321 D BSOHChargingDataCollector: performBatteryWork--
+07-14 13:49:20.539  2966  3380 D MARsPolicyManager: triggerAction called!
+07-14 13:49:20.540  2966  3380 I NSLocationMonitor: getGPSUsingApps() called
+07-14 13:49:20.540  5221 24048 I NSLocationManager_FLP: getGPSUsingApps, No change
+07-14 13:49:20.660  1812 10919 I QC2Comp : [avcD_3596] Stats: Pending(4) i/p-done(0) Works: Q: 26/Done 23|Work-Rate: Q(0.0/s Avg=0.0/s) Done(0.000/s Avg=0.028/s)| Stream: 25.00fps 192.7Kbps
+07-14 13:49:20.660  1812 10919 I QC2Comp : [avcD_3596] Mem-usage:  [In-1D: 5 bufs 40.000 MB] [1D-6035: 14 bufs 0.219 MB] [2D-6036: 20 bufs 1.875 MB] | Total: 42.094 MB
+07-14 13:49:21.266  4375  5682 I EPDG-1 [WifiProfiler]: handleWifiRssiIntent, rssi=-61
+07-14 13:49:21.266  4375  5682 I EPDG-1 [WifiProfiler]: isProfiling, hash=257678396, started=true
+07-14 13:49:21.266  4375  5682 I EPDG-1 [LogMetrics]: set, type=WIFI_RSSI_LAST, value=-61
+07-14 13:49:21.266  4375  5682 I EPDG-1 [WifiProfiler]: isProfiling, hash=257678396, started=true
+07-14 13:49:21.266  4375  5682 I EPDG-1 [WifiProfiler]: Rssi : -61 highrange : -75 lowrange : -80 mIsRssiInHystersis : false
+07-14 13:49:21.266  4375  5682 I EPDG-1 [Subscription]: isEpdgAvailable, IwlanPsState=2/2
+07-14 13:49:21.266  4375  5682 I EPDG-1 [WifiProfiler]: isL2WHandoverProfilingRunning: returning: false
+07-14 13:49:21.266  4375  5682 I EPDG-1 [WifiProfiler]: No need to send L2WHandoverProfiling runnable
+07-14 13:49:21.266  4375  5682 I EPDG-1 [WifiProfiler]: getHandoverThresholdMet: value is: false
+07-14 13:49:21.305  5802  5802 I adbd    : adbd service requested 'shell,v2,TERM=xterm,raw:am force-stop live.kingdomshift.app'
+07-14 13:49:21.324  4342 14116 D IpClient/wlan0: interfaceLinkStateChanged: ifindex 45 up
+07-14 13:49:21.404  2966  7330 W ActivityManager: Invalid packageName: live.kingdomshift.app
+07-14 13:49:21.405  2966  5321 D BSOHChargingDataCollector:  BSOH Sys-servce ... 
+07-14 13:49:21.405  2966  5321 D BSOHChargingDataCollector: performBatteryWork++
+07-14 13:49:21.405  2966  5321 D BSOHChargingDataCollector: performBatteryWork battery com.android.server.bsoh.device.PrimeBattery@8f65284
+07-14 13:49:21.405  2966  5321 D BSOHChargingDataCollector: primeBatt readVoltage from sysFsBattVolt,  path : /sys/class/power_supply/battery/batt_voltage_now
+07-14 13:49:21.416  2966  5321 D BSOHChargingDataCollector: 0 	 BattData addData data : BattData { voltage:3.73, current:0.407031, soc:0.18, temperature:33.0, status:2, timestamp:1784072961416, voltage_chg:null}
+07-14 13:49:21.416  2966  5321 D BSOHChargingDataCollector: performBatteryWork--
+07-14 13:49:21.509  1885  1892 D HeatmapThread: Updated plugType via uevent: 2
+07-14 13:49:21.512  1814  1836 E BatteryDump: !@new_battery_dump : 3730,407,475,550,18,330,322,350,330,0,338,350,0,Charging,NO_CHARGING,Normal,Good,USB,1,Normal,0,0,9151,0x0,0x20000,0x0,0,0,0000,0000,00000000,0,0,0,0,1042,3689,1818,990,0,
+07-14 13:49:21.515  1814  1814 I sehhealth-service: updateLrpSysfs: write: 337
+07-14 13:49:21.845 14096 14096 I wpa_supplicant: Heartbeat 3081
+07-14 13:49:21.904  1743  6706 I sensors-hal: handle_sns_std_sensor_event:137, [SSC_LIGHT] A: 148(148),m:11,c:0,b:0,c0:71112,l:148,r:90,bl:105,j:-1
+07-14 13:49:22.290  1156  1156 D io_stats: !@   8,0 r 107049785 2129519398 w 19104042 353915796 d 2869682 483601852 f 482697 2337415 iot 32963520 0 th 0 0 0 pt 0 inp 0 0 256990.637
+07-14 13:49:22.290  1156  1156 D io_stats: !@ Read_top(KB): .gms.persistent(25520) 1176 am(18809) 744 system_server(2966) 172
+07-14 13:49:22.290  1156  1156 D io_stats: !@ Write_top(KB): kworker/u16:1(8909) 3488 rdash.driverapp(17432) 44 soft.appmanager(3278) 16
+07-14 13:49:22.406  2966  5321 D BSOHChargingDataCollector:  BSOH Sys-servce ... 
+07-14 13:49:22.406  2966  5321 D BSOHChargingDataCollector: performBatteryWork++
+07-14 13:49:22.406  2966  5321 D BSOHChargingDataCollector: performBatteryWork battery com.android.server.bsoh.device.PrimeBattery@8f65284
+07-14 13:49:22.407  2966  5321 D BSOHChargingDataCollector: primeBatt readVoltage from sysFsBattVolt,  path : /sys/class/power_supply/battery/batt_voltage_now
+07-14 13:49:22.420  2966  5321 D BSOHChargingDataCollector: 0 	 BattData addData data : BattData { voltage:3.735, current:0.371875, soc:0.18, temperature:33.0, status:2, timestamp:1784072962420, voltage_chg:null}
+07-14 13:49:22.420  2966  5321 D BSOHChargingDataCollector: performBatteryWork--
+07-14 13:49:23.070  4179  4338 D AppOpsPrivacyItemMonitor: showLocationSystemApps  AppOpItem(Op code=1, UID=5013, AttributionTag=null, Package name=com.sec.location.nsflp2, Paused=false)false)false)false)false)
+07-14 13:49:23.074  4179  4338 D AppOpsPrivacyItemMonitor: showLocationSystemApps  AppOpItem(Op code=1, UID=10114, AttributionTag=null, Package name=com.samsung.android.rubin.app, Paused=false)false)false)false)false)
+07-14 13:49:23.077  4179  4338 D AppOpsPrivacyItemMonitor: showLocationSystemApps  AppOpItem(Op code=1, UID=10370, AttributionTag=null, Package name=com.doordash.driverapp, Paused=false)false)false)false)false)
+07-14 13:49:23.081  4179  4338 D AppOpsPrivacyItemMonitor: showLocationSystemApps  AppOpItem(Op code=1, UID=10101, AttributionTag=null, Package name=com.samsung.android.mcfds, Paused=false)false)false)false)false)
+07-14 13:49:23.088  4179  4179 D AiAgentEffect: onPrivacyItemsChanged privacyItems.size = 4
+07-14 13:49:23.088  4179  4179 D AiAgentEffect: onPrivacyItemsChanged privacyItems isEmpty or found item is null
+07-14 13:49:23.103  4179  4338 D AppOpsPrivacyItemMonitor: showLocationSystemApps  AppOpItem(Op code=1, UID=10370, AttributionTag=null, Package name=com.doordash.driverapp, Paused=false)false)false)false)false)false)
+07-14 13:49:23.105  4179  4338 D AppOpsPrivacyItemMonitor: showLocationSystemApps  AppOpItem(Op code=1, UID=10101, AttributionTag=null, Package name=com.samsung.android.mcfds, Paused=false)false)false)false)false)false)
+07-14 13:49:23.107  4179  4179 D AiAgentEffect: onPrivacyItemsChanged privacyItems.size = 2
+07-14 13:49:23.107  4179  4179 D AiAgentEffect: onPrivacyItemsChanged privacyItems isEmpty or found item is null
+07-14 13:49:23.109  4179  4338 D AppOpsPrivacyItemMonitor: showLocationSystemApps  AppOpItem(Op code=1, UID=10370, AttributionTag=null, Package name=com.doordash.driverapp, Paused=false)false)false)false)false)false)false)
+07-14 13:49:23.111  4179  4338 D AppOpsPrivacyItemMonitor: showLocationSystemApps  AppOpItem(Op code=1, UID=10101, AttributionTag=null, Package name=com.samsung.android.mcfds, Paused=false)false)false)false)false)false)false)
+07-14 13:49:23.114  4179  4179 D AiAgentEffect: onPrivacyItemsChanged privacyItems.size = 2
+07-14 13:49:23.114  4179  4179 D AiAgentEffect: onPrivacyItemsChanged privacyItems isEmpty or found item is null
+07-14 13:49:23.154  4179  4338 D AppOpsPrivacyItemMonitor: showLocationSystemApps  AppOpItem(Op code=1, UID=10370, AttributionTag=null, Package name=com.doordash.driverapp, Paused=false)false)false)false)false)false)false)false)
+07-14 13:49:23.161  4179  4179 D AiAgentEffect: onPrivacyItemsChanged privacyItems.size = 1
+07-14 13:49:23.161  4179  4179 D AiAgentEffect: onPrivacyItemsChanged privacyItems isEmpty or found item is null
+07-14 13:49:23.408  2966  5321 D BSOHChargingDataCollector:  BSOH Sys-servce ... 
+07-14 13:49:23.408  2966  5321 D BSOHChargingDataCollector: performBatteryWork++
+07-14 13:49:23.408  2966  5321 D BSOHChargingDataCollector: performBatteryWork battery com.android.server.bsoh.device.PrimeBattery@8f65284
+07-14 13:49:23.409  2966  5321 D BSOHChargingDataCollector: primeBatt readVoltage from sysFsBattVolt,  path : /sys/class/power_supply/battery/batt_voltage_now
+07-14 13:49:23.421  2966  5321 D BSOHChargingDataCollector: 0 	 BattData addData data : BattData { voltage:3.731, current:0.376562, soc:0.18, temperature:33.0, status:2, timestamp:1784072963421, voltage_chg:null}
+07-14 13:49:23.421  2966  5321 D BSOHChargingDataCollector: performBatteryWork--
+07-14 13:49:23.827  2966  4010 D UsbStatsMonitor: 0 0 0 0 0 0 0 0 0 0 0 0 10 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 1 0 0 0 0 0 0 0 0 106034152603674
+07-14 13:49:24.277  4375  5682 I EPDG-1 [WifiProfiler]: handleWifiRssiIntent, rssi=-60
+07-14 13:49:24.277  4375  5682 I EPDG-1 [WifiProfiler]: isProfiling, hash=257678396, started=true
+07-14 13:49:24.277  4375  5682 I EPDG-1 [LogMetrics]: set, type=WIFI_RSSI_LAST, value=-60
+07-14 13:49:24.277  4375  5682 I EPDG-1 [WifiProfiler]: isProfiling, hash=257678396, started=true
+07-14 13:49:24.278  4375  5682 I EPDG-1 [WifiProfiler]: Rssi : -60 highrange : -75 lowrange : -80 mIsRssiInHystersis : false
+07-14 13:49:24.278  4375  5682 I EPDG-1 [Subscription]: isEpdgAvailable, IwlanPsState=2/2
+07-14 13:49:24.278  4375  5682 I EPDG-1 [WifiProfiler]: isL2WHandoverProfilingRunning: returning: false
+07-14 13:49:24.278  4375  5682 I EPDG-1 [WifiProfiler]: No need to send L2WHandoverProfiling runnable
+07-14 13:49:24.278  4375  5682 I EPDG-1 [WifiProfiler]: getHandoverThresholdMet: value is: false
+07-14 13:49:24.410  2966  5321 D BSOHChargingDataCollector:  BSOH Sys-servce ... 
+07-14 13:49:24.410  2966  5321 D BSOHChargingDataCollector: performBatteryWork++
+07-14 13:49:24.410  2966  5321 D BSOHChargingDataCollector: performBatteryWork battery com.android.server.bsoh.device.PrimeBattery@8f65284
+07-14 13:49:24.411  2966  5321 D BSOHChargingDataCollector: primeBatt readVoltage from sysFsBattVolt,  path : /sys/class/power_supply/battery/batt_voltage_now
+07-14 13:49:24.424  2966  5321 D BSOHChargingDataCollector: 0 	 BattData addData data : BattData { voltage:3.735, current:0.501562, soc:0.18, temperature:33.0, status:2, timestamp:1784072964424, voltage_chg:null}
+07-14 13:49:24.425  2966  5321 D BSOHChargingDataCollector: performBatteryWork--
+07-14 13:49:25.090  1812 10868 I QC2Comp : [avcD_3595] Stats: Pending(0) i/p-done(0) Works: Q: 143/Done 144|Work-Rate: Q(0.0/s Avg=0.2/s) Done(0.000/s Avg=0.174/s)| Stream: 25.00fps 75.9Kbps
+07-14 13:49:25.090  1812 10868 I QC2Comp : [avcD_3595] Mem-usage:  [In-1D: 10 bufs 80.000 MB] [1D-6033: 15 bufs 0.234 MB] [2D-6034: 23 bufs 1.438 MB] | Total: 81.672 MB
+07-14 13:49:25.411  2966  5321 D BSOHChargingDataCollector:  BSOH Sys-servce ... 
+07-14 13:49:25.411  2966  5321 D BSOHChargingDataCollector: performBatteryWork++
+07-14 13:49:25.411  2966  5321 D BSOHChargingDataCollector: performBatteryWork battery com.android.server.bsoh.device.PrimeBattery@8f65284
+07-14 13:49:25.411  2966  5321 D BSOHChargingDataCollector: primeBatt readVoltage from sysFsBattVolt,  path : /sys/class/power_supply/battery/batt_voltage_now
+07-14 13:49:25.423  2966  5321 D BSOHChargingDataCollector: 0 	 BattData addData data : BattData { voltage:3.73, current:0.404687, soc:0.18, temperature:33.0, status:2, timestamp:1784072965423, voltage_chg:null}
+07-14 13:49:25.423  2966  5321 D BSOHChargingDataCollector: performBatteryWork--
+07-14 13:49:25.565  2966  3380 D MARsPolicyManager: triggerAction called!
+07-14 13:49:25.565  2966  3380 I NSLocationMonitor: getGPSUsingApps() called
+07-14 13:49:25.567  5221 24048 I NSLocationManager_FLP: getGPSUsingApps, No change
+07-14 13:49:25.661  1812 10919 I QC2Comp : [avcD_3596] Stats: Pending(4) i/p-done(0) Works: Q: 26/Done 23|Work-Rate: Q(0.0/s Avg=0.0/s) Done(0.000/s Avg=0.028/s)| Stream: 25.00fps 192.7Kbps
+07-14 13:49:25.661  1812 10919 I QC2Comp : [avcD_3596] Mem-usage:  [In-1D: 5 bufs 40.000 MB] [1D-6035: 14 bufs 0.219 MB] [2D-6036: 20 bufs 1.875 MB] | Total: 42.094 MB
+07-14 13:49:25.926  4179  4179 W View    : requestLayout() improperly called by android.widget.FrameLayout{4b5bfa1 V.E...... ......I. 0,0-1080,2316 #14} during layout: running second layout pass
+07-14 13:49:25.926  4179  4179 W View    : requestLayout() improperly called by com.android.systemui.qs.QSTouchAwareFrameLayout{94bd5c6 V.E...... ......I. 0,162-1080,2316 #7e0a0a4c com.android.systemui:id/qs_frame} during layout: running second layout pass
+07-14 13:49:25.932  4179  4179 D LightBarController: SKIP updateStatus (white icon) dreaming:true, keyguardVisible:true, goingToSleep:false
+07-14 13:49:25.935  1810  1810 E ANDR-PERF-MPCTL: ANDR-PERF-MPCTL: internal_perf_lock_acq_verification() 385: Perflock Submit request limit reached.
+07-14 13:49:25.936  4179  4179 D AiAgentEffect: onPrivacyItemsChanged privacyItems.size = 0
+07-14 13:49:25.936  4179  4179 D AiAgentEffect: onPrivacyItemsChanged privacyItems isEmpty or found item is null
+07-14 13:49:25.937  4179  4179 D SecKeyguardClockRepositoryImpl: setClockSize LARGE
+07-14 13:49:25.937  1899  1899 I SurfaceFlinger: SFWD update time=256994285529669
+07-14 13:49:25.938  4179  4179 I SecKeyguardClockPositionAlgorithm: prepareClockContainerHeightChanging:
+07-14 13:49:25.939  4179  4179 I FaceWidget_updatePosition: updatePosition: faceWidgetPosition = Point(0, 239)
+07-14 13:49:25.939  4179  4179 D FaceWidgetPagesController: refreshViews() reason = CLOCK_POSITION_CHANGED, force = false
+07-14 13:49:25.940  4179  4179 I PluginFaceWidgetManager: isEditMode = false
+07-14 13:49:25.940  4179  4179 I NowBarItemManager: getVisibleList isScreenTurnedOn = false / aodShowState false shouldControlScreenOff false isLockTypeNone false visibleList size = 0 / expandedItem null
+07-14 13:49:25.941  4179  4179 D SecKeyguardClockRepositoryImpl: setClockSize LARGE
+07-14 13:49:25.942  4179  4179 I SecKeyguardClockPositionAlgorithm: prepareClockContainerHeightChanging:
+07-14 13:49:25.942  1791 20575 W SDM     : DisplayBase::CommitOrPrepare: Prepare failed: 3
+07-14 13:49:25.942  1791 20575 I SDM     : DisplayBase::CommitOrPrepare: Clearing fences on input layers on display 66-0
+07-14 13:49:25.942  4179  4179 I FaceWidget_updatePosition: updatePosition: faceWidgetPosition = Point(0, 239)
+07-14 13:49:25.942  4179  4179 D FaceWidgetPagesController: refreshViews() reason = CLOCK_POSITION_CHANGED, force = false
+07-14 13:49:25.942  1899  1899 E SurfaceFlinger: [StatusBar$_4179#92] Invalid device requested composition type change: Client (1) --> Device (2)
+07-14 13:49:25.942  1899  1899 E SurfaceFlinger: [NotificationShade$_4179#42951] Invalid device requested composition type change: Client (1) --> Device (2)
+07-14 13:49:25.942  4179  4179 I PluginFaceWidgetManager: isEditMode = false
+07-14 13:49:25.942  4179  4179 I NowBarItemManager: getVisibleList isScreenTurnedOn = false / aodShowState false shouldControlScreenOff false isLockTypeNone false visibleList size = 0 / expandedItem null
+07-14 13:49:25.942  4179  4179 D SecKeyguardClockRepositoryImpl: setClockSize LARGE
+07-14 13:49:25.943  1899  1899 E SurfaceFlinger: trackPendingFrame: Invalid present fence
+07-14 13:49:25.943  4179  4179 I SecKeyguardClockPositionAlgorithm: prepareClockContainerHeightChanging:
+07-14 13:49:25.944  4179  4179 I FaceWidget_updatePosition: updatePosition: faceWidgetPosition = Point(0, 239)
+07-14 13:49:25.944  4179  4179 D FaceWidgetPagesController: refreshViews() reason = CLOCK_POSITION_CHANGED, force = false
+07-14 13:49:25.944  4179  4179 I PluginFaceWidgetManager: isEditMode = false
+07-14 13:49:25.945  4179  4179 I NowBarItemManager: getVisibleList isScreenTurnedOn = false / aodShowState false shouldControlScreenOff false isLockTypeNone false visibleList size = 0 / expandedItem null
+07-14 13:49:25.945  4179  4179 D SecKeyguardClockRepositoryImpl: setClockSize LARGE
+07-14 13:49:25.946  4179  4179 I SecKeyguardClockPositionAlgorithm: prepareClockContainerHeightChanging:
+07-14 13:49:25.947  4179  4179 I FaceWidget_updatePosition: updatePosition: faceWidgetPosition = Point(0, 239)
+07-14 13:49:25.947  4179  4179 D FaceWidgetPagesController: refreshViews() reason = CLOCK_POSITION_CHANGED, force = false
+07-14 13:49:25.947  4179  4179 I PluginFaceWidgetManager: isEditMode = false
+07-14 13:49:25.948  4179  4179 I NowBarItemManager: getVisibleList isScreenTurnedOn = false / aodShowState false shouldControlScreenOff false isLockTypeNone false visibleList size = 0 / expandedItem null
+07-14 13:49:25.949  4179  4179 I FaceWidgetClockPage: updateClockRect: skip in screen off state
+07-14 13:49:26.292  1156  1156 D io_stats: !@   8,0 r 107049798 2129519498 w 19104052 353918992 d 2869682 483601852 f 482697 2337415 iot 32963572 0 th 0 0 0 pt 0 inp 0 0 256994.640
+07-14 13:49:26.293  1156  1156 D io_stats: !@ Read_top(KB): system_server(2966) 52 chbox:googleapp(25188) 24 soft.appmanager(3278) 24
+07-14 13:49:26.293  1156  1156 D io_stats: !@ Write_top(KB): kworker/u16:3(9113) 3196
+07-14 13:49:26.413  2966  5321 D BSOHChargingDataCollector:  BSOH Sys-servce ... 
+07-14 13:49:26.413  2966  5321 D BSOHChargingDataCollector: performBatteryWork++
+07-14 13:49:26.413  2966  5321 D BSOHChargingDataCollector: performBatteryWork battery com.android.server.bsoh.device.PrimeBattery@8f65284
+07-14 13:49:26.414  2966  5321 D BSOHChargingDataCollector: primeBatt readVoltage from sysFsBattVolt,  path : /sys/class/power_supply/battery/batt_voltage_now
+07-14 13:49:26.427  2966  5321 D BSOHChargingDataCollector: 0 	 BattData addData data : BattData { voltage:3.737, current:0.50625, soc:0.18, temperature:33.0, status:2, timestamp:1784072966427, voltage_chg:null}
+07-14 13:49:26.427  2966  5321 D BSOHChargingDataCollector: performBatteryWork--
+07-14 13:49:27.048  7210  8592 I SDHMS:x : SIOP:: AP:346 BAT:330 USB:322 CHG:349 PA:343 CP:344 WIFI:343 CF:337 BLK:0 SUBBAT:0 SKIN:337 SKINF:337 SKINB:324 LRP:337 LRP2:337 LRF2:337 LRB2:324 AP2:336 CHG2:337 WIFI2:332 UANT2:332 RCV2:332 SPK2:332 FCAM:323 UPSPK:339 DNSPK:324 VAP02:349 VWIFI:348 AMB:323 AMB2:278 AVGCUR:425 AVGSYS:163 POWER:1583
+07-14 13:49:27.292  4375  5682 I EPDG-1 [WifiProfiler]: handleWifiRssiIntent, rssi=-61
+07-14 13:49:27.293  4375  5682 I EPDG-1 [WifiProfiler]: isProfiling, hash=257678396, started=true
+07-14 13:49:27.293  4375  5682 I EPDG-1 [LogMetrics]: set, type=WIFI_RSSI_LAST, value=-61
+07-14 13:49:27.293  4375  5682 I EPDG-1 [WifiProfiler]: isProfiling, hash=257678396, started=true
+07-14 13:49:27.293  4375  5682 I EPDG-1 [WifiProfiler]: Rssi : -61 highrange : -75 lowrange : -80 mIsRssiInHystersis : false
+07-14 13:49:27.293  4375  5682 I EPDG-1 [Subscription]: isEpdgAvailable, IwlanPsState=2/2
+07-14 13:49:27.293  4375  5682 I EPDG-1 [WifiProfiler]: isL2WHandoverProfilingRunning: returning: false
+07-14 13:49:27.293  4375  5682 I EPDG-1 [WifiProfiler]: No need to send L2WHandoverProfiling runnable
+07-14 13:49:27.293  4375  5682 I EPDG-1 [WifiProfiler]: getHandoverThresholdMet: value is: false
+07-14 13:49:27.415  2966  5321 D BSOHChargingDataCollector:  BSOH Sys-servce ... 
+07-14 13:49:27.415  2966  5321 D BSOHChargingDataCollector: performBatteryWork++
+07-14 13:49:27.415  2966  5321 D BSOHChargingDataCollector: performBatteryWork battery com.android.server.bsoh.device.PrimeBattery@8f65284
+07-14 13:49:27.415  2966  5321 D BSOHChargingDataCollector: primeBatt readVoltage from sysFsBattVolt,  path : /sys/class/power_supply/battery/batt_voltage_now
+07-14 13:49:27.428  2966  5321 D BSOHChargingDataCollector: 0 	 BattData addData data : BattData { voltage:3.736, current:0.498437, soc:0.18, temperature:33.0, status:2, timestamp:1784072967428, voltage_chg:null}
+07-14 13:49:27.428  2966  5321 D BSOHChargingDataCollector: performBatteryWork--
+07-14 13:49:28.294  1156  1156 D io_stats: !@   8,0 r 107049808 2129519550 w 19104164 353919468 d 2869682 483601852 f 482699 2337425 iot 32963612 0 th 0 0 0 pt 0 inp 0 0 256996.641
+07-14 13:49:28.416  2966  5321 D BSOHChargingDataCollector:  BSOH Sys-servce ... 
+07-14 13:49:28.416  2966  5321 D BSOHChargingDataCollector: performBatteryWork++
+07-14 13:49:28.416  2966  5321 D BSOHChargingDataCollector: performBatteryWork battery com.android.server.bsoh.device.PrimeBattery@8f65284
+07-14 13:49:28.417  2966  5321 D BSOHChargingDataCollector: primeBatt readVoltage from sysFsBattVolt,  path : /sys/class/power_supply/battery/batt_voltage_now
+07-14 13:49:28.428  2966  5321 D BSOHChargingDataCollector: 0 	 BattData addData data : BattData { voltage:3.737, current:0.478906, soc:0.18, temperature:33.0, status:2, timestamp:1784072968428, voltage_chg:null}
+07-14 13:49:28.429  2966  5321 D BSOHChargingDataCollector: performBatteryWork--
+07-14 13:49:28.834  5802  5802 I adbd    : adbd service requested 'shell,v2,TERM=xterm:export ANDROID_LOG_TAGS=''; exec logcat '-d''

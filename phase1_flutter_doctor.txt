@@ -1,0 +1,43 @@
+[√] Flutter (Channel stable, 3.44.0, on Microsoft Windows [Version 10.0.26200.8737], locale en-US) [491ms]
+    • Flutter version 3.44.0 on channel stable at C:\Users\charo\Downloads\flutter_windows_3.44.0-stable\flutter
+    • Upstream repository https://github.com/flutter/flutter.git
+    • Framework revision 559ffa3f75 (2 months ago), 2026-05-15 14:13:13 -0700
+    • Engine revision 4c525dac5e
+    • Dart version 3.12.0
+    • DevTools version 2.57.0
+    • Feature flags: enable-web, enable-linux-desktop, enable-macos-desktop, enable-windows-desktop, enable-android, enable-ios, cli-animations, enable-native-assets, enable-swift-package-manager, omit-legacy-version-file, enable-lldb-debugging, enable-uiscene-migration
+
+[√] Windows Version (11 Home 64-bit, 25H2, 2009) [1,455ms]
+
+[√] Android toolchain - develop for Android devices (Android SDK version 36.1.0) [3.1s]
+    • Android SDK at C:\Users\charo\AppData\Local\Android\sdk
+    • Emulator version unknown
+    • Platform android-36.1, build-tools 36.1.0
+    • Java binary at: C:\Program Files\Android\Android Studio\jbr\bin\java
+      This is the JDK bundled with the latest Android Studio installation on this machine.
+      To manually set the JDK path, use: `flutter config --jdk-dir="path/to/jdk"`.
+    • Java version OpenJDK Runtime Environment (build 21.0.10+-14961533-b1163.108)
+    • All Android licenses accepted.
+
+[√] Chrome - develop for the web [376ms]
+    • Chrome at C:\Program Files\Google\Chrome\Application\chrome.exe
+
+[!] Visual Studio - develop Windows apps (Visual Studio Build Tools 2026 18.5.0) [375ms]
+    • Visual Studio at C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools
+    • Visual Studio Build Tools 2026 version 18.5.11709.299
+    X Visual Studio is missing necessary components. Please re-run the Visual Studio installer for the "Desktop development with C++" workload, and include these components:
+        MSVC v142 - VS 2019 C++ x64/x86 build tools
+         - If there are multiple build tool versions available, install the latest
+        C++ CMake tools for Windows
+        Windows 10 SDK
+
+[√] Connected device (4 available) [417ms]
+    • SM S918U (mobile) • R5CW32XPP7F • android-arm64  • Android 16 (API 36)
+    • Windows (desktop) • windows     • windows-x64    • Microsoft Windows [Version 10.0.26200.8737]
+    • Chrome (web)      • chrome      • web-javascript • Google Chrome 150.0.7871.182
+    • Edge (web)        • edge        • web-javascript • Microsoft Edge 150.0.4078.99
+
+[√] Network resources [1,102ms]
+    • All expected network resources are available.
+
+! Doctor found issues in 1 category.

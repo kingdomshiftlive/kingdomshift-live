@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:flutter_callkit_incoming/flutter_callkit_incoming.dart';
 import 'package:shortzz/common/widget/kingdom_reveal/kingdom_reveal_overlay.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -59,9 +60,22 @@ class DashboardScreenController extends BaseController
   int _usageDurationSeconds = 0;
   static const int breakThresholdSeconds = 30 * 60; // 30 minutes
 
+  Future<void> _requestFullScreenIntentPermission() async {
+    if (!Platform.isAndroid) return;
+    try {
+      final allowed = await FlutterCallkitIncoming.canUseFullScreenIntent();
+      if (!allowed) {
+        await FlutterCallkitIncoming.requestFullIntentPermission();
+      }
+    } catch (e) {
+      Loggers.error('Full screen intent permission request failed: $e');
+    }
+  }
+
   @override
   void onInit() {
     super.onInit();
+    _requestFullScreenIntentPermission();
     Get.put(GifSheetController());
     animationController = AnimationController(
         duration: const Duration(milliseconds: 200), vsync: this);
@@ -238,12 +252,8 @@ class DashboardScreenController extends BaseController
         userName: userName,
         plugins: [ZegoUIKitSignalingPlugin()],
       );
-      Get.snackbar('Call service', 'Started OK, ID: $userId',
-          duration: const Duration(seconds: 8));
     } catch (e) {
       Loggers.error('Call invitation service init failed: $e');
-      Get.snackbar('Call service', 'FAILED: $e',
-          duration: const Duration(seconds: 15));
     }
   }
   Future<void> _createZegoEngine() async {

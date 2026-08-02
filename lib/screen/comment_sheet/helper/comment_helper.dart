@@ -204,7 +204,7 @@ class CommentHelper {
     print(isReply);
 
     Comment? comment = isReply
-        ? await _handleReplyComment(description,
+        ? await _handleReplyComment(description, reel,
             mentionUserIds: mentionUserIds.join(','))
         : await handleAddComment(description, commentType, reel,
             mentionUserIds: mentionUserIds.join(','));
@@ -355,37 +355,29 @@ class CommentHelper {
       Loggers.error('Invalid Post Id : $postId');
       return null;
     }
-
-    Comment? comment = (post.supabaseId ?? '').isNotEmpty
-        ? await PostService.instance.addSupabaseVideoComment(
-            supabaseId: post.supabaseId!,
-            comment: description,
-            type: type.value,
-          )
-        : await PostService.instance.addComment(
-            postId: postId,
-            comment: description,
-            mentionUserIds: mentionUserIds,
-            type: type.value);
+    Comment? comment = await PostService.instance.addComment(
+        postId: postId,
+        videoSupabaseId: post.supabaseId,
+        comment: description,
+        mentionUserIds: mentionUserIds,
+        type: type.value);
     return comment;
   }
 
-  Future<Comment?> _handleReplyComment(String description,
+  Future<Comment?> _handleReplyComment(String description, Post post,
       {String? mentionUserIds}) async {
     int commentId = replyComment.value?.id?.toInt() ?? -1;
-
-    if (commentId == -1) {
+    if (commentId == -1 || replyComment.value?.supabaseId == null) {
       Loggers.error('Invalid Comment Id : $commentId');
       return null;
     }
-
     onCloseReply();
-
-    Comment? comment = await PostService.instance.replyToComment(
-        commentId: commentId,
-        reply: description,
+    Comment? comment = await PostService.instance.addComment(
+        postId: post.id?.toInt() ?? -1,
+        videoSupabaseId: post.supabaseId,
+        parentCommentId: replyComment.value?.supabaseId,
+        comment: description,
         mentionUserIds: mentionUserIds);
-
     return comment;
   }
 

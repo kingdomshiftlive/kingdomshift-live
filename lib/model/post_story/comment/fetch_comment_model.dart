@@ -87,9 +87,10 @@ class Comment {
   });
 
   Comment.fromJson(dynamic json) {
-    id = json['id'];
+    supabaseId = json['id']?.toString();
+    id = supabaseId?.hashCode;
     commentId = json['comment_id'];
-    postId = json['post_id'];
+    postId = json['post_id']?.toString().hashCode;
     userId = json['user_id'];
     comment = json['comment'];
     reply = json['reply'];
@@ -116,6 +117,7 @@ class Comment {
   int? id;
   int? postId;
   int? commentId;
+  String? supabaseId;
   num? userId;
   String? comment;
   String? reply;

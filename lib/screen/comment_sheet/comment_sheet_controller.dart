@@ -124,59 +124,35 @@ class CommentSheetController extends BaseController {
       fetchComments();
     }, milliseconds: 100);
   }
-
   Future<void> fetchComments({bool isEmpty = false}) async {
     final postId = post.value?.id?.toInt() ?? -1;
-    if (postId == -1) {
+    final videoSupabaseId = post.value?.supabaseId;
+    if (postId == -1 || videoSupabaseId == null) {
       return Loggers.error('Invalid Post Id: $postId');
     }
     if (isLoading.value) return;
     isLoading.value = true;
-
     try {
-      final bool isSupabasePost = (post.value?.supabaseId ?? '').isNotEmpty;
-      final supabaseItems = isSupabasePost
-          ? await PostService.instance.fetchSupabaseVideoComments(
-              supabaseId: post.value!.supabaseId!,
-            )
-          : null;
-      final items = isSupabasePost
-          ? null
-          : await PostService.instance.fetchPostComments(
-              postId: postId,
-              lastItemId: isEmpty ? null : commentsList.lastOrNull?.id?.toInt(),
-            );
-
+      final items = await PostService.instance.fetchPostComments(
+        postId: postId,
+        videoSupabaseId: videoSupabaseId,
+      );
       if (isEmpty) {
         commentsList.clear();
       }
-
-      if (isSupabasePost) {
-        final fetchedComments = supabaseItems ?? [];
-        for (final newComment in fetchedComments) {
-          if (!commentsList.any((existing) => existing.id == newComment.id)) {
-            commentsList.add(newComment);
+      if (items == null) return;
+      if (commentsList.isEmpty) {
+        final pinned = items.pinnedComments ?? [];
+        for (final pin in pinned) {
+          if (!commentsList.any((c) => c.id == pin.id)) {
+            commentsList.add(pin);
           }
         }
-      } else {
-        if (items == null) return;
-
-        // Add pinned comments only once
-        if (commentsList.isEmpty) {
-          final pinned = items.pinnedComments ?? [];
-          for (final pin in pinned) {
-            if (!commentsList.any((c) => c.id == pin.id)) {
-              commentsList.add(pin);
-            }
-          }
-        }
-
-        // Add regular comments (avoid duplicates)
-        final fetchedComments = items.comments ?? [];
-        for (final newComment in fetchedComments) {
-          if (!commentsList.any((existing) => existing.id == newComment.id)) {
-            commentsList.add(newComment);
-          }
+      }
+      final fetchedComments = items.comments ?? [];
+      for (final newComment in fetchedComments) {
+        if (!commentsList.any((existing) => existing.id == newComment.id)) {
+          commentsList.add(newComment);
         }
       }
       post.update((val) => val?.comments = commentsList.length);
@@ -263,16 +239,17 @@ class CommentSheetController extends BaseController {
     commentsList[commentsList
         .indexWhere((element) => element.id == commentId)] = comment;
 
-    StatusModel response;
+
+    bool? success;
+    if (comment.supabaseId != null) {
+      success = await PostService.instance
+          .toggleCommentLike(commentId: comment.supabaseId!);
+    }
     if (like) {
-      response = await PostService.instance.likeComment(commentId: commentId);
       onCompletion?.call(comment);
-    } else {
-      response =
-          await PostService.instance.disLikeComment(commentId: commentId);
     }
 
-    if (response.status == false) {
+    if (success == false) {
       comment.updateLike(
           !like); // Revert the like/dislike change if the API call fails.
       commentsList[commentsList
@@ -362,17 +339,16 @@ class CommentSheetController extends BaseController {
         ),
         isScrollControlled: true);
   }
-
   Future<void> _deleteComment(Comment comment) async {
     int commentId = comment.id?.toInt() ?? -1;
-    if (commentId == -1) {
+    if (commentId == -1 || comment.supabaseId == null) {
       return Loggers.error('Invalid Comment Id : $commentId');
     }
     showLoader();
-    StatusModel model =
-        await PostService.instance.deleteComment(commentId: commentId);
+    final success = await PostService.instance
+        .deleteComment(commentId: comment.supabaseId);
     stopLoader();
-    if (model.status == true) {
+    if (success == true) {
       commentsList.removeWhere((element) => element.id == commentId);
       post.update((val) => val?.updateCommentCount(-1));
     }
@@ -385,10 +361,11 @@ class CommentSheetController extends BaseController {
       return Loggers.error('Invalid Reply Comment Id : $replyId');
     }
     showLoader();
-    StatusModel model =
-        await PostService.instance.deleteCommentReply(replyId: replyId);
+    showLoader();
+    final success = await PostService.instance
+        .deleteCommentReply(replyId: comment.supabaseId);
     stopLoader();
-    if (model.status == true) {
+    if (success == true) {
       (getReplyCommentsList[commentId] ?? []).remove(comment);
       updateCommentList(commentId, -1);
     }

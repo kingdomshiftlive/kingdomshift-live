@@ -13,7 +13,6 @@ import 'package:shortzz/common/manager/session_manager.dart';
 import 'package:shortzz/common/service/api/post_service.dart';
 import 'package:shortzz/common/service/navigation/navigate_with_controller.dart';
 import 'package:shortzz/languages/languages_keys.dart';
-import 'package:shortzz/model/general/status_model.dart';
 import 'package:shortzz/model/post_story/music/music_model.dart';
 import 'package:shortzz/model/post_story/post_by_id.dart';
 import 'package:shortzz/model/post_story/post_model.dart';
@@ -101,9 +100,11 @@ class ReelController extends BaseController {
   }
 
   Future<void> _likePostApi(int id) async {
-    StatusModel result = await PostService.instance.likePost(postId: id);
-    if (result.status == true) {
-      Post? reel = reelData.value;
+    Post? reel = reelData.value;
+    if (reel.supabaseId == null) return;
+    final liked = await PostService.instance
+        .toggleVideoLike(videoId: reel.supabaseId!);
+    if (liked == true) {
       if (reel.user?.notifyPostLike == 1 && myUser?.id != reel.userId) {
         FirebaseNotificationManager.instance.sendLocalisationNotification(
             LKey.activityLikedPost,
@@ -117,7 +118,9 @@ class ReelController extends BaseController {
   }
 
   Future<void> _disLikePostApi(int id) async {
-    await PostService.instance.disLikePost(postId: id);
+    Post? reel = reelData.value;
+    if (reel.supabaseId == null) return;
+    await PostService.instance.toggleVideoLike(videoId: reel.supabaseId!);
   }
 
   Future<void> onCommentTap(
@@ -172,22 +175,24 @@ class ReelController extends BaseController {
   }
 
   Future<void> _savePostApi(int id) async {
-    StatusModel result = await PostService.instance.savePost(postId: id);
-    if (result.status == true) {
-      if (Get.isRegistered<SavedPostScreenController>()) {
-        final controller = Get.find<SavedPostScreenController>();
-        controller.unsavedIds.removeWhere((element) => element == id);
-      }
+    Post? reel = reelData.value;
+    if (reel.supabaseId == null) return;
+    final saved = await PostService.instance
+        .toggleVideoSave(videoId: reel.supabaseId!);
+    if (saved == true && Get.isRegistered<SavedPostScreenController>()) {
+      final controller = Get.find<SavedPostScreenController>();
+      controller.unsavedIds.removeWhere((element) => element == id);
     }
   }
 
   Future<void> _unSavePostApi(int id) async {
-    StatusModel result = await PostService.instance.unSavePost(postId: id);
-    if (result.status == true) {
-      if (Get.isRegistered<SavedPostScreenController>()) {
-        final controller = Get.find<SavedPostScreenController>();
-        controller.unsavedIds.add(id);
-      }
+    Post? reel = reelData.value;
+    if (reel.supabaseId == null) return;
+    final saved = await PostService.instance
+        .toggleVideoSave(videoId: reel.supabaseId!);
+    if (saved == false && Get.isRegistered<SavedPostScreenController>()) {
+      final controller = Get.find<SavedPostScreenController>();
+      controller.unsavedIds.add(id);
     }
   }
 

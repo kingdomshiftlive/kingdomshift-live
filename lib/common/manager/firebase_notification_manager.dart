@@ -1,4 +1,9 @@
 import 'dart:convert';
+import 'package:flutter_callkit_incoming/flutter_callkit_incoming.dart';
+import 'package:flutter_callkit_incoming/entities/call_kit_params.dart';
+import 'package:flutter_callkit_incoming/entities/android_params.dart';
+import 'package:flutter_callkit_incoming/entities/ios_params.dart';
+import 'package:uuid/uuid.dart';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -148,6 +153,10 @@ class FirebaseNotificationManager {
 
   void showNotification(RemoteMessage message) {
     print('SHOW MESSAGE : ${message.toMap()}');
+    if (message.data['type'] == NotificationType.call.type) {
+      _showIncomingCall(message);
+      return;
+    }
     int notificationId =
         DateTime.now().millisecondsSinceEpoch.remainder(100000);
 
@@ -162,6 +171,26 @@ class FirebaseNotificationManager {
         payload: jsonEncode(message.toMap()));
   }
 
+  Future<void> _showIncomingCall(RemoteMessage message) async {
+    final data = message.data;
+    final callId = data['call_id'] ?? const Uuid().v4();
+    final callerName = data['caller_name'] ?? 'Unknown';
+    final callerId = data['caller_id'] ?? '';
+    final isVideo = data['is_video'] == 'true';
+    await FlutterCallkitIncoming.showCallkitIncoming(CallKitParams(
+      id: callId,
+      nameCaller: callerName,
+      appName: 'KingdomShift',
+      handle: callerId,
+      type: isVideo ? 1 : 0,
+      duration: 30000,
+      textAccept: 'Accept',
+      textDecline: 'Decline',
+      extra: <String, dynamic>{'caller_id': callerId, 'caller_name': callerName, 'is_video': isVideo},
+      android: const AndroidParams(isCustomNotification: true, isShowLogo: false, ringtonePath: 'system_ringtone_default', backgroundColor: '#0A0A0F', actionColor: '#4CD964', isShowFullLockedScreen: true),
+      ios: const IOSParams(iconName: 'CallKitLogo', handleType: 'generic', supportsVideo: true, ringtonePath: 'system_ringtone_default'),
+    ));
+  }
   Future<void> handleNotification(String payload) async {
     final RemoteMessage message = RemoteMessage.fromMap(jsonDecode(payload));
     final dataType = message.data['type'];
@@ -348,6 +377,7 @@ enum NotificationType {
   post('post'),
   user('user'),
   liveStream('live_stream'),
+  call('call'),
   other('other');
 
   final String type;

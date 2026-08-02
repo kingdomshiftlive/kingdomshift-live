@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shortzz/screen/live_stream/create_live_stream_screen/create_live_stream_screen.dart';
 import 'package:shortzz/screen/live_stream/live_stream_search_screen/live_stream_search_screen.dart';
+import 'package:shortzz/screen/live_stream/my_live_streams/my_live_streams_screen.dart';
 import 'package:shortzz/common/manager/session_manager.dart';
 
 const kLiveBg = Color(0xFF08141F);
@@ -105,6 +106,19 @@ class LiveDashboardScreen extends StatelessWidget {
                 border: Border.all(color: kLiveTeal.withValues(alpha: 0.3))),
             child: const Icon(Icons.chat_bubble_outline,
                 color: kLiveText, size: 18)),
+        const SizedBox(width: 8),
+        GestureDetector(
+          onTap: () => Get.to(() => const MyLiveStreamsScreen()),
+          child: Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                  color: kLiveCard,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: kLiveTeal.withValues(alpha: 0.3))),
+              child: const Icon(Icons.video_library_rounded,
+                  color: kLiveText, size: 18)),
+        ),
         const SizedBox(width: 8),
         Container(
             width: 36,
