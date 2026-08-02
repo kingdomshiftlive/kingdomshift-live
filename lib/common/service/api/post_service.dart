@@ -343,12 +343,12 @@ class PostService {
       return [];
     }
   }
-  Future<List<Post>> fetchKingdomDualVideos(String userId) async {
+  Future<List<Post>> fetchKingdomResponseVideos(String userId) async {
     try {
       final response = await supabase.Supabase.instance.client
           .from('videos')
           .select('*, app_profiles(id, full_name, username, avatar_url)')
-          .eq('content_type', 'kingdom_dual')
+          .eq('content_type', 'kingdom_response')
           .eq('creator_id', userId)
           .order('created_at', ascending: false)
           .limit(AppRes.paginationLimit);

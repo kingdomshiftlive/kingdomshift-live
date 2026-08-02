@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:shortzz/common/widget/kingdom_reveal/kingdom_reveal_overlay.dart';
 import 'package:get/get.dart';
-import 'package:shortzz/screen/dual_camera_screen/dual_camera_screen.dart';
+import 'package:shortzz/screen/kingdom_response_screen/kingdom_response_screen.dart';
 import 'package:proste_indexed_stack/proste_indexed_stack.dart';
 import 'package:shortzz/common/service/subscription/subscription_manager.dart';
 import 'package:shortzz/common/widget/banner_ads_custom.dart';
@@ -145,7 +145,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     'Create', isPostUploading,
                     isCreate: true),
                 _navItem(context, controller, -2, Icons.videocam_rounded,
-                    'Kingdom Dual', isPostUploading,
+                    'Kingdom Response', isPostUploading,
                     isDualCamera: true),
                 _navItem(context, controller, 4,
                     Icons.chat_bubble_outline_rounded, 'Inbox', isPostUploading,
@@ -426,7 +426,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               return;
             }
             if (isDualCamera) {
-              Get.to(() => const DualCameraScreen());
+              Get.to(() => const KingdomResponseScreen());
               return;
             }
             controller.onChanged(index);

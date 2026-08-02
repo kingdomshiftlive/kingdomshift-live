@@ -44,12 +44,12 @@ class ProfileScreenController extends BlockUserController
   RxList<Post> posts = <Post>[].obs;
   RxList<Post> podcasts = <Post>[].obs;
   RxList<Post> liveRecordings = <Post>[].obs;
-  RxList<Post> kingdomDualVideos = <Post>[].obs;
+  RxList<Post> kingdomResponseVideos = <Post>[].obs;
   RxBool isReelLoading = false.obs;
   RxBool isPostLoading = false.obs;
   RxBool isPodcastLoading = false.obs;
   RxBool isLiveRecordingLoading = false.obs;
-  RxBool isKingdomDualLoading = false.obs;
+  RxBool isKingdomResponseLoading = false.obs;
   final PageController pageController = PageController();
   RxBool isUserNotFound = false.obs;
   Setting? settingData = SessionManager.instance.getSettings();
@@ -94,7 +94,7 @@ class ProfileScreenController extends BlockUserController
       fetchPost(),
       fetchPodcast(),
       fetchLiveRecordingsList(),
-      fetchKingdomDualList(),
+      fetchKingdomResponseList(),
     });
   }
 
@@ -226,25 +226,25 @@ class ProfileScreenController extends BlockUserController
       isLiveRecordingLoading.value = false;
     }
   }
-  Future<void> fetchKingdomDualList({bool isEmpty = false}) async {
-    if (isKingdomDualLoading.value) return;
-    isKingdomDualLoading.value = true;
+  Future<void> fetchKingdomResponseList({bool isEmpty = false}) async {
+    if (isKingdomResponseLoading.value) return;
+    isKingdomResponseLoading.value = true;
     try {
       final userId = userData.value?.firebaseUid ??
           firebase_auth.FirebaseAuth.instance.currentUser?.uid;
       if (userId == null) return;
-      final result = await PostService.instance.fetchKingdomDualVideos(userId);
-      if (isEmpty) kingdomDualVideos.clear();
+      final result = await PostService.instance.fetchKingdomResponseVideos(userId);
+      if (isEmpty) kingdomResponseVideos.clear();
       for (var post in result) {
-        if (kingdomDualVideos.firstWhereOrNull((element) => element.id == post.id) ==
+        if (kingdomResponseVideos.firstWhereOrNull((element) => element.id == post.id) ==
             null) {
-          kingdomDualVideos.add(post);
+          kingdomResponseVideos.add(post);
         }
       }
     } catch (e) {
-      Loggers.error('Fetch Kingdom Dual Error : $e');
+      Loggers.error('Fetch Kingdom Response Error : $e');
     } finally {
-      isKingdomDualLoading.value = false;
+      isKingdomResponseLoading.value = false;
     }
   }
 
