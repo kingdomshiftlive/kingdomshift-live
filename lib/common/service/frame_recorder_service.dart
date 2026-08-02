@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:record/record.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:ffmpeg_kit_flutter_new/ffmpeg_kit.dart';
@@ -14,12 +13,6 @@ import 'package:ffmpeg_kit_flutter_new/return_code.dart';
 /// both into a single mp4 once recording stops. This is the TikTok-style
 /// approach: no OS screen-recording permission is ever requested, because
 /// we are only capturing pixels the app already owns and draws itself.
-class RecordingResult {
-  final String videoPath;
-  final String? thumbnailPath;
-  RecordingResult({required this.videoPath, this.thumbnailPath});
-}
-
 class FrameRecorderService {
   final GlobalKey boundaryKey;
   final AudioRecorder _audioRecorder = AudioRecorder();
@@ -32,8 +25,7 @@ class FrameRecorderService {
 
   /// Frames captured per second. Kept modest since capturing + encoding a
   /// PNG every tick has a real CPU cost on top of the live broadcast itself.
-  static const int _fps = 12;
-  bool _capturing = false;
+  static const int _fps = 8;
 
   FrameRecorderService(this.boundaryKey);
 
@@ -70,41 +62,27 @@ class FrameRecorderService {
   }
 
   Future<void> _captureFrame() async {
-    if (!_isRecording || _capturing) return;
-    _capturing = true;
+    if (!_isRecording) return;
     try {
       final boundary = boundaryKey.currentContext?.findRenderObject()
           as RenderRepaintBoundary?;
-      if (boundary == null) {
-        // ignore: avoid_print
-        print('[FrameRecorder] DIAG: boundary is null at frame $_frameIndex');
-        return;
-      }
+      if (boundary == null) return;
       final image = await boundary.toImage(pixelRatio: 1.0);
       final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
       image.dispose();
-      if (byteData == null) {
-        // ignore: avoid_print
-        print('[FrameRecorder] DIAG: byteData null at frame $_frameIndex');
-        return;
-      }
+      if (byteData == null) return;
       final file = File(
           '${_frameDir!.path}/frame_${_frameIndex.toString().padLeft(6, '0')}.png');
       await file.writeAsBytes(byteData.buffer.asUint8List());
-      // ignore: avoid_print
-      print('[FrameRecorder] DIAG: wrote frame $_frameIndex (${byteData.lengthInBytes} bytes)');
       _frameIndex++;
-    } catch (e, st) {
-      // ignore: avoid_print
-      print('[FrameRecorder] DIAG: captureFrame EXCEPTION at frame $_frameIndex: $e\n$st');
-    } finally {
-      _capturing = false;
+    } catch (e) {
+      // Skip this frame rather than crash the whole recording.
     }
   }
 
   /// Stops recording, stitches frames + audio into an mp4 via FFmpeg, and
   /// returns the finished file path (or null if nothing usable was captured).
-  Future<RecordingResult?> stop() async {
+  Future<String?> stop() async {
     if (!_isRecording) return null;
     _isRecording = false;
     _frameTimer?.cancel();
@@ -118,24 +96,8 @@ class FrameRecorderService {
     }
 
     if (_frameDir == null || _frameIndex < 2) {
-      // ignore: avoid_print
-      print('[FrameRecorder] DIAG: aborting — frameDir=$_frameDir frameIndex=$_frameIndex');
       await _cleanup(recordedAudioPath);
       return null;
-    }
-
-    String? thumbnailPath;
-    try {
-      final firstFrame = File('${_frameDir!.path}/frame_000000.png');
-      if (await firstFrame.exists()) {
-        final tempDir = await getTemporaryDirectory();
-        final savedThumb =
-            File('${tempDir.path}/thumb_${DateTime.now().millisecondsSinceEpoch}.png');
-        await firstFrame.copy(savedThumb.path);
-        thumbnailPath = savedThumb.path;
-      }
-    } catch (e) {
-      thumbnailPath = null;
     }
 
     final tempDir = await getTemporaryDirectory();
@@ -152,26 +114,14 @@ class FrameRecorderService {
         : '-y -framerate $_fps -i "$framePattern" '
             '-c:v libx264 -pix_fmt yuv420p "$outputPath"';
 
-    // ignore: avoid_print
-    print('[FrameRecorder] DIAG: frameIndex=$_frameIndex hasAudio=$hasAudio command=$command');
-
     final session = await FFmpegKit.execute(command);
     final returnCode = await session.getReturnCode();
-    final logs = await session.getAllLogsAsString();
-    // ignore: avoid_print
-    print('[FrameRecorder] DIAG: FFmpeg returnCode=$returnCode');
-    // ignore: avoid_print
-    print('[FrameRecorder] DIAG: FFmpeg logs:\n$logs');
 
     await _cleanup(recordedAudioPath);
 
     if (returnCode != null && ReturnCode.isSuccess(returnCode)) {
-      // ignore: avoid_print
-      print('[FrameRecorder] DIAG: SUCCESS, output at $outputPath');
-      return RecordingResult(videoPath: outputPath, thumbnailPath: thumbnailPath);
+      return outputPath;
     }
-    // ignore: avoid_print
-    print('[FrameRecorder] DIAG: FAILURE, returning null');
     return null;
   }
 
