@@ -307,12 +307,19 @@ class _KingdomResponseScreenState extends State<KingdomResponseScreen> {
               _errorMessage == null &&
               !_needsSourcePick &&
               _resultVideoPath == null
-          ? FloatingActionButton(
-              backgroundColor:
-                  _isRecording ? Colors.redAccent : const Color(0xFF14C9B8),
-              onPressed: _isRecording ? _stopRecording : _startRecording,
-              child: Icon(_isRecording ? Icons.stop_rounded : Icons.fiber_manual_record,
-                  color: Colors.white),
+          ? Padding(
+              // Android 15+ edge-to-edge rendering means the system nav
+              // bar can otherwise overlap this button — push it up by
+              // the device's bottom safe-area inset.
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewPadding.bottom + 12),
+              child: FloatingActionButton(
+                backgroundColor:
+                    _isRecording ? Colors.redAccent : const Color(0xFF14C9B8),
+                onPressed: _isRecording ? _stopRecording : _startRecording,
+                child: Icon(_isRecording ? Icons.stop_rounded : Icons.fiber_manual_record,
+                    color: Colors.white),
+              ),
             )
           : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -395,7 +402,9 @@ class _KingdomResponseScreenState extends State<KingdomResponseScreen> {
               : const Center(
                   child: CircularProgressIndicator(color: Color(0xFF14C9B8))),
         ),
-        Padding(
+        SafeArea(
+          top: false,
+          child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
@@ -428,6 +437,7 @@ class _KingdomResponseScreenState extends State<KingdomResponseScreen> {
                 ],
               ),
             ],
+          ),
           ),
         ),
       ],
