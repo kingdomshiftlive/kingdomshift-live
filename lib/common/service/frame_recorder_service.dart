@@ -150,9 +150,6 @@ class FrameRecorderService {
     // ignore: avoid_print
     print('[FrameRecorder] DIAG: recordedAudioPath=$recordedAudioPath exists=${recordedAudioPath != null && await File(recordedAudioPath).exists()} size=$audioFileSize');
 
-    // Treat a suspiciously small/empty audio file as invalid — a broken
-    // audio track (e.g. the recorder failing to finalize on stop) can
-    // make FFmpeg reject the whole command rather than just skip it.
     final hasAudio = audioFileSize > 1000;
     // ignore: avoid_print
     print('[FrameRecorder] DIAG: hasAudio decision=$hasAudio (threshold 1000 bytes)');
@@ -163,10 +160,9 @@ class FrameRecorderService {
         : '-y -framerate $_fps -i "$framePattern" '
             '-c:v libx264 -pix_fmt yuv420p "$outputPath"';
 
-    // Verify inputs actually exist right before running FFmpeg.
     final frameZero = File('${_frameDir!.path}/frame_000000.png');
     // ignore: avoid_print
-    print('[FrameRecorder] DIAG: frame_000000.png exists=${await frameZero.exists()}, frameDir listing=${await _frameDir!.list().map((f) => f.path.split('/').last).toList()}');
+    print('[FrameRecorder] DIAG: frame_000000.png exists=${await frameZero.exists()}');
     if (hasAudio) {
       // ignore: avoid_print
       print('[FrameRecorder] DIAG: audio file exists=${await File(recordedAudioPath!).exists()}, size=${await File(recordedAudioPath).length()}');
@@ -179,16 +175,16 @@ class FrameRecorderService {
     final returnCode = await session.getReturnCode();
     final state = await session.getState();
     final failStack = await session.getFailStackTrace();
-    // Small delay in case logs are still flushing asynchronously.
     await Future.delayed(const Duration(milliseconds: 300));
-    final logs = await session.getAllLogsAsString();
-    final logCount = (await session.getLogs()).length;
+
+    final individualLogs = await session.getLogs();
     // ignore: avoid_print
-    print('[FrameRecorder] DIAG: FFmpeg returnCode=$returnCode state=$state logCount=$logCount');
-    // ignore: avoid_print
-    print('[FrameRecorder] DIAG: FFmpeg failStackTrace=$failStack');
-    // ignore: avoid_print
-    print('[FrameRecorder] DIAG: FFmpeg logs:\n$logs');
+    print('[FrameRecorder] DIAG: returnCode=$returnCode state=$state logCount=${individualLogs.length} failStack=$failStack');
+    for (var i = 0; i < individualLogs.length; i++) {
+      // ignore: avoid_print
+      print('[FrameRecorder] LOG[$i]: ${individualLogs[i].getMessage()}');
+    }
+
     final outputFile = File(outputPath);
     // ignore: avoid_print
     print('[FrameRecorder] DIAG: output exists=${await outputFile.exists()} size=${await outputFile.exists() ? await outputFile.length() : 0}');
