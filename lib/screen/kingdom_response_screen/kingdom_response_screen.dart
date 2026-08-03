@@ -51,8 +51,11 @@ class _KingdomResponseScreenState extends State<KingdomResponseScreen> {
   bool _isSaving = false;
   String? _saveMessage;
   String? _resultVideoPath;
+  String? _resultThumbnailPath;
   VideoPlayerController? _previewController;
   String? _errorMessage;
+  Timer? _durationTimer;
+  Duration _recordingDuration = Duration.zero;
 
   @override
   void initState() {
@@ -150,6 +153,13 @@ class _KingdomResponseScreenState extends State<KingdomResponseScreen> {
     setState(() {
       _isRecording = true;
       _isPaused = false;
+      _recordingDuration = Duration.zero;
+    });
+    _durationTimer?.cancel();
+    _durationTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (mounted) {
+        setState(() => _recordingDuration += const Duration(seconds: 1));
+      }
     });
     await _originalVideoController!.seekTo(Duration.zero);
     await _originalVideoController!.play();
@@ -170,6 +180,8 @@ class _KingdomResponseScreenState extends State<KingdomResponseScreen> {
 
   Future<void> _stopRecording() async {
     if (!_isRecording) return;
+    _durationTimer?.cancel();
+    _durationTimer = null;
     setState(() {
       _isRecording = false;
       _isPaused = false;
@@ -185,7 +197,10 @@ class _KingdomResponseScreenState extends State<KingdomResponseScreen> {
       return;
     }
 
-    setState(() => _resultVideoPath = result.videoPath);
+    setState(() {
+      _resultVideoPath = result.videoPath;
+      _resultThumbnailPath = result.thumbnailPath;
+    });
     _previewController = VideoPlayerController.file(File(result.videoPath))
       ..initialize().then((_) {
         if (mounted) setState(() {});
@@ -252,13 +267,32 @@ class _KingdomResponseScreenState extends State<KingdomResponseScreen> {
       final videoUrl = supabase.Supabase.instance.client.storage
           .from('videos')
           .getPublicUrl(fileName);
+
+      // Upload the actual thumbnail image captured at recording start —
+      // without this the grid on the profile shows blank/empty tiles.
+      String thumbnailUrl = '';
+      if (_resultThumbnailPath != null) {
+        final thumbFile = File(_resultThumbnailPath!);
+        if (await thumbFile.exists()) {
+          final thumbFileName =
+              '${firebaseUser.uid}/kingdom_response_thumb_${DateTime.now().millisecondsSinceEpoch}.png';
+          await supabase.Supabase.instance.client.storage
+              .from('thumbnails')
+              .upload(thumbFileName, thumbFile,
+                  fileOptions: const supabase.FileOptions(upsert: true));
+          thumbnailUrl = supabase.Supabase.instance.client.storage
+              .from('thumbnails')
+              .getPublicUrl(thumbFileName);
+        }
+      }
+
       await supabase.Supabase.instance.client.from('videos').insert({
         'creator_id': firebaseUser.uid,
         'title':
             'Kingdom Response - ${DateTime.now().toIso8601String().split('T').first}',
         'description': 'Recorded with Kingdom Response',
         'video_url': videoUrl,
-        'thumbnail_url': '',
+        'thumbnail_url': thumbnailUrl,
         'category': 'Faith',
         'status': 'published',
         'content_type': 'kingdom_response',
@@ -281,6 +315,12 @@ class _KingdomResponseScreenState extends State<KingdomResponseScreen> {
         ));
   }
 
+  String _formatDuration(Duration d) {
+    final minutes = d.inMinutes.toString().padLeft(2, '0');
+    final seconds = (d.inSeconds % 60).toString().padLeft(2, '0');
+    return '$minutes:$seconds';
+  }
+
   void _retake() {
     setState(() {
       _resultVideoPath = null;
@@ -292,6 +332,7 @@ class _KingdomResponseScreenState extends State<KingdomResponseScreen> {
 
   @override
   void dispose() {
+    _durationTimer?.cancel();
     _originalVideoController?.removeListener(_onVideoProgress);
     _originalVideoController?.dispose();
     _cameraController?.dispose();
@@ -309,23 +350,52 @@ class _KingdomResponseScreenState extends State<KingdomResponseScreen> {
             style: TextStyle(color: Colors.white, fontSize: 16)),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: _errorMessage != null
-          ? Center(
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: Text(_errorMessage!,
-                    style: const TextStyle(color: Colors.white70),
-                    textAlign: TextAlign.center),
+      body: Stack(
+        children: [
+          _errorMessage != null
+              ? Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Text(_errorMessage!,
+                        style: const TextStyle(color: Colors.white70),
+                        textAlign: TextAlign.center),
+                  ),
+                )
+              : _needsSourcePick
+                  ? _buildSourcePicker()
+                  : !_isReady
+                      ? const Center(
+                          child: CircularProgressIndicator(color: Color(0xFF14C9B8)))
+                      : _resultVideoPath != null
+                          ? _buildPreview()
+                          : _buildRecordView(),
+          // Duration counter lives outside the RepaintBoundary that gets
+          // captured into the recording, so it shows live on-screen for
+          // the responder without ending up burned into the saved video.
+          if (_isRecording)
+            Positioned(
+              top: 12,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: Colors.black54,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Text(
+                    _formatDuration(_recordingDuration),
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600),
+                  ),
+                ),
               ),
-            )
-          : _needsSourcePick
-              ? _buildSourcePicker()
-              : !_isReady
-                  ? const Center(
-                      child: CircularProgressIndicator(color: Color(0xFF14C9B8)))
-                  : _resultVideoPath != null
-                      ? _buildPreview()
-                      : _buildRecordView(),
+            ),
+        ],
+      ),
       floatingActionButton: _isReady &&
               _errorMessage == null &&
               !_needsSourcePick &&
