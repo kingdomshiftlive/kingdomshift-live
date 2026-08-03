@@ -34,6 +34,14 @@ class FrameRecorderService {
   /// Frames captured per second. Kept modest since capturing + encoding a
   /// PNG every tick has a real CPU cost on top of the live broadcast itself.
   static const int _fps = 12;
+
+  /// Capture resolution scale relative to the widget's logical size.
+  /// Full-resolution (1.0) PNG capture was measured taking ~150ms/frame
+  /// on-device — under half the ~83ms budget for 12fps — causing the
+  /// actual capture rate to fall to ~6-7fps and the output to look
+  /// jerky. Capturing at reduced resolution cuts encode+write time
+  /// substantially, letting the real rate track much closer to target.
+  static const double _capturePixelRatio = 0.55;
   bool _capturing = false;
 
   FrameRecorderService(this.boundaryKey);
@@ -82,7 +90,7 @@ class FrameRecorderService {
         print('[FrameRecorder] DIAG: boundary is null at frame $_frameIndex');
         return;
       }
-      final image = await boundary.toImage(pixelRatio: 1.0);
+      final image = await boundary.toImage(pixelRatio: _capturePixelRatio);
       final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
       image.dispose();
       if (byteData == null) {
@@ -180,11 +188,13 @@ class FrameRecorderService {
     // ignore: avoid_print
     print('[FrameRecorder] DIAG: elapsedSeconds=$elapsedSeconds frameIndex=$_frameIndex actualFps=$actualFps (target was $_fps)');
 
-    // libx264 (and yuv420p) require even width AND height. The RepaintBoundary
-    // capture can produce an odd dimension (e.g. 384x735) depending on the
-    // device's logical pixel size, which makes the encoder refuse to start.
-    // This filter rounds both dimensions down to the nearest even number.
-    const scaleFilter = 'scale=trunc(iw/2)*2:trunc(ih/2)*2';
+    // libx264 (and yuv420p) require even width AND height — "-2" in the
+    // filter below handles that automatically.
+    // Capture happens at reduced resolution for speed (see
+    // _capturePixelRatio above), so scale the final output back up to a
+    // normal vertical-video size (1280px tall) — "-2" keeps aspect ratio
+    // while still rounding to an even width for libx264.
+    const scaleFilter = 'scale=-2:1280';
 
     final command = hasAudio
         ? '-y -framerate $actualFps -i "$framePattern" -i "$recordedAudioPath" '
