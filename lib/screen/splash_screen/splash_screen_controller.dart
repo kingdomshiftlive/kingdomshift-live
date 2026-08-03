@@ -8,6 +8,7 @@ import 'package:shortzz/common/controller/base_controller.dart';
 import 'package:shortzz/common/extensions/string_extension.dart';
 import 'package:shortzz/common/manager/logger.dart';
 import 'package:shortzz/common/manager/session_manager.dart';
+import 'package:shortzz/common/service/api/common_service.dart';
 import 'package:shortzz/model/general/settings_model.dart';
 import 'package:shortzz/screen/auth_screen/login_screen.dart';
 import 'package:shortzz/screen/dashboard_screen/dashboard_screen.dart';
@@ -32,6 +33,13 @@ class SplashScreenController extends BaseController {
 
   Future<void> fetchSettings() async {
     await Future.delayed(const Duration(milliseconds: 1500));
+    // Loads gifts (and other global settings) on every app launch. This
+    // was never actually called anywhere in the app before — the only
+    // other call site was buried inside create-feed screen and the
+    // auth-screen call was commented out, so gift data never loaded in
+    // time for live streaming. Runs best-effort; a failure here should
+    // never block navigation into the app.
+    CommonService.instance.fetchGlobalSettings();
     bool isLoggedIn = SessionManager.instance.isLogin();
     User? savedUser = SessionManager.instance.getUser();
     _navigated = true;

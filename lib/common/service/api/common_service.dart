@@ -21,8 +21,48 @@ class CommonService {
 
   static final CommonService instance = CommonService._();
 
+  /// Was previously a no-op stub (`return true;`), which meant
+  /// SessionManager.getSettings() always returned null and gift-sending
+  /// was completely non-functional — the app never had any gift data to
+  /// show. This now actually fetches from the admin panel's
+  /// `virtual_gifts` table (the table the admin panel's Virtual Gifts
+  /// tab writes to) and maps it into the Gift model the live-stream
+  /// screen already expects, preserving any other settings already
+  /// cached locally.
   Future<bool> fetchGlobalSettings() async {
-    return true;
+    try {
+      final response = await supabase.Supabase.instance.client
+          .from('virtual_gifts')
+          .select()
+          .eq('is_active', true)
+          .order('coins', ascending: true);
+
+      final gifts = (response as List)
+          .map((row) => Gift(
+                id: row['id'] is int
+                    ? row['id']
+                    : int.tryParse(row['id'].toString()),
+                coinPrice: (row['coins'] as num?)?.toInt(),
+                image: row['image_url'] as String?,
+                type: 'image',
+                createdAt: row['created_at'] != null
+                    ? DateTime.tryParse(row['created_at'])
+                    : null,
+                updatedAt: row['updated_at'] != null
+                    ? DateTime.tryParse(row['updated_at'])
+                    : null,
+              ))
+          .toList();
+
+      final existing = SessionManager.instance.getSettings() ?? Setting();
+      existing.gifts = gifts;
+      SessionManager.instance.setSettings(existing);
+      return true;
+    } catch (e) {
+      // Non-fatal — leave whatever settings were already cached (or
+      // none) rather than crashing app startup over a gifts fetch.
+      return false;
+    }
   }
 
   Future<FilePathModel> uploadFileGivePath(XFile files,
