@@ -263,7 +263,14 @@ class PodcastDetailController extends BaseController {
 
     // Initial setup (will be updated after video loads)
     if (Platform.isAndroid) {
-      Pip().setup(const PipOptions(autoEnterEnabled: true));
+      // Auto-enter PiP disabled: on Android 15/16 edge-to-edge devices,
+      // this was falsely reporting PipState.pipStateStarted the moment
+      // the video opened (not on actual backgrounding), which switched
+      // the screen into its bare no-controls PiP layout permanently.
+      // Manual PiP (system home-button minimize) still works at the OS
+      // level independent of this flag — only the buggy auto-trigger
+      // is disabled.
+      Pip().setup(const PipOptions(autoEnterEnabled: false));
     }
 
     final cached = await VideoCacheHelper.getValidCachedVideo(videoUrl);
@@ -300,7 +307,7 @@ class PodcastDetailController extends BaseController {
       // Update PiP aspect ratio based on video dimensions
       if (videoController != null && Platform.isAndroid) {
         Pip().setup(PipOptions(
-          autoEnterEnabled: true,
+          autoEnterEnabled: false,
           aspectRatioX: videoController!.value.size.width.toInt(),
           aspectRatioY: videoController!.value.size.height.toInt(),
         ));
