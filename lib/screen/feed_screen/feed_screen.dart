@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shortzz/screen/feed_screen/feed_screen_controller.dart';
 import 'package:shortzz/model/user_model/user_model.dart';
+import 'package:shortzz/screen/live_stream/live_stream_search_screen/live_stream_search_screen.dart';
 
 // ─── Brand Colors ───────────────────────────────────────────────
 const kBgPrimary = Color(0xFF08141F);
@@ -118,7 +119,21 @@ class _FeedScreenState extends State<FeedScreen> {
       body: SafeArea(
           child: Column(children: [
         _buildHeader(),
-        KSTabs(tabs: _navTabs, initialIndex: 0),
+        KSTabs(
+          tabs: _navTabs,
+          initialIndex: 0,
+          onChanged: (index) {
+            // "Live" (index 2) was previously non-functional — tapping it
+            // only highlighted the label with no behavior behind it. It
+            // now opens the app's already-built live-stream browsing
+            // screen (real-time list of active streams via Firestore).
+            // Other tabs (Following/Groups/Marketplace) still need their
+            // own wiring — left as-is for now, only Live was in scope.
+            if (index == 2) {
+              Get.to(() => LiveStreamSearchScreen(myUser: widget.myUser));
+            }
+          },
+        ),
         const Divider(color: Color(0xFF1A2A3A), height: 1),
         KSTabs(tabs: _filterTabs, initialIndex: 0, usePill: true),
         const Divider(color: Color(0xFF1A2A3A), height: 1),
